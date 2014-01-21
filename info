@@ -1,0 +1,20 @@
+ou: machines
+	vlans
+	pfgroups
+
+
+
+für xen VMs: zusaetliche interfaces (eth1 ..., eth0 schon konfiguriert)
+NetInTumVifExtra: ..
+VMs haben NetInTumBootmode xm oder xen
+
+
+VLAN: man kommt raus, aber nicht rein
+spezialVLN vlan0, automatisch alle die nicht zu uns gehören
+
+
+VLAn PF: was darf rein
+AM Host: zusaetzlich was darf rein
+eig nirgendwo ausgehedes verbieten (außer bekannte hosts mac spoofing)
+
+
