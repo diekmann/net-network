@@ -1,0 +1,46 @@
+diff -u -r ITVal-1.0/FDDL/api.cc patched_ITVal-1.0/FDDL/api.cc
+--- ITVal-1.0/FDDL/api.cc	2006-11-29 17:05:44.000000000 +0100
++++ patched_ITVal-1.0/FDDL/api.cc	2013-12-02 16:47:06.000000000 +0100
+@@ -26,6 +26,7 @@
+ Williamsburg, VA 23185
+ */
+ 
++#include <limits.h>
+ #include <stdio.h>
+ #include <assert.h>
+ #include <FDDL/mdd.h>
+diff -u -r ITVal-1.0/FDDL/mdd.h patched_ITVal-1.0/FDDL/mdd.h
+--- ITVal-1.0/FDDL/mdd.h	2006-10-27 20:42:19.000000000 +0200
++++ patched_ITVal-1.0/FDDL/mdd.h	2013-12-02 16:47:06.000000000 +0100
+@@ -31,6 +31,8 @@
+ #ifndef FDDL_MDD_H
+ #   define FDDL_MDD_H 1
+ 
++#include <stdio.h>
++
+ #   include <iostream>
+ #   include <assert.h>
+ 
+diff -u -r ITVal-1.0/src/fwmdd.h patched_ITVal-1.0/src/fwmdd.h
+--- ITVal-1.0/src/fwmdd.h	2007-01-12 09:01:06.000000000 +0100
++++ patched_ITVal-1.0/src/fwmdd.h	2013-12-02 16:47:06.000000000 +0100
+@@ -135,7 +135,7 @@
+    int InternalGetServiceArcs(level k, node_idx p, int* src, int* dst,
+       int* low, int* high, service*&output, int& numArcs);
+   void PrintPort (mdd_handle h, level k);
+-  int PrintPort (level k, node_idx p, int highByte, int depth, portset * p);
++  int PrintPort (level k, node_idx, int highByte, int depth, portset * p);
+ };
+ 
+ #endif
+diff -u -r ITVal-1.0/src/structures.h patched_ITVal-1.0/src/structures.h
+--- ITVal-1.0/src/structures.h	2006-10-21 06:26:54.000000000 +0200
++++ patched_ITVal-1.0/src/structures.h	2013-12-02 16:47:06.000000000 +0100
+@@ -29,6 +29,7 @@
+ #ifndef __STRUCTURES_H
+ #define __STRUCTURES_H
+ 
++#include <stdio.h>
+ #include <stdlib.h>
+ 
+ //Linked list of IP addresses
