@@ -25,3 +25,8 @@ net-network (c) by Chair for Network Architectures and Services, TUM
 net-network is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
 You should have received a copy of the license along with this work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
+
+
+Third-party parts of this repository may be licensed seperately.
+For example, ITVal is GPLv2.
+
