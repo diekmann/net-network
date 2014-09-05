@@ -1,0 +1,4 @@
+dumps created October 2014
+
+the *_default rulesets are the ones installed on the device by the default.
+the *_tuned rulesets are the ones specially crafted for operation in the local LAN.
