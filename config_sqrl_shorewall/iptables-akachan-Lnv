@@ -1,0 +1,567 @@
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+1559K 1947M net-fw     all  --  lup    *       0.0.0.0/0            0.0.0.0/0           
+ 346K   21M lmd_in     all  --  lmd    *       0.0.0.0/0            0.0.0.0/0           
+2460K 3203M ldit_in    all  --  ldit   *       0.0.0.0/0            0.0.0.0/0           
+30981   41M loben_in   all  --  loben  *       0.0.0.0/0            0.0.0.0/0           
+ 602K   58M wt_in      all  --  wt     *       0.0.0.0/0            0.0.0.0/0           
+ 742K 1064M vshit_in   all  --  vshit  *       0.0.0.0/0            0.0.0.0/0           
+    0     0 lua_in     all  --  lua    *       0.0.0.0/0            0.0.0.0/0           
+  259 27259 wg_in      all  --  wg     *       0.0.0.0/0            0.0.0.0/0           
+70834 4278K pvpn-fw    all  --  vpriv  *       0.0.0.0/0            0.0.0.0/0           
+   24  7872 utvm-fw    all  --  vocb   *       0.0.0.0/0            0.0.0.0/0           
+ 115K   26M ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+  922 80214 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:INPUT:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+3949K 4460M net_frwd   all  --  lup    *       0.0.0.0/0            0.0.0.0/0           
+ 906K   70M lmd_fwd    all  --  lmd    *       0.0.0.0/0            0.0.0.0/0           
+ 954K   87M ldit_fwd   all  --  ldit   *       0.0.0.0/0            0.0.0.0/0           
+  338  118K loben_fwd  all  --  loben  *       0.0.0.0/0            0.0.0.0/0           
+ 385K   31M wt_fwd     all  --  wt     *       0.0.0.0/0            0.0.0.0/0           
+ 189K   10M vshit_fwd  all  --  vshit  *       0.0.0.0/0            0.0.0.0/0           
+    0     0 lua_fwd    all  --  lua    *       0.0.0.0/0            0.0.0.0/0           
+27065 6904K wg_fwd     all  --  wg     *       0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn_frwd  all  --  vpriv  *       0.0.0.0/0            0.0.0.0/0           
+35839 3100K utvm_frwd  all  --  vocb   *       0.0.0.0/0            0.0.0.0/0           
+  512 51859 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  280 40243 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:FORWARD:REJECT:"
+  280 40243 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain OUTPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 917K  216M fw-net     all  --  *      lup     0.0.0.0/0            0.0.0.0/0           
+ 658K  929M fw-loc     all  --  *      lmd     0.0.0.0/0            0.0.0.0/0           
+1431K  221M fw-loc     all  --  *      ldit    0.0.0.0/0            0.0.0.0/0           
+16730 5856K fw-loc     all  --  *      loben   0.0.0.0/0            0.0.0.0/0           
+ 751K  702M fw-loc     all  --  *      wt      0.0.0.0/0            0.0.0.0/0           
+ 376K   20M fw-loc     all  --  *      vshit   0.0.0.0/0            0.0.0.0/0           
+    0     0 fw-gst     all  --  *      lua     0.0.0.0/0            0.0.0.0/0           
+ 1027  246K fw-gst     all  --  *      wg      0.0.0.0/0            0.0.0.0/0           
+64385  152M fw-pvpn    all  --  *      vpriv   0.0.0.0/0            0.0.0.0/0           
+  790  189K fw-utvm    all  --  *      vocb    0.0.0.0/0            0.0.0.0/0           
+ 115K   26M ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:OUTPUT:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain Broadcast (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 2467  575K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type BROADCAST
+  922 80214 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type MULTICAST
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type ANYCAST
+
+Chain Drop (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 3342  410K            all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 3342  410K Broadcast  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 3 code 4 /* Needed ICMP types */
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 11 /* Needed ICMP types */
+   14  1431 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+    0     0 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 135,445 /* SMB */
+    8   624 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:137:139 /* SMB */
+    0     0 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:137 dpts:1024:65535 /* SMB */
+   18   848 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 135,139,445 /* SMB */
+   21  2463 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:1900 /* UPnP */
+   74 16497 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:!0x17/0x02
+    0     0 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:53 /* Late DNS Replies */
+
+Chain Limit (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  773 40308            all  --  *      *       0.0.0.0/0            0.0.0.0/0            recent: SET name: SSHA side: source mask: 255.255.255.255
+  554 30248 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            recent: UPDATE seconds: 60 hit_count: 2 name: SSHA side: source mask: 255.255.255.255
+  219 10060 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain Reject (21 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 2970  494K            all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 2970  494K Broadcast  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 3 code 4 /* Needed ICMP types */
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 11 /* Needed ICMP types */
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+    0     0 reject     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 135,445 /* SMB */
+    0     0 reject     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:137:139 /* SMB */
+    0     0 reject     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:137 dpts:1024:65535 /* SMB */
+    0     0 reject     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 135,139,445 /* SMB */
+    0     0 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:1900 /* UPnP */
+  232 11616 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:!0x17/0x02
+    0     0 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:53 /* Late DNS Replies */
+
+Chain dynamic (20 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain fw-gst (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   38 12834 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+  220 52190 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+  769  181K Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    3   144 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:fw-gst:REJECT:"
+    3   144 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain fw-loc (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+3230K 1878M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+   10   480 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 3073  661K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain fw-net (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   78 29562 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+ 897K  214M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+17514 1315K ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53 /* DNS */
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53 /* DNS */
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 2917  374K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain fw-pvpn (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+63416  152M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+  969 80248 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain fw-utvm (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   24  8472 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+  766  181K Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:fw-utvm:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain gst-fw (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+  220 14179 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53 /* DNS */
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53 /* DNS */
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:gst-fw:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain gst-loc (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:gst-loc:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain gst-net (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+26497 6870K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+  568 33912 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain gst-pvpn (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:gst-pvpn:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain gst-utvm (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:gst-utvm:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain gst_frwd (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+27065 6904K gst-net    all  --  *      lup     0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-loc    all  --  *      lmd     0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-loc    all  --  *      ldit    0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-loc    all  --  *      loben   0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-loc    all  --  *      wt      0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-loc    all  --  *      vshit   0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      lua     0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      wg      0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-pvpn   all  --  *      vpriv   0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-utvm   all  --  *      vocb    0.0.0.0/0            0.0.0.0/0           
+
+Chain ldit_fwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+18950  954K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+18950  954K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 952K   87M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 954K   87M loc_frwd   all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ldit_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 5687  585K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 5687  585K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+2454K 3202M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2460K 3203M loc-fw     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain lmd_fwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+16671  910K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+16671  910K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 518K   44M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 906K   70M loc_frwd   all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain lmd_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+17799 1253K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+17799 1253K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 328K   19M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 346K   21M loc-fw     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain loben_fwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   68  5025 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+   68  5025 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+  294  114K tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  338  118K loc_frwd   all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain loben_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  524 60889 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+  524 60889 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+30466   41M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+30981   41M loc-fw     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain loc-fw (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+4150K 4383M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+   16   940 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 /* SSH */
+    5   300 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 /* Ping */
+30964 2616K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain loc-gst (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:loc-gst:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain loc-net (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+2388K  197M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+44224 2324K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain loc-pvpn (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:loc-pvpn:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain loc-utvm (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:loc-utvm:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain loc_frwd (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+2432K  199M loc-net    all  --  *      lup     0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      lmd     0.0.0.0/0            0.0.0.0/0           
+  912 57684 ACCEPT     all  --  *      ldit    0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      loben   0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      wt      0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      vshit   0.0.0.0/0            0.0.0.0/0           
+    0     0 loc-gst    all  --  *      lua     0.0.0.0/0            0.0.0.0/0           
+    0     0 loc-gst    all  --  *      wg      0.0.0.0/0            0.0.0.0/0           
+    0     0 loc-pvpn   all  --  *      vpriv   0.0.0.0/0            0.0.0.0/0           
+    0     0 loc-utvm   all  --  *      vocb    0.0.0.0/0            0.0.0.0/0           
+
+Chain logdrop (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain logflags (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 4 level 6 prefix "Shorewall:logflags:DROP:"
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain logreject (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain lua_fwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 gst_frwd   all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain lua_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+    0     0 tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 gst-fw     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain net-fw (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 6467  919K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 6467  919K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+  235 72834 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+1439K 1930M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+1552K 1946M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+ 1159  313K DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+   36  1795 DROP       icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 /* Ping */
+  773 40308 Limit      tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+  922 80214 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+ 3342  410K Drop       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 2272  175K LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:net-fw:DROP:"
+ 2272  175K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain net-gst (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+29195   21M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Drop       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:net-gst:DROP:"
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain net-loc (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+3881K 4436M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Drop       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:net-loc:DROP:"
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain net-pvpn (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Drop       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:net-pvpn:DROP:"
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain net-utvm (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+37966 3468K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Drop       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:net-utvm:DROP:"
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain net_frwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+3271K 4356M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+1504K 1421M net-loc    all  --  *      lmd     0.0.0.0/0            0.0.0.0/0           
+1255K 1571M net-loc    all  --  *      ldit    0.0.0.0/0            0.0.0.0/0           
+  243 97798 net-loc    all  --  *      loben   0.0.0.0/0            0.0.0.0/0           
+ 625K  717M net-loc    all  --  *      wt      0.0.0.0/0            0.0.0.0/0           
+ 497K  727M net-loc    all  --  *      vshit   0.0.0.0/0            0.0.0.0/0           
+    0     0 net-gst    all  --  *      lua     0.0.0.0/0            0.0.0.0/0           
+29195   21M net-gst    all  --  *      wg      0.0.0.0/0            0.0.0.0/0           
+    0     0 net-pvpn   all  --  *      vpriv   0.0.0.0/0            0.0.0.0/0           
+37966 3468K net-utvm   all  --  *      vocb    0.0.0.0/0            0.0.0.0/0           
+
+Chain pvpn-fw (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    6   612 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    6   612 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+69915 4200K tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+70828 4278K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    6   612 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain pvpn-gst (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:pvpn-gst:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain pvpn-loc (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:pvpn-loc:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain pvpn-net (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:pvpn-net:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain pvpn-utvm (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:pvpn-utvm:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain pvpn_frwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-net   all  --  *      lup     0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-loc   all  --  *      lmd     0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-loc   all  --  *      ldit    0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-loc   all  --  *      loben   0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-loc   all  --  *      wt      0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-loc   all  --  *      vshit   0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-gst   all  --  *      lua     0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-gst   all  --  *      wg      0.0.0.0/0            0.0.0.0/0           
+    0     0 pvpn-utvm  all  --  *      vocb    0.0.0.0/0            0.0.0.0/0           
+
+Chain reject (26 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match src-type BROADCAST
+    0     0 DROP       all  --  *      *       224.0.0.0/4          0.0.0.0/0           
+    0     0 DROP       2    --  *      *       0.0.0.0/0            0.0.0.0/0           
+    1    60 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with tcp-reset
+  280 40243 REJECT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+    3   144 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-unreachable
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
+
+Chain shorewall (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0            all  --  *      *       0.0.0.0/0            0.0.0.0/0            recent: SET name: %CURRENTTIME side: source mask: 255.255.255.255
+
+Chain smurflog (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:smurfs:DROP:"
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain smurfs (20 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   58 19416 RETURN     all  --  *      *       0.0.0.0              0.0.0.0/0           
+    0     0 smurflog   all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]  ADDRTYPE match src-type BROADCAST
+    0     0 smurflog   all  --  *      *       224.0.0.0/4          0.0.0.0/0           [goto] 
+
+Chain tcpflags (20 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 logflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]  tcp flags:0x3F/0x29
+    0     0 logflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]  tcp flags:0x3F/0x00
+    0     0 logflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]  tcp flags:0x06/0x06
+    0     0 logflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]  tcp flags:0x03/0x03
+    0     0 logflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]  tcp spt:0 flags:0x17/0x02
+
+Chain utvm-fw (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   24  7872 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+   24  7872 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+   24  7872 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+    0     0 tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53 /* DNS */
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53 /* DNS */
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:utvm-fw:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain utvm-gst (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:utvm-gst:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain utvm-loc (5 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:utvm-loc:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain utvm-net (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+35517 3080K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            81.169.168.252       udp dpt:1194
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            81.169.168.252       tcp dpt:80
+  321 19743 ACCEPT     udp  --  *      *       0.0.0.0/0            8.8.8.8              udp dpt:53 /* DNS */
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            8.8.8.8              tcp dpt:53 /* DNS */
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            141.76.2.4          
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    1    60 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    1    60 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain utvm-pvpn (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 RETURN     all  --  *      *       0.0.0.0/0            224.0.0.0/4         
+    0     0 Reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 6 prefix "Shorewall:utvm-pvpn:REJECT:"
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain utvm_frwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  322 19803 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+  322 19803 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+    0     0 ACCEPT     udp  --  *      vocb    0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+    1    60 tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+35839 3100K utvm-net   all  --  *      lup     0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-loc   all  --  *      lmd     0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-loc   all  --  *      ldit    0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-loc   all  --  *      loben   0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-loc   all  --  *      wt      0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-loc   all  --  *      vshit   0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-gst   all  --  *      lua     0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-gst   all  --  *      wg      0.0.0.0/0            0.0.0.0/0           
+    0     0 utvm-pvpn  all  --  *      vpriv   0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      vocb    0.0.0.0/0            0.0.0.0/0           
+
+Chain vshit_fwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 4337  231K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 4337  231K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 180K 9626K tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 189K   10M loc_frwd   all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain vshit_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 1575  237K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 1575  237K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 740K 1064M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 742K 1064M loc-fw     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain wg_fwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  568 33912 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+  568 33912 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+14986 5401K tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+27065 6904K gst_frwd   all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain wg_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  259 27259 dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+  259 27259 smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+   39 13080 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68
+    0     0 tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  220 14179 gst-fw     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain wt_fwd (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 5110  282K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 5110  282K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 314K   25M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 385K   31M loc_frwd   all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain wt_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 5400  481K dynamic    all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 5400  481K smurfs     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW,UNTRACKED
+ 596K   57M tcpflags   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 602K   58M loc-fw     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
