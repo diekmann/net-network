@@ -1,0 +1,89 @@
+#!/bin/sh
+#
+# chkconfig: 2345 08 92
+#
+
+. /etc/init.d/functions
+
+IPTABLES_CONFIG=/etc/iptables.rules
+
+# check we have the iptables executable
+if [ ! -x /sbin/iptables ]; then
+ exit 0
+fi
+
+# check we have the right kernel version
+KERNELMAJ=`uname -r | sed                   -e 's,\..*,,'`
+KERNELMIN=`uname -r | sed -e 's,[^\.]*\.,,' -e 's,\..*,,'`
+if [ "$KERNELMAJ" -lt 2 ] ; then
+ exit 0
+fi
+if [ "$KERNELMAJ" -eq 2 -a "$KERNELMIN" -lt 3 ] ; then
+ exit 0
+fi
+
+if  /sbin/lsmod 2>/dev/null |grep -q ipchains ; then
+ # Don't do both
+ exit 0
+fi
+
+start() {
+ # don't do squat if we don't have the script
+ if [ -f $IPTABLES_CONFIG ]; then
+            action "Applying iptables firewall rules:" /etc/iptables.rules
+     echo
+     touch /var/lock/subsys/iptables
+ fi
+}
+
+stop() {
+ action "Flushing all chains:" iptables -F
+ action "Removing user defined chains:" iptables -X
+ echo $"Resetting built-in chains to the default ACCEPT policy:"
+ iptables -P INPUT ACCEPT && \
+ iptables -P FORWARD ACCEPT && \
+ iptables -P OUTPUT ACCEPT && \
+   success "Resetting built-in chains to the default ACCEPT policy" || \
+   failure "Resetting built-in chains to the default ACCEPT policy"
+ echo
+ rm -f /var/lock/subsys/iptables
+}
+
+case "$1" in
+  start)
+ start
+ ;;
+
+  stop)
+ stop
+ ;;
+
+  restart)
+ # "restart" is really just "start" as this isn't a daemon,
+ #  and "start" clears any pre-defined rules anyway.
+ #  This is really only here to make those who expect it happy
+ start
+ ;;
+
+  status)
+ iptables --list
+ ;;
+
+  panic)
+ echo $"Changing target policies to DROP: "
+ iptables -P INPUT DROP && \
+     iptables -P FORWARD DROP && \
+     iptables -P OUTPUT DROP && \
+     success "Changing target policies to DROP" || \
+     failure "Changing target policies to DROP"
+ echo
+ action "Flushing all chains:" iptables -F INPUT && iptables -F FORWARD && iptables -F OUTPUT
+ action "Removing user defined chains:" iptables -X
+ ;;
+
+  *)
+ echo "Usage: $0 {start|stop|restart|status|panic}"
+ exit 1
+esac
+
+exit 0

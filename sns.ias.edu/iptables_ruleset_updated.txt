@@ -1,0 +1,512 @@
+#!/bin/bash
+## Iptables example ruleset 
+
+## James Stephens (jns@ias.edu)
+## http://www.sns.ias.edu/~jns/
+
+## --------------------------------------------------------------------
+#
+# Startup script to implement /etc/sysconfig/iptables pre-defined rules.
+#
+# chkconfig: 2345 14 92
+#
+# description: Automates a packet filtering firewall with iptables.
+#
+# by bero@redhat.com, based on the ipchains script:
+# Script Author:	Joshua Jensen <joshua@redhat.com>
+#   -- hacked up by gafton with help from notting
+# modified by Anton Altaparmakov <aia21@cam.ac.uk>:
+# modified by Nils Philippsen <nils@redhat.de>
+# modified by Thomas Uphill <uphill@ias.edu>
+# modified by James Stephens <jns@ias.edu>
+#
+# config: /etc/sysconfig/iptables
+
+# Source function library.
+. /etc/init.d/functions
+
+#turn on debug messages
+DEBUG=1
+
+# Executables
+IPTABLES=/sbin/iptables
+
+# Config Files
+IPTABLES_CONFIG=/etc/sysconfig/iptables
+NETWORK_CONFIG=/etc/sysconfig/network
+
+# Standard Definitions
+ALL="0/0"
+CLASS_A="10.0.0.0/8"
+CLASS_B="172.16.0.0/12"
+CLASS_C="192.168.0.0/16"
+CLASS_D_MULTICAST="224.0.0.0/4"
+CLASS_E_RESERVED_NET="240.0.0.0/5"
+LOOPBACK="127.0.0.0/8"
+P_PORTS="0:1023"
+UP_PORTS="1024:65535"
+
+# Various configurable options for opening outbound and inbound ports
+# to override do not change this file but insert appropriate variable 
+# definition in /etc/sysconfig/network
+
+ALLOW_HOST=""
+TCPSERVICES_INBOUND="22"
+TCPSERVICES_OUTBOUND="0:65535"
+UDPSERVICES_INBOUND="0:0"
+UDPSERVICES_OUTBOUND="0:65535"
+
+EXCLUDE_IF="lo"
+source $NETWORK_CONFIG
+
+if [ ! -x /sbin/iptables ]; then
+	echo "/sbin/iptables not found"
+	echo_warning
+	echo
+	exit 0
+fi
+
+if  /sbin/lsmod 2>/dev/null |grep -q ipchains ; then
+	echo -n $"Found ipchains"
+	echo_warning 
+	echo
+	action $"Stopping ipchains" /etc/init.d/ipchains stop
+	action $"Removing ipchains" modprobe -r ipchains
+fi
+
+if ! /sbin/lsmod 2>/dev/null |grep -q ip_tables ; then
+	echo
+	action $"Inserting ip_tables modules" \
+		modprobe -a ip_tables ip_conntrack ip_conntrack_ftp || exit 0
+	# other iptables modules here...
+fi
+
+
+iftable() {
+	if fgrep -qsx $1 /proc/net/ip_tables_names; then
+		$IPTABLES -t "$@"
+	fi
+}
+
+allow_outbound_tcpservice() {
+    #allow us to reach tcp $remote_port on $remote_addr with $iface
+    remote_port=$1
+    iface=$2
+    remote_addr=$3
+    action_string=$4
+    local_port=$5
+    [ -z "$local_port" ] && local_port=0:65535
+    if [ -z "$action_string" ]; then
+	service_name=`grep -w $remote_port /etc/services | grep -v ^# |grep tcp | head -1 | cut -f1` || service_name=unknown-$remote_port
+	action_string="tcp $service_name outbound on $iface"
+    fi
+    action $"$action_string" $IPTABLES -A INPUT -i $iface -p tcp --sport $remote_port -s $remote_addr --dport $local_port -m state --state ESTABLISHED -j ACCEPT && \
+	$IPTABLES -A OUTPUT -o $iface -p tcp --sport $local_port -d $remote_addr --dport $remote_port -m state --state NEW,ESTABLISHED -j ACCEPT
+}
+
+allow_outbound_udpservice() {
+    #allow us to reach udp $remote_port on $remote_addr with $iface
+    remote_port=$1
+    iface=$2
+    remote_addr=$3
+    action_string=$4
+    local_port=$5
+    [ -z "$local_port"] && local_port=0:65535
+    if [ -z "$action_string" ]; then
+	service_name=`grep -w $remote_port /etc/services | grep -v ^# |grep udp | head -1 |cut -f1` || service_name="unknown-$remote_port"
+	action_string="udp $service_name outbound on $iface"
+    fi
+    action $"$action_string" $IPTABLES -A INPUT -i $iface -p udp --dport $local_port -s $remote_addr --sport $remote_port -m state --state ESTABLISHED -j ACCEPT && \
+	$IPTABLES -A OUTPUT -o $iface -p udp --sport $local_port -d $remote_addr --dport $remote_port -m state --state NEW,ESTABLISHED -j ACCEPT
+}
+
+allow_outbound_icmpservice() {
+    #allow us to reach icmp $type on $remote_addr with $iface
+    type=$1
+    iface=$2
+    remote_addr=$3
+    action_string=$4
+    if [ -z "$action_string" ]; then
+	action_string="icmp type $type outbound on $iface"
+    fi
+    action $"$action_string" $IPTABLES -A icmp-out -o $iface -p icmp --icmp-type $type -d $remote_addr -j RETURN
+}
+
+allow_inbound_tcpservice() {
+    #allow $remote_addr to reach tcp $local_port on our local $iface
+    local_port=$1
+    iface=$2
+    remote_addr=$3
+    action_string=$4
+    if [ -z "$action_string" ]; then
+	service_name=`grep -w $local_port /etc/services | grep -v ^# | grep tcp | head -1 | cut -f1` || service_name=unknown-$local_port
+	action_string="tcp $service_name inbound on $iface"
+    fi
+    action $"$action_string" $IPTABLES -A INPUT -i $iface -p tcp -s $remote_addr --dport $local_port -m state --state NEW,ESTABLISHED -j ACCEPT && \
+	$IPTABLES -A OUTPUT -o $iface -p tcp -d $remote_addr --sport $local_port -m state --state ESTABLISHED -j ACCEPT
+}
+
+allow_inbound_udpservice() {
+    #allow $remote_addr to reach udp $local_port on our local $iface
+    local_port=$1
+    iface=$2
+    remote_addr=$3
+    action_string=$4
+    if [ -z "$action_string" ]; then
+	service_name=`grep -w $local_port /etc/services | grep -v ^# | grep udp | head -1 | cut -f1` ||  service_name=unknown-$local_port
+	action_string="udp $service_name inbound on $iface"
+    fi
+    action $"$action_string" $IPTABLES -A INPUT -i $iface -p udp -s $remote_addr --dport $local_port -m state --state NEW,ESTABLISHED -j ACCEPT && \
+	$IPTABLES -A OUTPUT -o $iface -p udp -d $remote_addr --sport $local_port -m state --state ESTABLISHED -j ACCEPT
+}
+
+allow_inbound_icmpservice() {
+    #allow $remote_addr to reach icmp $type on our local $iface
+    type=$1
+    iface=$2
+    remote_addr=$3
+    action_string=$4
+    if [ -z "$action_string" ]; then
+	action_string="icmp type $type inbound on $iface"
+    fi
+    action $"$action_string" $IPTABLES -A icmp-in -i $iface -p icmp --icmp-type $type -s $remote_addr -j RETURN
+}
+
+start() {
+    # If we don't clear these first, we might be adding to
+    #  pre-existing rules.
+    action $"Flushing all current rules and user defined chains:" $IPTABLES -F
+    action $"Clearing all current rules and user defined chains:" $IPTABLES -X
+    chains=`cat /proc/net/ip_tables_names 2>/dev/null`
+    for i in $chains; do $IPTABLES -t $i -F; done && \
+	success $"Flushing all current rules and user defined chains:" || \
+	failure $"Flushing all current rules and user defined chains:"	    
+    for i in $chains; do $IPTABLES -t $i -X; done && \
+	success $"Clearing all current rules and user defined chains:" || \
+	failure $"Clearing all current rules and user defined chains:"
+    
+    for i in $chains; do $IPTABLES -t $i -Z; done
+    echo $"Setting default DROP..."
+	$IPTABLES -P INPUT DROP
+	$IPTABLES -P FORWARD DROP
+	$IPTABLES -P OUTPUT DROP
+ 
+    ## Kernel flags
+    # To dynamically change kernel parameters and variables on the
+    # fly you need CONFIG_SYSCTL defined in your kernel.
+
+    # Enable response to ping.
+    /bin/echo "0" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+    # Disable response to broadcasts.
+    # You don't want yourself becoming a Smurf amplifier.
+    /bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+
+    # Don't accept source routed packets. Attackers can use source
+    # routing to generate traffic pretending to be from inside your
+    # network, but which is routed back along the path from which
+    # it came, namely outside, so attackers can compromise your
+    #network. Source routing is rarely used for legitimate purposes.
+    /bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route
+
+    # Disable ICMP redirect acceptance. ICMP redirects can be used
+    # to alter your routing tables, possibly to a bad end.
+    for interface in /proc/sys/net/ipv4/conf/*/accept_redirects; do
+      /bin/echo "0" > ${interface}
+    done
+
+    # Enable bad error message protection.
+    /bin/echo "1" > /proc/sys/net/ipv4/icmp_ignore_bogus_error_responses
+
+    # Turn on reverse path filtering. This helps make sure that
+    # packets use legitimate source addresses, by automatically
+    # rejecting incoming packets if the routing table entry for
+    # their source address doesn't match the network interface
+    # they're arriving on. This has security advantages because
+    # it prevents so-called IP spoofing, however it can pose
+    # problems if you use asymmetric routing (packets from you
+    # to a host take a different path than packets from that host
+    # to you) or if you operate a non-routing host which has
+    # several IP addresses on different interfaces. (Note - If
+    # you turn on IP forwarding, you will also get this).
+    for interface in /proc/sys/net/ipv4/conf/*/rp_filter; do
+      /bin/echo "1" > ${interface}
+    done
+
+    # Log spoofed packets, source routed packets, redirect packets.
+    /bin/echo "1" > /proc/sys/net/ipv4/conf/all/log_martians
+
+    # Make sure that IP forwarding is turned off. We only want
+    # this for a multi-homed host.
+    /bin/echo "0" > /proc/sys/net/ipv4/ip_forward
+
+    echo $"Fixing up firewall rules..."
+    #allow all traffic on excluded interfaces
+    for iface in $EXCLUDE_IF
+    do
+      action $"Allow all traffic on $iface" $IPTABLES -A INPUT -i $iface -j ACCEPT &&\
+	$IPTABLES -A OUTPUT -o $iface -j ACCEPT
+    done
+
+    iface=eth+
+
+    #SYN-Flooding Protection
+#    action $"SYN-Flooding Protection on $iface" $IPTABLES -N syn-flood-$iface && \
+#      $IPTABLES -A INPUT -i $iface -p tcp --syn -j syn-flood-$iface && \
+#      $IPTABLES -A syn-flood-$iface -m limit --limit 1/s --limit-burst 4 -j RETURN && \
+#      $IPTABLES -A syn-flood-$iface -j DROP
+
+      #New connections should be SYN
+      action $"New connections must be SYN on $iface" $IPTABLES -A INPUT -i $iface -p tcp ! --syn -m state --state NEW -j DROP
+
+      #drop incoming traffic from reserved networks
+      action $"DROP incoming traffic from reserved networks on $iface" $IPTABLES -A INPUT -i $iface -s $CLASS_A -j DROP && \
+	$IPTABLES -A INPUT -i $iface -s $CLASS_C -j DROP && \
+	$IPTABLES -A INPUT -i $iface -s $CLASS_D_MULTICAST -j DROP && \
+	$IPTABLES -A INPUT -i $iface -s $CLASS_E_RESERVED_NET -j DROP && \
+
+      #drop incoming traffic to the loopback on $iface
+      action $"DROP incoming traffic from loopback on $iface" $IPTABLES -A INPUT -i $iface -d $LOOPBACK -j DROP
+
+
+##  =====================================================================================
+## ICMP
+
+	$IPTABLES -N icmp-in
+	$IPTABLES -N icmp-out
+
+	$IPTABLES -A INPUT  -i $iface -p icmp -j icmp-in
+	$IPTABLES -A OUTPUT -o $iface -p icmp -j icmp-out
+
+	# Accept 0,3,4,8,11,12,14,16,18 in.
+	allow_inbound_icmpservice 0 $iface $ALL
+	allow_inbound_icmpservice 3 $iface $ALL
+	allow_inbound_icmpservice 4 $iface $ALL
+	allow_inbound_icmpservice 8 $iface $ALL
+	allow_inbound_icmpservice 11 $iface $ALL
+	allow_inbound_icmpservice 12 $iface $ALL
+	allow_inbound_icmpservice 14 $iface $ALL
+	allow_inbound_icmpservice 16 $iface $ALL
+	allow_inbound_icmpservice 18 $iface $ALL
+
+	# Allow 0,4,8,12,13,15,17 out.
+	allow_outbound_icmpservice 0 $iface $ALL
+	allow_outbound_icmpservice 4 $iface $ALL
+	allow_outbound_icmpservice 8 $iface $ALL
+	allow_outbound_icmpservice 12 $iface $ALL
+	allow_outbound_icmpservice 13 $iface $ALL
+	allow_outbound_icmpservice 15 $iface $ALL
+	allow_outbound_icmpservice 17 $iface $ALL
+
+	# Any ICMP not already allowed is dropped.
+	$IPTABLES -A icmp-in  -i $iface -j DROP 
+	$IPTABLES -A icmp-out -o $iface -j DROP 
+
+	$IPTABLES -A INPUT  -i $iface -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+	$IPTABLES -A OUTPUT -o $iface -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+
+# ========================================================================================
+
+      #allow outbound services
+      if [ "$TCPSERVICES_OUTBOUND" ]; then
+	  echo "OUTBOUND tcp services"
+	  for service in $TCPSERVICES_OUTBOUND
+	    do
+	    allow_outbound_tcpservice $service $iface $ALL
+	  done
+      else
+	  echo -n "No OUTBOUND tcp services defined in $NETWORK_CONFIG"
+	  echo_passed
+	  echo
+      fi
+      if [ "$UDPSERVICES_OUTBOUND" ]; then
+	echo "OUTBOUND udp services"
+	for service in $UDPSERVICES_OUTBOUND
+	do
+		allow_outbound_udpservice $service $iface $ALL
+	done
+      fi
+     
+      #allow inbound tcp services
+      if [ "$TCPSERVICES_INBOUND" ]; then
+	  echo "INBOUND TCPSERVICES"
+	  for service in $TCPSERVICES_INBOUND
+	    do
+	    allow_inbound_tcpservice $service $iface $ALL
+	  done
+      else
+	  echo -n "No INBOUND tcp services defined in $NETWORK_CONFIG"
+	  echo_passed
+	  echo
+      fi
+      
+      #allow inbound udp services
+      if [ "$UDPSERVICES_INBOUND" ]; then
+          echo "INBOUND UDPSERVICES"
+          for service in $UDPSERVICES_INBOUND
+            do
+            allow_inbound_udpservice $service $iface $ALL
+          done
+      else
+          echo -n "No INBOUND udp services defined in $NETWORK_CONFIG"
+          echo_passed
+          echo
+      fi
+
+        if [ "$ALLOW_HOST" ]; then
+                for host in $ALLOW_HOST
+                do
+                        allow_outbound_tcpservice 0:65535 $iface $host
+                        allow_outbound_udpservice 0:65535 $iface $host
+                        allow_inbound_tcpservice 0:65535 $iface $host
+                        allow_inbound_udpservice 0:65535 $iface $host
+                done
+        fi
+
+      ## AUTH server
+      # Reject ident probes with a tcp reset. 
+      $IPTABLES -A INPUT -i $iface -p tcp --dport 113 -j REJECT --reject-with tcp-reset
+
+      ## LOGGING
+      # Any UDP not already allowed is logged and then dropped.
+      # iptables -A INPUT  -i $iface -p udp -j LOG --log-prefix "IPTABLES UDP-IN: "
+      # iptables -A INPUT  -i $iface -p udp -j DROP
+      # iptables -A OUTPUT -o $iface -p udp -j LOG --log-prefix "IPTABLES UDP-OUT: "
+      # iptables -A OUTPUT -o $iface -p udp -j DROP
+
+      # Any icmp not already allowed is logged and then dropped.
+      # We are talking here about stuff that passed the earlier test, but has
+      # been found not to relate to a current connection
+      # iptables -A INPUT  -i $iface -p icmp -j LOG --log-prefix "IPTABLES ICMP-IN: "
+      # iptables -A INPUT  -i $iface -p icmp -j DROP
+      # iptables -A OUTPUT -o $iface -p icmp -j LOG --log-prefix "IPTABLES ICMP-OUT: "
+      # iptables -A OUTPUT -o $iface -p icmp -j DROP
+
+      # Any tcp not already allowed is logged and then dropped.
+      # iptables -A INPUT  -i $iface -p tcp -j LOG --log-prefix "IPTABLES TCP-IN: "
+      # iptables -A INPUT  -i $iface -p tcp -j DROP
+      # iptables -A OUTPUT -o $iface -p tcp -j LOG --log-prefix "IPTABLES TCP-OUT: "
+      # iptables -A OUTPUT -o $iface -p tcp -j DROP
+
+
+    if [ -f "$IPTABLES_CONFIG" -a -s "$IPTABLES_CONFIG" ]; then
+	echo $"Applying user customized rules from $IPTABLES_CONFIG"
+	grep -v "^[[:space:]]*#" $IPTABLES_CONFIG | grep -v '^[[:space:]]*$' |  /sbin/iptables-restore -n && success $IPTABLES_CONFIG || failure $IPTABLES_CONFIG
+	echo
+    fi
+    touch /var/lock/subsys/iptables
+}
+
+stop() {
+	chains=`cat /proc/net/ip_tables_names 2>/dev/null`
+        for i in $chains; do $IPTABLES -t $i -F; done && \
+                success $"Flushing all chains:" || \
+                failure $"Flushing all chains:"
+        for i in $chains; do $IPTABLES -t $i -X; done && \
+                success $"Removing user defined chains:" || \
+                failure $"Removing user defined chains:"
+        echo -n $"Resetting built-in chains to the default ACCEPT policy:"
+	iftable filter -P INPUT ACCEPT && \
+	   iftable filter -P OUTPUT ACCEPT && \
+	   iftable filter -P FORWARD ACCEPT && \
+	   iftable nat -P PREROUTING ACCEPT && \
+	   iftable nat -P POSTROUTING ACCEPT && \
+	   iftable nat -P OUTPUT ACCEPT && \
+           iftable mangle -P PREROUTING ACCEPT && \
+           iftable mangle -P OUTPUT ACCEPT && \
+	   success $"Resetting built-in chains to the default ACCEPT policy" || \
+	   failure $"Resetting built-in chains to the default ACCEPT policy"
+	echo
+	rm -f /var/lock/subsys/iptables
+}
+
+#getopts dh Option
+#case $Option in
+#	d)
+#	DEBUG="TRUE"
+#	;;
+#	h)
+#	usage
+#	;;
+#esac
+
+case "$1" in
+  start)
+	start
+	;;
+
+  stop)
+	stop
+	;;
+
+  restart)
+	# "restart" is really just "start" as this isn't a daemon,
+	#  and "start" clears any pre-defined rules anyway.
+	#  This is really only here to make those who expect it happy
+	start
+	;;
+
+  condrestart)
+	[ -e /var/lock/subsys/iptables ] && start
+	;;
+
+  status)
+	tables=`cat /proc/net/ip_tables_names 2>/dev/null`
+	for table in $tables; do
+		echo $"Table: $table"
+		$IPTABLES -t $table --list
+	done
+	;;
+
+  panic)
+	echo -n $"Changing target policies to DROP: "	
+	iftable filter -P INPUT DROP && \
+	    iftable filter -P FORWARD DROP && \
+	    iftable filter -P OUTPUT DROP && \
+	    iftable nat -P PREROUTING DROP && \
+	    iftable nat -P POSTROUTING DROP && \
+	    iftable nat -P OUTPUT DROP && \
+	    iftable mangle -P PREROUTING DROP && \
+	    iftable mangle -P OUTPUT DROP && \
+	    success $"Changing target policies to DROP" || \
+	    failure $"Changing target policies to DROP"
+	echo
+        iftable filter -F INPUT && \
+                iftable filter -F FORWARD && \
+                iftable filter -F OUTPUT && \
+                iftable nat -F PREROUTING && \
+                iftable nat -F POSTROUTING && \
+                iftable nat -F OUTPUT && \
+                iftable mangle -F PREROUTING && \
+                iftable mangle -F OUTPUT && \
+                success $"Flushing all chains:" || \
+                failure $"Flushing all chains:"
+        iftable filter -X INPUT && \
+                iftable filter -X FORWARD && \
+                iftable filter -X OUTPUT && \
+                iftable nat -X PREROUTING && \
+                iftable nat -X POSTROUTING && \
+                iftable nat -X OUTPUT && \
+                iftable mangle -X PREROUTING && \
+                iftable mangle -X OUTPUT && \
+                success $"Removing user defined chains:" || \
+                failure $"Removing user defined chains:"
+        ;;
+
+  save)
+	echo -n $"Saving current rules to $IPTABLES_CONFIG: "
+	touch $IPTABLES_CONFIG
+	chmod 600 $IPTABLES_CONFIG
+	/sbin/iptables-save -c > $IPTABLES_CONFIG  2>/dev/null && \
+	  success $"Saving current rules to $IPTABLES_CONFIG" || \
+	  failure $"Saving current rules to $IPTABLES_CONFIG"
+	echo
+	;;
+
+  *)
+	echo $"Usage: $0 {start|stop|restart|condrestart|status|panic|save}"
+	exit 1
+esac
+
+exit 0
+
