@@ -2,3 +2,6 @@ dumps created October 2014
 
 the *_default rulesets are the ones installed on the device by the default.
 the *_tuned rulesets are the ones specially crafted for operation in the local LAN.
+the *_legacyifacerules were created during the lifetime of the device. partly did the device automagically install rules, partly did the administrator install rules for the "suggested" (preselected) interface.
+the *_cleanup rulesets were created after the administrator found the "hidden" drop down menu which allowed selecting a specific interface. This ruleset has one ruleset for all interfaces
+
