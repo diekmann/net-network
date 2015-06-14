@@ -1,0 +1,37 @@
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+DOS_PROTECT  all  --  0.0.0.0/0            0.0.0.0/0           
+DEFAULT_INPUT  all  --  0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain DEFAULT_INPUT (1 references)
+target     prot opt source               destination         
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0           
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            multiport dports 873,3260,3261,3262,3240:3259,21,548,111,892,2049,443,80,3493,3306
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            multiport dports 22,23
+DROP       udp  --  0.0.0.0/0            0.0.0.0/0            multiport dports 68,67,123,514,19999,5353,161,111,892,2049
+ACCEPT     all  --  192.168.0.0/16       0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+DROP       all  --  0.0.0.0/0            0.0.0.0/0           
+
+Chain DOS_PROTECT (1 references)
+target     prot opt source               destination         
+RETURN     icmp --  0.0.0.0/0            0.0.0.0/0            icmptype 8 limit: avg 1/sec burst 5
+DROP       icmp --  0.0.0.0/0            0.0.0.0/0            icmptype 8
+RETURN     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04 limit: avg 1/sec burst 5
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04
+RETURN     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 limit: avg 10000/sec burst 100
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02
+RETURN     icmp --  0.0.0.0/0            0.0.0.0/0            icmptype 8 limit: avg 1/sec burst 5
+DROP       icmp --  0.0.0.0/0            0.0.0.0/0            icmptype 8
+RETURN     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04 limit: avg 1/sec burst 5
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04
+RETURN     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 limit: avg 10000/sec burst 100
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02

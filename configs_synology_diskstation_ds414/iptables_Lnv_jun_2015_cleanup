@@ -1,0 +1,37 @@
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   94 19782 DOS_PROTECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   94 19782 DEFAULT_INPUT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 88 packets, 16482 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain DEFAULT_INPUT (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   60  8084 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+   30 11502 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+    0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 873,3260,3261,3262,3240:3259,21,548,111,892,2049,443,80,3493,3306
+    0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 22,23
+    0     0 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 68,67,123,514,19999,5353,161,111,892,2049
+    4   196 ACCEPT     all  --  *      *       192.168.0.0/16       0.0.0.0/0           
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DROP       all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
+
+Chain DOS_PROTECT (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 RETURN     icmp --  eth1   *       0.0.0.0/0            0.0.0.0/0            icmptype 8 limit: avg 1/sec burst 5
+    0     0 DROP       icmp --  eth1   *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    0     0 RETURN     tcp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04 limit: avg 1/sec burst 5
+    0     0 DROP       tcp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04
+    0     0 RETURN     tcp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 limit: avg 10000/sec burst 100
+    0     0 DROP       tcp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02
+    0     0 RETURN     icmp --  eth0   *       0.0.0.0/0            0.0.0.0/0            icmptype 8 limit: avg 1/sec burst 5
+    0     0 DROP       icmp --  eth0   *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    0     0 RETURN     tcp  --  eth0   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04 limit: avg 1/sec burst 5
+    0     0 DROP       tcp  --  eth0   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x04
+    1    60 RETURN     tcp  --  eth0   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 limit: avg 10000/sec burst 100
+    0     0 DROP       tcp  --  eth0   *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02
