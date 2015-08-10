@@ -1,0 +1,53 @@
+# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default 
+     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+     inet 127.0.0.1/8 scope host lo
+        valid_lft forever preferred_lft forever
+2: loben: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 10.13.42.145/28 brd 10.13.42.159 scope global loben
+        valid_lft forever preferred_lft forever
+3: lua: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+4: lup: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 188.95.234.0/23 brd 188.95.235.255 scope global dynamic lup
+        valid_lft 6875sec preferred_lft 6875sec
+5: lmd: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 10.13.42.129/29 brd 10.13.42.135 scope global lmd
+        valid_lft forever preferred_lft forever
+6: ldit: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 10.13.42.137/29 brd 10.13.42.143 scope global ldit
+        valid_lft forever preferred_lft forever
+8: wt_suck: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+10: vpriv@NONE: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 100
+     link/none 
+     inet 10.13.37.200 peer 255.255.255.0/32 scope global vpriv
+        valid_lft forever preferred_lft forever
+11: vocb@NONE: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 10.13.43.17/28 brd 10.13.43.31 scope global vocb
+        valid_lft forever preferred_lft forever
+12: vocb-nic@NONE: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master vocb state DOWN group default qlen 500
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+13: vshit@NONE: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 10.13.43.1/28 brd 10.13.43.15 scope global vshit
+        valid_lft forever preferred_lft forever
+14: vshit-nic@NONE: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master vshit state DOWN group default qlen 500
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+17: vnet0@NONE: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel master vocb state UNKNOWN group default qlen 500
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+18: vnet1@NONE: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel master vshit state UNKNOWN group default qlen 500
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+19: wt: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 10.13.42.161/28 brd 10.13.42.175 scope global wt
+        valid_lft forever preferred_lft forever
+20: wg: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+     link/ether XX:XX:XX:XX:XX:XX brd ff:ff:ff:ff:ff:ff
+     inet 10.13.42.177/28 brd 10.13.42.191 scope global wg
+        valid_lft forever preferred_lft forever

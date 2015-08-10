@@ -1,0 +1,92 @@
+# iptables -L -n -v
+Chain INPUT (policy DROP 24625 packets, 2860K bytes)
+  pkts bytes target     prot opt in     out     source               destination         
+  122K 8298K ACCEPT     udp  --  vshit  *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+     0     0 ACCEPT     tcp  --  vshit  *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+   140 53066 ACCEPT     udp  --  vshit  *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+     0     0 ACCEPT     tcp  --  vshit  *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+     0     0 ACCEPT     udp  --  vocb   *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+     0     0 ACCEPT     tcp  --  vocb   *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+   159 52152 ACCEPT     udp  --  vocb   *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+     0     0 ACCEPT     tcp  --  vocb   *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+  7719  655K ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+  6710  553K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+  5330 1232K ACCEPT     all  --  lmd    *       0.0.0.0/0            0.0.0.0/0           
+  111K 8942K ACCEPT     all  --  ldit   *       0.0.0.0/0            0.0.0.0/0           
+  200K  207M ACCEPT     all  --  loben  *       0.0.0.0/0            0.0.0.0/0           
+  5155 1211K ACCEPT     all  --  wt     *       0.0.0.0/0            0.0.0.0/0           
+  597K   37M ACCEPT     all  --  vpriv  *       0.0.0.0/0            0.0.0.0/0           
+7006K 8876M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+  3509  200K SSHLimit   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+     0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:53 state RELATED,ESTABLISHED
+     0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:4242 state RELATED,ESTABLISHED
+  5128 1204K BasicSvc   all  --  vshit  *       0.0.0.0/0            0.0.0.0/0           
+11800 1703K BasicSvc   all  --  wg     *       0.0.0.0/0            0.0.0.0/0           
+     0     0 BasicSvc   all  --  lua    *       0.0.0.0/0            0.0.0.0/0           
+     0     0 ACCEPT     udp  --  vocb   *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+31033 4800K LOG        all  --  lup    *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4
+  6321 1934K ACCEPT     udp  --  lup    *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+     0     0 PError     all  --  lmd    *       0.0.0.0/0            0.0.0.0/0           
+     0     0 PError     all  --  ldit   *       0.0.0.0/0            0.0.0.0/0           
+     0     0 PError     all  --  loben  *       0.0.0.0/0            0.0.0.0/0           
+     0     0 PError     all  --  wt     *       0.0.0.0/0            0.0.0.0/0           
+  5128 1204K PError     all  --  vshit  *       0.0.0.0/0            0.0.0.0/0           
+  5157 1210K PError     all  --  wg     *       0.0.0.0/0            0.0.0.0/0           
+     0     0 PError     all  --  lua    *       0.0.0.0/0            0.0.0.0/0           
+  5128 1204K PError     all  --  vocb   *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 10 packets, 613 bytes)
+  pkts bytes target     prot opt in     out     source               destination         
+3225K 4215M ACCEPT     all  --  *      vshit   0.0.0.0/0            10.13.43.0/28        ctstate RELATED,ESTABLISHED
+3247K  152M ACCEPT     all  --  vshit  *       10.13.43.0/28        0.0.0.0/0           
+     0     0 ACCEPT     all  --  vshit  vshit   0.0.0.0/0            0.0.0.0/0           
+     0     0 REJECT     all  --  *      vshit   0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+     0     0 REJECT     all  --  vshit  *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+     0     0 ACCEPT     all  --  vocb   vocb    0.0.0.0/0            0.0.0.0/0           
+     0     0 REJECT     all  --  *      vocb    0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+1464K  118M REJECT     all  --  vocb   *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+6494K 8194M ACCEPT     all  --  lup    *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+  3775  381K FromInternalF  all  --  lmd    *       0.0.0.0/0            0.0.0.0/0           
+2684K  248M FromInternalF  all  --  ldit   *       0.0.0.0/0            0.0.0.0/0           
+1210K  135M FromInternalF  all  --  loben  *       0.0.0.0/0            0.0.0.0/0           
+     0     0 FromInternalF  all  --  wt     *       0.0.0.0/0            0.0.0.0/0           
+     0     0 ACCEPT     all  --  vshit  lup     0.0.0.0/0            0.0.0.0/0           
+  564K   79M ACCEPT     all  --  wg     lup     0.0.0.0/0            0.0.0.0/0           
+     0     0 ACCEPT     all  --  lua    lup     0.0.0.0/0            0.0.0.0/0           
+     0     0 ACCEPT     udp  --  vocb   lup     0.0.0.0/0            0.0.0.0/0            udp dpt:53 /* DNS */
+     0     0 ACCEPT     tcp  --  vocb   lup     0.0.0.0/0            0.0.0.0/0            tcp dpt:53 /* DNS */
+     0     0 ACCEPT     udp  --  vocb   lup     0.0.0.0/0            131.159.207.206      udp dpt:1194
+     0     0 ACCEPT     tcp  --  vocb   lup     0.0.0.0/0            131.159.207.206      tcp dpt:80
+     0     0 ACCEPT     tcp  --  vocb   lup     0.0.0.0/0            141.76.2.4          
+
+Chain OUTPUT (policy ACCEPT 6562K packets, 3389M bytes)
+  pkts bytes target     prot opt in     out     source               destination         
+   140 49560 ACCEPT     udp  --  *      vshit   0.0.0.0/0            0.0.0.0/0            udp dpt:68
+   159 56127 ACCEPT     udp  --  *      vocb    0.0.0.0/0            0.0.0.0/0            udp dpt:68
+
+Chain BasicSvc (3 references)
+  pkts bytes target     prot opt in     out     source               destination         
+   227 76626 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+  6410  415K ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+     0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:15678
+
+Chain FromInternalF (4 references)
+  pkts bytes target     prot opt in     out     source               destination         
+     0     0 ACCEPT     all  --  *      lmd     0.0.0.0/0            0.0.0.0/0           
+    50  3090 ACCEPT     all  --  *      ldit    0.0.0.0/0            0.0.0.0/0           
+     0     0 ACCEPT     all  --  *      loben   0.0.0.0/0            0.0.0.0/0           
+     0     0 ACCEPT     all  --  *      wt      0.0.0.0/0            0.0.0.0/0           
+3898K  383M ACCEPT     all  --  *      lup     0.0.0.0/0            0.0.0.0/0           
+
+Chain PError (8 references)
+  pkts bytes target     prot opt in     out     source               destination         
+     0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with tcp-reset
+15413 3619K REJECT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+     0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-proto-unreachable
+
+Chain SSHLimit (1 references)
+  pkts bytes target     prot opt in     out     source               destination         
+     0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+  3509  200K            all  --  *      *       0.0.0.0/0            0.0.0.0/0            recent: SET name: SSHA side: source mask: 255.255.255.255
+  1011 55712 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            recent: UPDATE seconds: 60 hit_count: 2 name: SSHA side: source mask: 255.255.255.255
+  2498  145K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
