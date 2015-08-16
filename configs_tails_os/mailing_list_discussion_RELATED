@@ -1,0 +1,144 @@
+tails-dev@boum.org
+http://thread.gmane.org/gmane.linux.distributions.tails.devel/7539
+
+===
+
+From: Jacob Appelbaum <jacob@...>
+Subject: [Tails-dev] Reducing attack surface of kernel and tightening	firewall/sysctls
+Newsgroups: gmane.linux.distributions.tails.devel
+Date: 2014-12-03 17:22:30 GMT
+Hi,
+
+After talking with a new friend about netfilter and the kernel, we
+discussed a funny thing that happens to lots of people who use
+iptables. As a result, I took a look at Tails and sure enough, that
+funny little issue is present. I think as a result, we should make a
+reasonable, minimal change to our iptables rules. Looking at Ferm, the
+firewall rules say something that is extremely common which is as
+follows for INPUT and OUTPUT:
+
+            mod state state (RELATED ESTABLISHED) ACCEPT;
+
+I propose that we change the rule to be:
+
+            mod state state (NEW ESTABLISHED) ACCEPT;
+
+The reason is pretty simple - RELATED makes the kernel do a lot of
+extra lifting that is not needed by using the conntrack kernel code:
+
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/net/netfilter?id=refs/tags/v3.18-rc7
+
+Take a look at the various nf_conntrack_*.c files to see the various
+parsers that are exposed by using the RELATED connection tracking
+state. We should never need the kernel to automatically modify the
+firewall - as an example, we do not need it to setup an incoming FTP
+session based on the kernel believing that we've tried to do an
+outgoing FTP session. An old example of this kind of trick is
+demonstrated here:
+
+  http://www.securiteam.com/unixfocus/5DP0B2040S.html
+
+An example of how RELATED opens up the firewall is written here:
+
+  https://home.regit.org/netfilter-en/secure-use-of-helpers/
+
+Now, I think that the older exploit above is not functional but I
+admit, I haven't tested it or thought about how it may be extended for
+the current kernel. That however doesn't convince me that we should
+ever have that code exposed on a deployed Tails system. Unless RELATED
+literally does nothing, I think it adds attack surface - how much is
+an open research question. On the other hand, if RELATED does nothing,
+we should remove it, it isn't needed as far as I see.
+
+There are two basic issues that fell out of the discussion today: one
+where an incoming connection is allowed, another where the parser has
+a bug which is exploitable. Neither is required for our uses, right?
+Both are actually harmful to our use cases, I think.
+
+Some of the modules are written by very talented programmers and I'm
+sure they're well written. Still, if you look at the code, you'll see
+that they literally do IRC or Amanda parsing in the kernel. Here are
+some examples:
+
+Amanda:  https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/net/netfilter/nf_conntrack_amanda.c?id=refs/tags/v3.18-rc7
+
+pptp: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/net/netfilter/nf_conntrack_pptp.c?id=refs/tags/v3.18-rc7
+
+If we look at on the latest Tails, we'll see
+/proc/sys/net/netfilter/nf_conntrack_helper is set to 1. I propose
+that we set it to 0. We do not want help tracking connections, we do
+not want those extra protocol parsers in the kernel doing this kind of
+heavy lifting.
+
+Thus with two minor changes, I think we can easily tighten the system
+and it should not impact anything except for an attacker. I think we
+want to set the sysctl net.netfilter.nf_conntrack_helper to 0 and
+remove RELATED from the Ferm configuration. I think we need to replace
+it with NEW and nothing else.
+
+We'll need to research exactly what other changes to Ferm need to made
+for establishing a connection but I think it is simply (NEW
+ESTABLISHED).
+
+It seems that we should really look into tightening the network stack
+down to the absolute minimum amount of code. I think right now, the
+attack surface is larger than needed for our uses.
+
+Thoughts?
+
+All the best,
+Jake
+_______________________________________________
+Tails-dev mailing list
+Tails-dev@...
+https://mailman.boum.org/listinfo/tails-dev
+To unsubscribe from this list, send an empty email to Tails-dev-unsubscribe@...
+
+===
+
+From: Jacob Appelbaum <jacob@...>
+Subject: Re: [Tails-dev] Reducing attack surface of kernel and tightening	firewall/sysctls
+Newsgroups: gmane.linux.distributions.tails.devel
+Date: 2014-12-03 18:32:43 GMT
+On 12/3/14, intrigeri <intrigeri@...> wrote:
+> Hi Jake,
+>
+> Jacob Appelbaum wrote (03 Dec 2014 17:22:30 GMT) :
+>> Thoughts?
+>
+> Thanks a lot for this detailed report! :)
+>
+
+Sure - happy to help. :)
+
+> Were the proposed changes tested in Tails?
+>
+
+I've not tested it - I was hoping that someone might explain how
+RELATED was inserted into the rules in the first place. Who reasoned
+about it? Does anyone feel that I'm off base?
+
+> If yes, then the next steps are:
+>
+>   1. filing a ticket about that
+>   2. proposing a branch that implements the proposed changes
+>   3. building a branch that implements the proposed changes
+>   4. running the automated test suite against the resulting ISO
+>
+> Are you interested in doing any of these?
+>
+
+I'm happy to help once we know the direction. It isn't clear to me
+that this is interesting or useful. In general, I'm happy to do all
+four once we've had a bit of a discussion. I feel like I need a sanity
+check for my previous email. I may be totally offbase or onto a topic
+that makes some sense. I'm actually not completely sure.
+
+All the best,
+Jake
+_______________________________________________
+Tails-dev mailing list
+Tails-dev@...
+https://mailman.boum.org/listinfo/tails-dev
+To unsubscribe from this list, send an empty email to Tails-dev-unsubscribe@...
+
