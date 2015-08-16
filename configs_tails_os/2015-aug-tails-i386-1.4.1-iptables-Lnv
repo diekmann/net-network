@@ -1,0 +1,44 @@
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+18032 4248K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+ 3224  219K ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+17832 2265K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9050flags: 0x17/0x02 owner UID match 0
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9050flags: 0x17/0x02 owner UID match 13
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9050flags: 0x17/0x02 owner UID match 65534
+   19   988 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcpflags: 0x17/0x02 multiport dports 9050,9061,9062,9150 owner UID match 1000
+    3   156 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9062flags: 0x17/0x02 owner UID match 116
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9062flags: 0x17/0x02 owner UID match 118
+    2   104 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9062flags: 0x17/0x02 owner UID match 119
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9051 owner UID match 121
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9051 owner UID match 0
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9052 owner UID match 1000
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:9040 owner UID match 1000
+    0     0 ACCEPT     udp  --  *      lo      0.0.0.0/0            127.0.0.1            udp dpt:53 owner UID match 1000
+ 3198  217K ACCEPT     udp  --  *      lo      0.0.0.0/0            127.0.0.1            udp dpt:5353 owner UID match 1000
+    0     0 ACCEPT     udp  --  *      lo      0.0.0.0/0            127.0.0.2            udp dpt:53 owner UID match 1000
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.2            tcp dpt:53flags: 0x17/0x02 owner UID match 1000
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:631flags: 0x17/0x02 owner UID match 1000
+    0     0 ACCEPT     tcp  --  *      lo      0.0.0.0/0            127.0.0.1            tcp dpt:6136flags: 0x17/0x02 owner UID match 1000
+    0     0 ACCEPT     tcp  --  *      !lo     0.0.0.0/0            0.0.0.0/0            owner UID match 114
+    0     0 ACCEPT     udp  --  *      !lo     0.0.0.0/0            0.0.0.0/0            owner UID match 114 udp dpt:53
+    0     0 lan        all  --  *      *       0.0.0.0/0            10.0.0.0/8          
+    0     0 lan        all  --  *      *       0.0.0.0/0            172.16.0.0/12       
+    0     0 lan        all  --  *      *       0.0.0.0/0            192.168.0.0/16      
+   16   834 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 105
+12512 1051K LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 8 level 7 prefix "Dropped outbound packet: "
+12512 1051K REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+
+Chain lan (3 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53 reject-with icmp-port-unreachable
+    0     0 REJECT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53 reject-with icmp-port-unreachable
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 113 reject-with icmp-port-unreachable
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+

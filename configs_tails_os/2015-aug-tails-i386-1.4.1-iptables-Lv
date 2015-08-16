@@ -1,0 +1,43 @@
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+18032 4248K ACCEPT     all  --  any    any     anywhere             anywhere             state RELATED,ESTABLISHED
+ 3224  219K ACCEPT     all  --  lo     any     anywhere             anywhere            
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+17832 2265K ACCEPT     all  --  any    any     anywhere             anywhere             state RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9050flags: FIN,SYN,RST,ACK/SYN owner UID match root
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9050flags: FIN,SYN,RST,ACK/SYN owner UID match proxy
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9050flags: FIN,SYN,RST,ACK/SYN owner UID match nobody
+   19   988 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcpflags: FIN,SYN,RST,ACK/SYN multiport dports 9050,9061,9062,9150 owner UID match amnesia
+    3   156 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9062flags: FIN,SYN,RST,ACK/SYN owner UID match htp
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9062flags: FIN,SYN,RST,ACK/SYN owner UID match tails-iuk-get-target-file
+    2   104 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9062flags: FIN,SYN,RST,ACK/SYN owner UID match tails-upgrade-frontend
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9051 owner UID match tor-launcher
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9051 owner UID match root
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9052 owner UID match amnesia
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:9040 owner UID match amnesia
+    0     0 ACCEPT     udp  --  any    lo      anywhere             localhost            udp dpt:domain owner UID match amnesia
+ 3198  217K ACCEPT     udp  --  any    lo      anywhere             localhost            udp dpt:mdns owner UID match amnesia
+    0     0 ACCEPT     udp  --  any    lo      anywhere             127.0.0.2            udp dpt:domain owner UID match amnesia
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             127.0.0.2            tcp dpt:domainflags: FIN,SYN,RST,ACK/SYN owner UID match amnesia
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:ippflags: FIN,SYN,RST,ACK/SYN owner UID match amnesia
+    0     0 ACCEPT     tcp  --  any    lo      anywhere             localhost            tcp dpt:6136flags: FIN,SYN,RST,ACK/SYN owner UID match amnesia
+    0     0 ACCEPT     tcp  --  any    !lo     anywhere             anywhere             owner UID match clearnet
+    0     0 ACCEPT     udp  --  any    !lo     anywhere             anywhere             owner UID match clearnet udp dpt:domain
+    0     0 lan        all  --  any    any     anywhere             10.0.0.0/8          
+    0     0 lan        all  --  any    any     anywhere             172.16.0.0/12       
+    0     0 lan        all  --  any    any     anywhere             192.168.0.0/16      
+   16   834 ACCEPT     all  --  any    any     anywhere             anywhere             owner UID match debian-tor
+12512 1051K LOG        all  --  any    any     anywhere             anywhere             LOG level debug uid prefix "Dropped outbound packet: "
+12512 1051K REJECT     all  --  any    any     anywhere             anywhere             reject-with icmp-port-unreachable
+
+Chain lan (3 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 REJECT     tcp  --  any    any     anywhere             anywhere             tcp dpt:domain reject-with icmp-port-unreachable
+    0     0 REJECT     udp  --  any    any     anywhere             anywhere             udp dpt:domain reject-with icmp-port-unreachable
+    0     0 REJECT     all  --  any    any     anywhere             anywhere             owner UID match i2psvc reject-with icmp-port-unreachable
+    0     0 ACCEPT     all  --  any    any     anywhere             anywhere
