@@ -1,0 +1,51 @@
+#nft list ruleset
+table ip nat {
+	chain post {
+		 type nat hook postrouting priority 0;
+		 ip saddr 10.13.37.0/24 ip daddr != 10.149.107.128 snat 10.149.107.130-10.149.107.135
+	}
+
+	chain pre {
+		 type nat hook prerouting priority 0;
+		 iifname "eth0" tcp dport { 5050, 8080} ip daddr 10.149.107.135 dnat 10.13.37.100
+		 iifname "eth0" tcp dport 5900 ip saddr 10.149.107.128 ip daddr 10.149.107.135 dnat 10.13.37.100
+	}
+}
+table ip filter {
+	chain ssh-chain {
+		 ip saddr { 10.13.37.0/25, 10.149.107.128} accept
+		 counter packets 1 bytes 60
+		 reject with icmp type net-prohibited
+	}
+
+	chain input {
+		 type filter hook input priority 0;
+		 tcp dport 22 jump ssh-chain
+	}
+
+	chain wgpc {
+		 ip saddr { 10.149.104.34, 10.149.107.129, 10.149.107.128} accept
+		 ip saddr { 10.149.106.64/29} accept
+		 ip saddr { 10.149.106.96/29} accept
+		 ip saddr { 10.149.106.128/29} accept
+		 ip saddr { 10.149.106.160/29} accept
+		 ip saddr { 10.149.106.192/29} accept
+		 ip saddr { 10.149.107.32/29} accept
+		 ip saddr { 10.149.107.64/29} accept
+		 ip saddr { 10.149.107.96/29} accept
+		 counter packets 0 bytes 0
+		 reject with icmp type net-prohibited
+	}
+
+	chain wgfilter {
+		 tcp dport { 25, 993, 80, 443, 143, 465} accept
+		 counter packets 1 bytes 60
+		 reject with icmp type net-prohibited
+	}
+
+	chain forward {
+		 type filter hook forward priority 0;
+		 tcp dport { 5050, 8080} jump wgpc
+		 ip saddr 10.13.37.128/25 jump wgfilter
+	}
+}
