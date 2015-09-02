@@ -1,0 +1,173 @@
+#!/bin/bash 
+
+IPT=$(which iptables)
+EXT_IF="ppp0"			# External interface
+LAN_IF="eth0"			# Internal interface
+LOCALNET="192.168.13.0/24"	# LAN Address Range
+BROADCAST="192.168.13.255"	# LAN Broadcast Address
+
+# Once you have a working set of rules, you should run this:
+# # iptables-save > /etc/iptables.conf
+# and from then on, this script will load your rules from that file
+FIREWALL_CONF=/etc/iptables.conf
+
+# Load kernel modules needed for FTP and NAT
+/sbin/modprobe ip_nat_ftp || /sbin/modprobe nf_nat_ftp
+/sbin/modprobe ip_conntrack_ftp || /sbin/modprobe nf_conntrack_ftp
+
+# Turn off packet forwarding in the kernel
+#  ** This will be turned on at the end of the script **
+echo 0 > /proc/sys/net/ipv4/ip_forward
+
+# Notify the kernel that we're using a dynamic IP address
+echo 1 > /proc/sys/net/ipv4/ip_dynaddr
+
+# Enable TCP SYN Cookie Protection
+if [ -e /proc/sys/net/ipv4/tcp_syncookies ]; then
+  echo 1 > /proc/sys/net/ipv4/tcp_syncookies
+fi
+
+# Disable ICMP Redirect Acceptance
+echo 0 > /proc/sys/net/ipv4/conf/all/accept_redirects
+# Do not send Redirect Messages
+echo 0 > /proc/sys/net/ipv4/conf/all/send_redirects 
+# Disable source-routed packets
+echo 0 > /proc/sys/net/ipv4/conf/all/accept_source_route
+
+# Enable bad error message protection
+echo 1 > /proc/sys/net/ipv4/icmp_ignore_bogus_error_responses
+# Enable broadcast echo protection
+echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+
+if [ -e $FIREWALL_CONF ]; then
+  iptables-restore < $FIREWALL_CONF
+  # Turn on packet forwarding in the kernel
+  echo 1 > /proc/sys/net/ipv4/ip_forward
+  exit 0
+fi
+
+# Set default policy
+$IPT -P INPUT DROP
+$IPT -P OUTPUT DROP
+$IPT -P FORWARD DROP
+
+# Flush existing rules and kill custom chains
+$IPT -F
+$IPT -t nat -F
+$IPT -t mangle -F
+$IPT -X
+
+# Create new custom user chains
+$IPT -N State
+$IPT -N BadStuff
+$IPT -N LanIn
+
+# Allow all traffic on the loopback interface
+$IPT -A INPUT -i lo -j ACCEPT
+$IPT -A OUTPUT -o lo -j ACCEPT
+
+# Send packets to the appropriate chains
+$IPT -A INPUT -i $LAN_IF -j LanIn
+$IPT -A INPUT -j BadStuff
+$IPT -A INPUT -j State
+
+
+#########################
+# nat table
+#########################
+
+# SNAT packets destined for the internet 
+$IPT -t nat -A POSTROUTING -o $EXT_IF -j MASQUERADE
+
+# Redirect ssh to another host inside the lan (uncommented if needed)
+#$IPT -t nat -A PREROUTING -i $EXT_IF -p tcp --dport 22 -j DNAT --to-destination <add_ip:port here>
+
+#########################
+# OUTPUT chain
+#########################
+
+# Drop invalid packets trying to leave this box
+$IPT -A OUTPUT -o $EXT_IF -m conntrack --ctstate INVALID -j DROP
+# Allow all other packets destined to the LAN from this box
+$IPT -A OUTPUT -o $LAN_IF -j ACCEPT
+
+# Do not send ICMP type 11 (time-exceeded) packets - this system will 
+# not willfully participate in traceroute-enabled netmapping
+$IPT -A OUTPUT -o $EXT_IF -p icmp --icmp-type time-exceeded -j DROP
+# Allow everything else out
+$IPT -A OUTPUT -o $EXT_IF -p all -j ACCEPT
+
+
+#########################
+# BadStuff chain
+#########################
+
+# Drop packets from the internet that claim to be from a private network
+$IPT -A BadStuff -i $EXT_IF -s 10.0.0.0/8 -j DROP
+$IPT -A BadStuff -i $EXT_IF -s 172.16.0.0/12 -j DROP
+$IPT -A BadStuff -i $EXT_IF -s 192.168.0.0/16 -j DROP
+# or from the loopback range
+$IPT -A BadStuff -i $EXT_IF -s 127.0.0.0/8 -j DROP
+# Drop malformed broadcast packets 
+$IPT -A BadStuff -i $EXT_IF -s 255.255.255.255 -j DROP
+$IPT -A BadStuff -i $EXT_IF -s 0.0.0.0 -j DROP
+# Drop packets from Class D Multicast addresses
+$IPT -A BadStuff -i $EXT_IF -s 224.0.0.0/8 -j DROP
+# Drop packets from Class E Reserved IP addresses
+$IPT -A BadStuff -i $EXT_IF -s 240.0.0.0/8 -j DROP
+
+
+#########################
+# LanIn chain
+#########################
+
+# Allow packets of established connections and those related to them
+$IPT -A LanIn -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+# Allow incoming ssh from local network
+$IPT -A LanIn -p tcp -s $LOCALNET --dport 22 --syn -m conntrack --ctstate NEW -j ACCEPT
+# Allow incoming pings from local network  
+$IPT -A LanIn -s $LOCALNET -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
+# Reject everything else from local network
+$IPT -A LanIn -j REJECT
+
+
+#########################
+# State chain
+#########################
+
+# Drop packets with invalid state flags
+$IPT -A State -m conntrack --ctstate INVALID -j DROP
+# Accept packets that are part of established connections
+# or are related to established connections
+$IPT -A State -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+
+########################
+# FORWARD chain
+########################
+
+
+# INCOMING STUFF FROM THE INTERNET
+
+# Allow established/related
+$IPT -A FORWARD -j State
+
+# If you forwarded ssh connections to a box inside the lan earlier,
+# you'll need to edit and uncomment this rule
+#$IPT -A FORWARD -i $EXT_IF -o $LAN_IF -d <destination_ip_inside_lan> --dport 22 -j ACCEPT 
+
+
+# OUTGOING STUFF FROM LAN BOXES
+
+# Do not allow outgoing connection attempts to NFS, SOCKS, OpenWindows, squid, samba/cifs
+$IPT -A FORWARD -o $EXT_IF -p tcp -m multiport --dports 2049,1080,2000,3128,137,138,139,445 --syn -j REJECT
+# Do not allow ICMP time-exceeded messages to be forwarded outside of the local network
+$IPT -A FORWARD -o $EXT_IF -p icmp --icmp-type time-exceeded -j DROP
+# Everything else can pass
+$IPT -A FORWARD -o $EXT_IF -j ACCEPT
+
+
+###############################################################################
+# Turn on packet forwarding in the kernel now that all chains are populated
+echo 1 > /proc/sys/net/ipv4/ip_forward
+##############################################################################

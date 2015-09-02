@@ -1,0 +1,77 @@
+Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 delegate_prerouting  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 delegate_postrouting  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain delegate_postrouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 postrouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for postrouting */
+    0     0 zone_lan_postrouting  all  --  *      eth1    0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_wan_postrouting  all  --  *      eth0    0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_vpn_postrouting  all  --  *      tun0    0.0.0.0/0            0.0.0.0/0           
+
+Chain delegate_prerouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 prerouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for prerouting */
+    0     0 zone_lan_prerouting  all  --  eth1   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_wan_prerouting  all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_vpn_prerouting  all  --  tun0   *       0.0.0.0/0            0.0.0.0/0           
+
+Chain postrouting_lan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain postrouting_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain postrouting_vpn_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain postrouting_wan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain prerouting_lan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain prerouting_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain prerouting_vpn_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain prerouting_wan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain zone_lan_postrouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 postrouting_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for postrouting */
+
+Chain zone_lan_prerouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 prerouting_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for prerouting */
+
+Chain zone_vpn_postrouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 postrouting_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for postrouting */
+    0     0 MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_vpn_prerouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 prerouting_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for prerouting */
+
+Chain zone_wan_postrouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 postrouting_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for postrouting */
+    0     0 MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_prerouting (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 prerouting_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for prerouting */

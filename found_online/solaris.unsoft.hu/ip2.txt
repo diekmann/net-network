@@ -1,0 +1,5 @@
+default via 10.5.0.1 dev eth0  proto static 
+10.5.0.0/24 dev eth0  proto kernel  scope link  src 10.5.0.132 
+10.10.10.0/24 via 10.10.10.2 dev tun0 
+10.10.10.2 dev tun0  proto kernel  scope link  src 10.10.10.1 
+192.168.1.0/24 dev eth1  proto kernel  scope link  src 192.168.1.1 

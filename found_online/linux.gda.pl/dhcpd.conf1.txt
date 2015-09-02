@@ -1,0 +1,70 @@
+#
+# Sample configuration file for ISC dhcpd for Debian
+#
+# $Id: dhcpd.conf,v 1.4 2002/05/05 21:28:06 peloy Exp $
+#
+
+# The ddns-updates-style parameter controls whether or not the server will
+# attempt to do a DNS update when a lease is confirmed. We default to the
+# behavior of the version 2 packages ('none', since DHCP v2 didn't
+# have support for DDNS.)
+ddns-update-style none;
+
+# option definitions common to all supported networks...
+#option domain-name "example.org";
+#option domain-name-servers ns1.example.org, ns2.example.org;
+
+default-lease-time 6000;
+max-lease-time 72000;
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+
+# Use this to send dhcp log messages to a different log file (you also
+# have to hack syslog.conf to complete the redirection).
+log-facility local7;
+
+shared-network przykladowa siec {
+
+subnet 192.168.0.0 netmask 255.255.0.0 {
+    option broadcast-address 192.168.255.255;
+#range 192.168.100.100 192.168.100.200;
+    option routers 192.168.2.253;
+    option domain-name-servers 192.168.2.253, 194.204.159.1, 194.204.152.34;    
+    option netbios-name-servers 192.168.2.253;
+    option netbios-node-type 4;
+
+
+group   {
+        use-host-decl-names       on;
+	option broadcast-address 192.168.255.255;
+#range 192.168.100.100 192.168.100.200;
+        option routers 192.168.2.253;
+        option domain-name-servers 192.168.2.253, 194.204.159.1, 194.204.152.34;    
+        option netbios-name-servers 192.168.2.253;
+        option netbios-node-type 4;
+
+host mars {
+    hardware ethernet 00:36:54:15:32:53;
+    fixed-address 192.168.1.1;
+}
+
+host mars1 {
+    hardware ethernet 00:C0:DF:25:32:80;
+    fixed-address 192.168.1.1;
+}
+
+host poluvex {
+    hardware ethernet 00:0A:32:C5:5E:D6;
+    fixed-address 192.168.1.3;
+}
+
+host e {
+    hardware ethernet 00:30:4F:2E:70:7E;
+    fixed-address 192.168.1.4;
+}
+
+  }
+ }
+}

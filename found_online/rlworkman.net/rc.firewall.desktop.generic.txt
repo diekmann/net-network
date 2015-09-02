@@ -1,0 +1,45 @@
+# Define variables
+
+IPT=$(which iptables)		# change if needed
+EXT_IF=eth0			# external interface (connected to internet)
+
+FIREWALL_CONF=/etc/iptables.conf
+
+# Enable TCP SYN Cookie Protection
+if [ -e /proc/sys/net/ipv4/tcp_syncookies ]; then
+  echo 1 > /proc/sys/net/ipv4/tcp_syncookies
+fi
+
+# Disable ICMP Redirect Acceptance
+echo 0 > /proc/sys/net/ipv4/conf/all/accept_redirects
+
+# Do not send Redirect Messages
+echo 0 > /proc/sys/net/ipv4/conf/all/send_redirects
+
+if [ -e $FIREWALL_CONF ]; then
+  iptables-restore < $FIREWALL_CONF
+  exit 0
+fi
+
+# Set default policy to DROP
+$IPT -P INPUT DROP
+$IPT -P OUTPUT DROP
+$IPT -P FORWARD DROP
+
+# Flush old rules
+$IPT -F
+
+# Allow loopback traffic
+$IPT -A INPUT -i lo -j ACCEPT
+$IPT -A OUTPUT -o lo -j ACCEPT
+
+# Allow packets of established connections and those related to them
+$IPT -A INPUT -i $EXT_IF -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Allow all outgoing packets except invalid ones
+$IPT -A OUTPUT -o $EXT_IF -m conntrack --ctstate INVALID -j DROP
+$IPT -A OUTPUT -o $EXT_IF -j ACCEPT
+
+# Allow incoming ssh (uncomment the line below if needed)
+#$IPT -A INPUT -i $EXT_IF -p tcp --dport 22 --syn -m conntrack --ctstate NEW -j ACCEPT 
+

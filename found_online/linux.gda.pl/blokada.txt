@@ -1,0 +1,6 @@
+iptables -t nat -I PREROUTING -p tcp -s 192.168.13.86 -j REDIRECT --to-port 81
+iptables -t nat -I PREROUTING -p tcp -s 192.168.10.39 -j REDIRECT --to-port 81
+
+
+
+  

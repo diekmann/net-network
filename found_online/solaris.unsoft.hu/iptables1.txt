@@ -1,0 +1,174 @@
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   10   664 delegate_input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 delegate_forward  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   44  3244 delegate_output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain delegate_forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 forwarding_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for forwarding */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 zone_lan_forward  all  --  eth1   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_wan_forward  all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_vpn_forward  all  --  tun0   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain delegate_input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    8   544 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+    2   120 input_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for input */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    2   120 syn_flood  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02
+    0     0 zone_lan_input  all  --  eth1   *       0.0.0.0/0            0.0.0.0/0           
+    2   120 zone_wan_input  all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_vpn_input  all  --  tun0   *       0.0.0.0/0            0.0.0.0/0           
+
+Chain delegate_output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    8   544 ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+   36  2700 output_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for output */
+    1   104 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 zone_lan_output  all  --  *      eth1    0.0.0.0/0            0.0.0.0/0           
+   35  2596 zone_wan_output  all  --  *      eth0    0.0.0.0/0            0.0.0.0/0           
+    0     0 zone_vpn_output  all  --  *      tun0    0.0.0.0/0            0.0.0.0/0           
+
+Chain forwarding_lan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain forwarding_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain forwarding_vpn_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain forwarding_wan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain input_lan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain input_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain input_vpn_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain input_wan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain output_lan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain output_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain output_vpn_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain output_wan_rule (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain reject (3 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with tcp-reset
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+
+Chain syn_flood (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    2   120 RETURN     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 limit: avg 25/sec burst 50
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_dest_ACCEPT (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      eth1    0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 forwarding_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for forwarding */
+    0     0 zone_wan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* forwarding lan -> wan */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* Accept port forwards */
+    0     0 zone_lan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 input_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for input */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* Accept port redirections */
+    0     0 zone_lan_src_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 output_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for output */
+    0     0 zone_lan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_src_ACCEPT (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  eth1   *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_vpn_dest_ACCEPT (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      tun0    0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_vpn_forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 forwarding_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for forwarding */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* Accept port forwards */
+    0     0 zone_vpn_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_vpn_input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 input_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for input */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* Accept port redirections */
+    0     0 zone_vpn_src_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_vpn_output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 output_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for output */
+    0     0 zone_vpn_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_vpn_src_ACCEPT (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  tun0   *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_dest_ACCEPT (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   35  2596 ACCEPT     all  --  *      eth0    0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_dest_REJECT (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 reject     all  --  *      eth0    0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 forwarding_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for forwarding */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* Accept port forwards */
+    0     0 zone_wan_dest_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    2   120 input_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for input */
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:68 /* Allow-DHCP-Renew */
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 /* Allow-Ping */
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80 /* http */
+    1    60 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:23 /* telnet */
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:23 /* telnet */
+    1    60 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:1194 /* ovpn */
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:1194 /* ovpn */
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:11194 /* ovpn2 */
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:11194 /* ovpn2 */
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* Accept port redirections */
+    0     0 zone_wan_src_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   35  2596 output_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* user chain for output */
+   35  2596 zone_wan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_src_REJECT (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 reject     all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
