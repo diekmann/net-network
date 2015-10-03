@@ -28,6 +28,7 @@ The following is licensed under a Creative Commons Attribution-NonCommercial-Sha
  * configs_synology_diskstation_ds414
  * configs_sqrl_shorewall
  * config_ongy_flat_share
+ * config_vsrv
 
 You should have received a copy of the license along with this work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
 
