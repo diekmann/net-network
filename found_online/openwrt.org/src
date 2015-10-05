@@ -1,1 +1,5 @@
 https://dev.openwrt.org/attachment/ticket/18787/iptables-save-AA.txt
+
+https://dev.openwrt.org/ticket/18787#no1
+
+WARNING: file is a bit broken and has Windows \r\n line endings!
