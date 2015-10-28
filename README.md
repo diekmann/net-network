@@ -1,26 +1,24 @@
 net-network
 ===========
 
-Collection of network configurations
+Collection of network configurations. 
+Mainly firewalls of different servers and institutions. 
+For anonymity, many public IP addresses have been replace with public IP addresses of the TUM. 
 
 
-configs_chair_for_Network_Architectures_and_Services
+Acknowledgements
 ===========
-network of netintum
 
+Many administrators and contributors wish to remain anonymous. 
+Thank you very much for your contribution!
 
-http://www.net.in.tum.de/en/homepage/
-
-
-We only censored the MAC addresses for privacy reasons. 
-To get an uncensored dump of the data, please send me an email. 
-To make a dump with pseudonymized -- instead of anonymized -- MAC addresses publicly available, just send me a pull request with a tuned anonymize_mac_addresses.sh
 
 
 License
--------
+===========
 
-net-network (c) by Chair for Network Architectures and Services, TUM
+net-network (c) by Chair for Network Architectures and Services, TUM. 
+And many other contributors!
 
 The following is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License:
 

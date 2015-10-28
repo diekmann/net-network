@@ -1,0 +1,10 @@
+Details on configs_chair_for_Network_Architectures_and_Services:
+network of netintum
+
+http://www.net.in.tum.de/en/homepage/
+
+
+We only censored the MAC addresses for privacy reasons. 
+To get an uncensored dump of the data, please send me an email. 
+To make a dump with pseudonymized -- instead of anonymized -- MAC addresses publicly available, just send me a pull request with a tuned anonymize_mac_addresses.sh
+
