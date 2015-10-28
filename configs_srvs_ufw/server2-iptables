@@ -1,0 +1,169 @@
+Chain INPUT (policy DROP 2423 packets, 191K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  35G   40T ufw-before-logging-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  35G   40T ufw-before-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2648K 1324M ufw-after-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 3196  253K ufw-after-logging-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 3196  253K ufw-reject-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 3196  253K ufw-track-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ufw-before-logging-forward  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ufw-before-forward  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ufw-after-forward  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ufw-after-logging-forward  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ufw-reject-forward  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 1452K packets, 58M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  31G   27T ufw-before-logging-output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  31G   27T ufw-before-output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 527M   34G ufw-after-output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 527M   34G ufw-after-logging-output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 527M   34G ufw-reject-output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 527M   34G ufw-track-output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-after-forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-after-input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 300K   23M ufw-skip-to-policy-input  udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:137
+ 150K   37M ufw-skip-to-policy-input  udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:138
+    0     0 ufw-skip-to-policy-input  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:139
+    0     0 ufw-skip-to-policy-input  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:445
+2196K 1263M ufw-skip-to-policy-input  udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ufw-skip-to-policy-input  udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:68
+   51 10133 ufw-skip-to-policy-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type BROADCAST
+
+Chain ufw-after-logging-forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 3/min burst 10 LOG flags 0 level 4 prefix "[UFW BLOCK] "
+
+Chain ufw-after-logging-input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 2768  227K LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 3/min burst 10 LOG flags 0 level 4 prefix "[UFW BLOCK] "
+
+Chain ufw-after-logging-output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-after-output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-before-forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ufw-user-forward  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-before-input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 563M   74G ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+  34G   40T ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+37078 1579K ufw-logging-deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID
+37078 1579K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 3
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 4
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 11
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 12
+12237  423K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+ 8382 2749K ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:67 dpt:68
+  35M 3645M ufw-not-local  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 166K   13M ACCEPT     udp  --  *      *       0.0.0.0/0            224.0.0.251          udp dpt:5353
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            239.255.255.250      udp dpt:1900
+  35M 3632M ufw-user-input  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-before-logging-forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-before-logging-input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-before-logging-output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-before-output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 563M   74G ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+  30G   26T ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+ 527M   34G ufw-user-output  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-logging-allow (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 3/min burst 10 LOG flags 0 level 4 prefix "[UFW ALLOW] "
+
+Chain ufw-logging-deny (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+21871  927K RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID limit: avg 3/min burst 10
+ 8163  347K LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 3/min burst 10 LOG flags 0 level 4 prefix "[UFW BLOCK] "
+
+Chain ufw-not-local (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  32M 2309M RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL
+ 166K   13M RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type MULTICAST
+2646K 1323M RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type BROADCAST
+    0     0 ufw-logging-deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 3/min burst 10
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-reject-forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-reject-input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-reject-output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-skip-to-policy-forward (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-skip-to-policy-input (7 references)
+ pkts bytes target     prot opt in     out     source               destination         
+2645K 1323M DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-skip-to-policy-output (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-track-input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-track-output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 493M   30G ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW
+  33M 3910M ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW
+
+Chain ufw-user-forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-user-input (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+1450K   86M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:22
+    0     0 ACCEPT     tcp  --  *      *       188.95.233.200       0.0.0.0/0            tcp dpt:3306
+    0     0 ACCEPT     tcp  --  *      *       188.95.233.220       0.0.0.0/0            tcp dpt:3306
+    0     0 ACCEPT     tcp  --  *      *       188.95.233.38        0.0.0.0/0            tcp dpt:3306
+  31M 2222M ACCEPT     all  --  *      *       10.0.0.0/24          0.0.0.0/0           
+  360 28134 ACCEPT     all  --  *      *       188.95.233.220       0.0.0.0/0           
+   11   660 ACCEPT     all  --  *      *       188.95.233.200       0.0.0.0/0           
+
+Chain ufw-user-limit (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 3/min burst 5 LOG flags 0 level 4 prefix "[UFW LIMIT BLOCK] "
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+
+Chain ufw-user-limit-accept (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain ufw-user-logging-forward (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-user-logging-input (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-user-logging-output (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain ufw-user-output (1 references)
+ pkts bytes target     prot opt in     out     source               destination         

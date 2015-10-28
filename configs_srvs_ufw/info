@@ -1,0 +1,7 @@
+Dumps of two production servers, running ufw.
+
+The administrators of the firewall wish to remain anonymous. For these reasonsn, we replaced ip addresses with addresses of the TUM and some non-privileged (> 1023) TCP port numbers by random numbers (> 1023).
+The port 3306 (mysql) was not changed.
+
+
+Thank you very much anonymous adminstrator!
