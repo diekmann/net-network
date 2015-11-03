@@ -1,0 +1,30 @@
+# ip -4 a s
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN 
+    inet 127.0.0.1/8 scope host lo
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc htb state UP qlen 1000
+    inet [PUBLIC IP HERE] scope global eth1
+4: eth0.10@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.10.254/24 brd 192.168.10.255 scope global eth0.10
+5: eth0.11@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.11.254/24 brd 192.168.11.255 scope global eth0.11
+6: eth0.12@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.12.254/24 brd 192.168.12.255 scope global eth0.12
+7: eth0.13@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.13.254/24 brd 192.168.13.255 scope global eth0.13
+8: eth0.14@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.14.254/24 brd 192.168.14.255 scope global eth0.14
+9: eth0.19@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.19.254/24 brd 192.168.19.255 scope global eth0.19
+10: eth0.20@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.20.254/24 brd 192.168.20.255 scope global eth0.20
+11: eth0.21@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.21.254/24 brd 192.168.21.255 scope global eth0.21
+12: eth0.22@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.22.254/24 brd 192.168.22.255 scope global eth0.22
+13: eth0.23@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.23.254/24 brd 192.168.23.255 scope global eth0.23
+14: eth0.24@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP 
+    inet 192.168.24.254/24 brd 192.168.24.255 scope global eth0.24
+77: tun0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN qlen 100
+    inet 10.12.0.1/16 brd 10.12.255.255 scope global tun0
