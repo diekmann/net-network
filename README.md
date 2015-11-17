@@ -29,6 +29,8 @@ The following is licensed under a Creative Commons Attribution-NonCommercial-Sha
  * config_vsrv
  * configs_srvs_ufw
  * config_veroneau.net
+ * config_home_user
+ * config_memphis_testbed
 
 You should have received a copy of the license along with this work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
 

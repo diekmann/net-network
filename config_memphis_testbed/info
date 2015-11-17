@@ -1,0 +1,6 @@
+Firewall of the memphis testbed. Some IPs have been pseudonymized.
+
+The internal IP range of the testbed is 145.30.196.192.
+
+WARNING: some random values were chosen for some public IPs.
+These IPs do not belong to us! For example 145.30.196.192 was chosen by random!
