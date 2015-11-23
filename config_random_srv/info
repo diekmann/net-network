@@ -1,0 +1,4 @@
+IP addresses have been replaced for anonymity.
+
+Description by admin:
+192.168.1.0/24 is a physically separate internal network which uses e.g, Kerberos sync (we have a fallback machine for this).
