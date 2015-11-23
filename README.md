@@ -48,6 +48,7 @@ Every dump is valuable! Please consider donating your dump. For science!
 
  * we accept pull requests
  * anonymous contributions to: my_github_name @ net (dot) in (dot) tum (dot) de
-   GPG: CC8E 23DA 4746 5AD1 DBEA  7B04 E458 7581 35F5 8030
+   * GPG: CC8E 23DA 4746 5AD1 DBEA  7B04 E458 7581 35F5 8030
+   * We can take care of all the anonymization for you.
 
 
