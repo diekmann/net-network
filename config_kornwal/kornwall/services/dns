@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DNSSERVER=$(cat /etc/resolv.conf | egrep "^nameserver [0-255].*[0-255]$" | cut -b 12-36)
+
+echo "		Folgenede DNS Server werden verwendet:"
+
+for DNSNAMESERVERADDY in $DNSSERVER; do
+	$IPTABLES -A udp_packets_in -p UDP -s $DNSNAMESERVERADDY -d $LAN_IP --sport $PORT_DNS -m state --state $ESTABLISHED -j ACCEPT
+
+
+
+
+	$IPTABLES -A udp_packets_out -p UDP -s $LAN_IP -d $DNSNAMESERVERADDY --dport $PORT_DNS -m state --state $ESTABLISHED -j ACCEPT
+	$IPTABLES -A udp_packets_out -p UDP -s $LAN_IP -d $DNSNAMESERVERADDY --dport $PORT_DNS -m state --state NEW -j LOG --log-prefix "new connection to DNS  "
+	$IPTABLES -A udp_packets_out -p UDP -s $LAN_IP -d $DNSNAMESERVERADDY --dport $PORT_DNS -m state --state NEW -j ACCEPT
+	echo "		$DNSNAMESERVERADDY"
+done
+

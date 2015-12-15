@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$IPTABLES -A OUTPUT -p UDP -d $LAN_BROADCAST -s $LAN_IP -j ACCEPT  

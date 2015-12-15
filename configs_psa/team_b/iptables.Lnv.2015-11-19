@@ -1,0 +1,42 @@
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  210 70924 ACCEPT     udp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+    2   168 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    7   588 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+ 2585  160K ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+  488  101K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+    1    60 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+   85  5963 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            tcp dpt:3306
+    1    60 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    3   252 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    3   252 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+  311 57117 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    5   463 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+   14   840 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:3306
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   28  9184 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+    7   588 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    2   168 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+ 1630  213K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+  427 35397 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+  133  7980 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    4   240 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:3306
+    1    60 ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           

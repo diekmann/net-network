@@ -1,0 +1,66 @@
+Chain INPUT (policy DROP 6672K packets, 1768M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+11954 1761K ACCEPT     all  --  *      *       127.0.0.1            127.0.0.1           
+    5   200 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp spt:53 
+ 227K   42M ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0           udp spt:53 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.0/24     0.0.0.0/0           tcp dpt:53 
+    0     0 ACCEPT     udp  --  *      *       192.168.134.0/24     0.0.0.0/0           udp dpt:53 
+    0     0 ACCEPT     tcp  --  *      *       192.168.16.0/24      0.0.0.0/0           tcp dpt:53 
+    0     0 ACCEPT     udp  --  *      *       192.168.16.0/24      0.0.0.0/0           udp dpt:53 
+ 134K  144M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp spt:80 
+ 264K  289M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp spt:443 
+4142K  253M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp dpt:80 
+  14M  856M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp dpt:443 
+ 597M   32G ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp spt:22 
+ 379K  153M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp dpt:22 
+  864  450K ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           multiport sports 137,138,139,445 
+3138K  324M ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0           multiport sports 137,138,139,445 
+37721   14M ACCEPT     tcp  --  *      *       192.168.134.0/24     0.0.0.0/0           multiport dports 137,138,139,445 
+  725 56550 ACCEPT     udp  --  *      *       192.168.134.0/24     0.0.0.0/0           multiport dports 137,138,139,445 
+  226 38932 ACCEPT     tcp  --  *      *       192.168.16.0/24      0.0.0.0/0           multiport dports 137,138,139,445 
+   74  5772 ACCEPT     udp  --  *      *       192.168.16.0/24      0.0.0.0/0           multiport dports 137,138,139,445 
+    0     0 ACCEPT     tcp  --  *      *       131.159.15.1         131.159.15.82      tcp spt:25 
+   44  4072 ACCEPT     tcp  --  *      *       131.159.15.42        131.159.15.82      tcp spt:25 
+    0     0 ACCEPT     tcp  --  *      *       127.0.0.1            127.0.0.1           tcp dpt:25 
+  496 41664 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           icmp type 0 
+    2   144 ACCEPT     icmp --  *      *       192.168.134.0/24     0.0.0.0/0           icmp type 8 
+   11   756 ACCEPT     icmp --  *      *       192.168.16.0/24      0.0.0.0/0           icmp type 8 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.10       192.168.134.17      tcp spt:515 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.15       192.168.134.17      tcp spt:515 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.9        192.168.134.17      tcp spt:515 
+    0     0 ACCEPT     tcp  --  *      *       127.0.0.1            127.0.0.1           tcp dpt:631 
+    0     0 ACCEPT     tcp  --  *      *       127.0.0.1            127.0.0.1           tcp spt:631 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.3        192.168.134.17      tcp spt:514 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.3        192.168.134.17      tcp spt:544 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.3        192.168.134.17      tcp dpt:113 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.3        192.168.134.17      tcp dpts:1020:65535 
+    0     0 ACCEPT     tcp  --  *      *       131.159.21.1         0.0.0.0/0           tcp spt:123 
+    0     0 ACCEPT     tcp  --  *      *       131.159.21.2         0.0.0.0/0           tcp spt:123 
+    0     0 ACCEPT     udp  --  *      *       131.159.21.2         0.0.0.0/0           udp spt:123 
+24328 1849K ACCEPT     udp  --  *      *       131.159.21.1         0.0.0.0/0           udp spt:123 
+ 301K  107M ACCEPT     tcp  --  *      *       192.168.16.16        0.0.0.0/0           tcp spt:389 
+    0     0 ACCEPT     tcp  --  *      *       192.168.16.13        0.0.0.0/0           tcp spt:389 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.13       0.0.0.0/0           tcp spt:389 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.12       0.0.0.0/0           tcp spt:389 
+    0     0 ACCEPT     tcp  --  *      *       192.168.134.16       0.0.0.0/0           tcp spt:389 
+  532  299K ACCEPT     tcp  --  *      *       131.159.15.83        0.0.0.0/0           tcp spt:389 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp dpt:161 
+    9   594 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0           udp dpt:161 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            127.0.0.1           tcp dpt:8009 
+    0     0 ACCEPT     tcp  --  *      *       127.0.0.1            0.0.0.0/0           tcp spt:8009 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.16.17       tcp dpt:3306 
+    0     0 ACCEPT     tcp  --  *      *       192.168.16.17        0.0.0.0/0           tcp spt:3306 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.134.17      tcp dpt:2001 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.134.17      tcp dpt:2000 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.16.17       tcp dpt:2001 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.16.17       tcp dpt:2000 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            131.159.15.82      tcp dpt:2000 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            131.159.15.82      tcp dpt:2001 
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.134.17      tcp dpt:2161 
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            192.168.134.17      udp dpt:2161 
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 332M packets, 1582G bytes)
+ pkts bytes target     prot opt in     out     source               destination         

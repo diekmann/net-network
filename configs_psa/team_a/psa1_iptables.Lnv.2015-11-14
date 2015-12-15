@@ -1,0 +1,44 @@
+Chain INPUT (policy DROP 26205 packets, 8140K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+14403  940K ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+10967   14M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    4   336 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 2022  168K ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+
+Chain FORWARD (policy DROP 10 packets, 624 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   95 29722 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.10.0/24     
+
+Chain OUTPUT (policy DROP 13879 packets, 4552K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            131.159.0.2         
+  126  9104 ACCEPT     all  --  *      *       0.0.0.0/0            131.159.0.0/16      
+  266 31776 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.1.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.2.0/24      
+ 1789  121K ACCEPT     all  --  *      *       0.0.0.0/0            192.168.3.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.4.0/24      
+   22  3748 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.5.0/24      
+   15  3320 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.6.0/24      
+    2   120 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.7.0/24      
+   23  1565 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.8.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.9.0/24      
+18601 6640K ACCEPT     all  --  *      *       0.0.0.0/0            192.168.10.0/24     
+ 1243 92725 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.11.0/24     
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.12.0/24     
+    2   304 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.101.2       
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.102.2       
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.103.2       
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.105.2       
+    5   420 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.106.2       
+   35  4725 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.107.2       
+  119 22777 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.108.2       
+ 1247  227K ACCEPT     all  --  *      *       0.0.0.0/0            192.168.120.1       
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.130.1       
+  450 37482 ACCEPT     all  --  *      *       0.0.0.0/0            129.187.10.100      
+  228 12579 ACCEPT     all  --  *      *       0.0.0.0/0            212.211.132.250     
+10582 1650K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    1    84 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+  265 20332 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    1    60 ACCEPT     all  --  *      *       0.0.0.0/0            212.211.132.32      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            212.211.132.250     
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            195.20.242.89       

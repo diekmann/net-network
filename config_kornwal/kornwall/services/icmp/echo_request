@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# ping: 8 und 0, ausgehend
+$IPTABLES -A icmp_packets_out -p ICMP --icmp-type echo-request -j ACCEPT
+$IPTABLES -A icmp_packets_in -p ICMP --icmp-type echo-reply -j ACCEPT

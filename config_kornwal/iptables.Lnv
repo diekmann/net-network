@@ -1,0 +1,82 @@
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID LOG flags 0 level 4 prefix "dropped INVALID IN: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID
+    0     0 tcp_packets_in  tcp  --  *      *       0.0.0.0/0            192.168.0.14        
+    0     0 udp_packets_in  udp  --  *      *       0.0.0.0/0            192.168.0.14        
+    0     0 icmp_packets_in  icmp --  *      *       0.0.0.0/0            192.168.0.14        
+    4   336 ACCEPT     all  --  lo     *       127.0.0.1            127.0.0.1           
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       192.168.0.255       
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped IN: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID LOG flags 0 level 4 prefix "dropped INVALID OUT: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID
+    0     0 tcp_packets_out  tcp  --  *      *       192.168.0.14         0.0.0.0/0           
+    0     0 udp_packets_out  udp  --  *      *       192.168.0.14         0.0.0.0/0           
+    0     0 icmp_packets_out  icmp --  *      *       192.168.0.14         0.0.0.0/0           
+    4   336 ACCEPT     all  --  *      lo      127.0.0.1            127.0.0.1           
+    0     0 ACCEPT     udp  --  *      *       192.168.0.14         192.168.0.255       
+    2   168 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped OUT: "
+    2   168 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain icmp_packets_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+    0     0 LOG        icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 4 LOG flags 0 level 4 prefix "received source quench"
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 4
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped IN ICMP: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain icmp_packets_out (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped OUT ICMP: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain tcp_packets_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.14         tcp spt:80 state ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.14         tcp spt:443 state ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.14         tcp spt:21 state ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.14         tcp spts:1023:65535 dpts:1023:65535 state ESTABLISHED
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped IN TCP: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain tcp_packets_out (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:80 state ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:80 flags:0x16/0x02 state NEW
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:443 state ESTABLISHED
+    0     0 LOG        tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:443 flags:0x16/0x02 state NEW LOG flags 0 level 4 prefix "new HTTPS: "
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:443 flags:0x16/0x02 state NEW
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:21 state ESTABLISHED
+    0     0 LOG        tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:21 flags:0x16/0x02 state NEW LOG flags 0 level 4 prefix "new FTP connection  "
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp dpt:21 flags:0x16/0x02 state NEW
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp spts:1023:65535 dpts:1023:65535 flags:0x16/0x02 state NEW
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.14         0.0.0.0/0            tcp spts:1023:65535 dpts:1023:65535 state ESTABLISHED
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped OUT TCP: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain udp_packets_in (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  *      *       8.8.8.8              192.168.0.14         udp spt:53 state ESTABLISHED
+    0     0 ACCEPT     udp  --  *      *       8.8.4.4              192.168.0.14         udp spt:53 state ESTABLISHED
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped IN UDP: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain udp_packets_out (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  *      *       192.168.0.14         8.8.8.8              udp dpt:53 state ESTABLISHED
+    0     0 LOG        udp  --  *      *       192.168.0.14         8.8.8.8              udp dpt:53 state NEW LOG flags 0 level 4 prefix "new connection to DNS  "
+    0     0 ACCEPT     udp  --  *      *       192.168.0.14         8.8.8.8              udp dpt:53 state NEW
+    0     0 ACCEPT     udp  --  *      *       192.168.0.14         8.8.4.4              udp dpt:53 state ESTABLISHED
+    0     0 LOG        udp  --  *      *       192.168.0.14         8.8.4.4              udp dpt:53 state NEW LOG flags 0 level 4 prefix "new connection to DNS  "
+    0     0 ACCEPT     udp  --  *      *       192.168.0.14         8.8.4.4              udp dpt:53 state NEW
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "dropped OUT UDP: "
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           

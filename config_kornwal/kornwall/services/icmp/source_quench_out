@@ -1,0 +1,4 @@
+#!/bin/bash
+
+$IPTABLES -A icmp_packets_out -p ICMP --icmp-type source-quench -j LOG --log-prefix "sending source quench"
+$IPTABLES -A icmp_packets_out -p ICMP --icmp-type source-quench  -j ACCEPT

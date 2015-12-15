@@ -1,0 +1,10 @@
+A script to set up a host-based firewall on a PC. Written by Cornelius Diekmann around 2006.
+
+A review in 2015:
+Don't judge, I was jung ;-)
+For example, LO_IP="127.0.0.1" is just plain nonsense. How could the nameserver-thing ever work?
+LAN_IP_RANGE and LAN_BROADCAST are not consistent. But it worked at that time ;-)
+Most of the knowledge was probably obtained from the frozentux tutorial.
+
+I executed the script (fixing the path to iptables) in 2015 on my laptop to generate the iptables-save and iptables-Lnv dump.
+

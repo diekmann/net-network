@@ -1,0 +1,51 @@
+Format:
+TYPE_CODE
+
+TYPE	CODE	Description	Query	Error	Reference
+0	0	Echo Reply	x	 	RFC792
+3	0	Network Unreachable	 	x	RFC792
+3	1	Host Unreachable	 	x	RFC792
+3	2	Protocol Unreachable	 	x	RFC792
+3	3	Port Unreachable	 	x	RFC792
+3	4	Fragmentation needed but no frag. bit set	 	x	RFC792
+3	5	Source routing failed	 	x	RFC792
+3	6	Destination network unknown	 	x	RFC792
+3	7	Destination host unknown	 	x	RFC792
+3	8	Source host isolated (obsolete)	 	x	RFC792
+3	9	Destination network administratively prohibited	 	x	RFC792
+3	10	Destination host administratively prohibited	 	x	RFC792
+3	11	Network unreachable for TOS	 	x	RFC792
+3	12	Host unreachable for TOS	 	x	RFC792
+3	13	Communication administratively prohibited by filtering	 	x	RFC1812
+3	14	Host precedence violation	 	x	RFC1812
+3	15	Precedence cutoff in effect	 	x	RFC1812
+4	0	Source quench	 	 	RFC792
+5	0	Redirect for network	 	 	RFC792
+5	1	Redirect for host	 	 	 
+5	2	Redirect for TOS and network	 	 	RFC792
+5	3	Redirect for TOS and host	 	 	RFC792
+8	0	Echo request	x	 	RFC792
+9	0	Router advertisement - Normal router advertisement	 	 	RFC1256
+9	16	Router advertisement - Does not route common traffic	 	 	RFC2002
+10	0	Route selection	 	 	RFC1256
+11	0	TTL equals 0 during transit	 	x	RFC792
+11	1	TTL equals 0 during reassembly	 	x	RFC792
+12	0	IP header bad (catchall error)	 	x	RFC792
+12	1	Required options missing	 	x	RFC1108
+12	2	IP Header bad length	 	x	RFC792
+13	0	Timestamp request (obsolete)	x	 	RFC792
+14	 	Timestamp reply (obsolete)	x	 	RFC792
+15	0	Information request (obsolete)	x	 	RFC792
+16	0	Information reply (obsolete)	x	 	RFC792
+17	0	Address mask request	x	 	RFC950
+18	0	Address mask reply	x	 	RFC950
+20-29	 	Reserved for robustness experiment	 	 	Zaw-Sing Su
+30	0	Traceroute	x	 	RFC1393
+31	0	Datagram Conversion Error	 	x	RFC1475
+32	0	Mobile Host Redirect	 	 	David Johnson
+33	0	IPv6 Where-Are-You	x	 	Bill Simpson
+34	0	IPv6 I-Am-Here	x	 	Bill Simpson
+35	0	Mobile Registration Request	x	 	Bill Simpson
+36	0	Mobile Registration Reply	x	 	Bill Simpson
+39	0	SKIP	 	 	Tom Markson
+40	0	Photuris	 	 	RFC2521

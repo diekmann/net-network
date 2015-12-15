@@ -11,6 +11,7 @@ Acknowledgements
 
 Many administrators and contributors wish to remain anonymous. 
 Thank you very much for your contribution!
+Special thanks to Pieter-Jan Maenhaut and Andreas Korsten.
 
 
 
@@ -32,6 +33,11 @@ The following is licensed under a Creative Commons Attribution-NonCommercial-Sha
  * config_home_user
  * config_memphis_testbed
  * config_random_srv
+ * config_eduroam_laptop
+ * config_kornwal
+ * config_private_root
+ * configs_psa
+ * configs_ugent
 
 You should have received a copy of the license along with this work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
 

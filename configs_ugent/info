@@ -1,0 +1,26 @@
+Contributed by
+Opleiding Industrieel Ingenieur Informatica
+Universiteit Gent - Faculteit Ingenieurswetenschappen en Architectuur
+Vakgroep Informatietechnologie (EA05)
+
+Thank you very much!
+
+For privacy reasons, public IP addresses have been remapped into the range of the TUM.
+To make the dump compatible with iptables-save v1.4.21, we replaced "/255.255.255.0" with "/24". It may be necessary to replace the "-d !" syntax with "! -d" syntax.
+
+Description (verbatim):
+
+> A little background info:
+> 
+> These dumps were taken from one of our oldest servers, and the rules are probably more than 10 years old (and were written by a former colleague who left our group many years ago). Rewriting these rules a bit has been on my todo list for a long time, but I still need to find some time to do so.
+> 
+> The rules may seem strange at first, but they are mostly designed to keep students away.
+> 
+> The rules mainly handle access from our internal networks. The server itself is located in our internal network, and has several network interfaces (listed in ip.4as). The most important interfaces:
+> - eth0: connected to the teachers network 192.168.134.0/24
+> - eth1: connected to the students network (lab computers) 192.168.16.0/24
+> - eth2: connected to the public network range 131.159.15.82/26 [note: IP replaced]
+> 
+> There is another firewall in front (at the edge of the network), managed by the network administrators from the university, defining access to the different networks (public, teacher’s network, lab network). Unfortunately I have no access to this configuration.
+> 
+> I’m pretty sure we are not protected against spoofing. If you have any recommendations regarding our configuration, feel free to forward them!

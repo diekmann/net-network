@@ -1,0 +1,20 @@
+#!/bin/bash
+echo "loading startup configuration"
+
+LOOPBACK=true
+DNS=true
+HTTP=true
+HTTPS=true
+FTP=true
+UDP_LAN_BROADCAST=true  #so ne art "pingen" im windows netzwerk
+UDP_LAN_BROADCAST_SELF=true #selbst broadcasten
+SSH_SELF=false #verbindungen via ssh zu sich selbst
+FTP=true
+
+ICMP_echo_request=true # andere Leute anpingen
+ICMP_echo_reply=true   # selbst angepingt werden
+ICMP_source_quench_in=true # anderer server überlastet	
+ICMP_source_quench_out=false # eigener server überlastet	
+
+
+echo "done"

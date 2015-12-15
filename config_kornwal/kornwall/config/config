@@ -1,0 +1,69 @@
+#!/bin/bash
+echo "reading configuration file"
+
+
+INET_IFACE="eth0"
+
+LAN_IP="192.168.0.14"
+
+LAN_IP_RANGE="192.168.0.0/16"
+
+LAN_BROADCAST="192.168.0.255"
+
+LO_IFACE="lo"
+LO_IP="127.0.0.1"
+
+IPTABLES="/usr/sbin/iptables"
+
+ESTABLISHED="ESTABLISHED"
+
+DROP_INVALID=true
+
+HTTP_CONNECTION_LOGGING=false
+
+#PC2ALLOW="192.168.0.15"
+
+
+ /bin/echo "0" > /proc/sys/net/ipv4/ip_forward
+# Diese Option benötigt nur ein Router, ein Host
+# mit mehreren Netzwerk-Interfaces. Dies sollte
+# also bei Ihnen per Default ausgeschlatet sein.
+#
+
+#pings deaktivieren
+# /bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+#broadcats pings deaktivieren
+/bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+#/bin/echo "0" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts #test
+
+# Deaktivierung von "source routed packets"
+/bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route 
+
+#max connections 
+#/bin/echo "32760" > /proc/sys/net/ipv4/ip_conntrack_max
+
+############ TCP-Syncookies, Abwehrmaßnahmen gegen syn flooding
+/bin/echo "1" > /proc/sys/net/ipv4/tcp_syncookies
+
+
+############# Das Loggen ungültiger ICMP-Pakete wird ausgeschaltet
+/bin/echo "0" > /proc/sys/net/ipv4/icmp_ignore_bogus_error_responses
+
+##### IP-Spoof Protection
+/bin/echo "1" > /proc/sys/net/ipv4/conf/$INET_IFACE/rp_filter
+
+##### Keine Redirections
+/bin/echo "0" > /proc/sys/net/ipv4/conf/$INET_IFACE/accept_redirects
+
+##### Kein Source-Routing
+/bin/echo "0" > /proc/sys/net/ipv4/conf/$INET_IFACE/accept_source_route
+
+##### Kein Bootstrap Protokoll
+/bin/echo "0" > /proc/sys/net/ipv4/conf/$INET_IFACE/bootp_relay
+
+##### Ungültige IP-Pakete werden geloggt.
+/bin/echo "1" > /proc/sys/net/ipv4/conf/$INET_IFACE/log_martians 
+
+
+echo "done"

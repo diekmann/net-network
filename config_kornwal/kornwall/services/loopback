@@ -1,0 +1,4 @@
+#!/bin/bash
+
+$IPTABLES -A INPUT -i $LO_IFACE -s $LO_IP -d $LO_IP -j ACCEPT
+$IPTABLES -A OUTPUT -o $LO_IFACE -s $LO_IP -d $LO_IP -j ACCEPT

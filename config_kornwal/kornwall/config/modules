@@ -1,0 +1,31 @@
+#!/bin/bash
+
+############################################
+#
+# 2. Module loading.
+#
+
+#
+# Needed to initially load modules
+#/sbin/depmod -a
+# 2.1 Required modules
+#
+#/sbin/modprobe ip_conntrack
+#/sbin/modprobe ip_tables
+#/sbin/modprobe iptable_filter
+#/sbin/modprobe iptable_mangle
+#/sbin/modprobe iptable_nat
+#/sbin/modprobe ipt_LOG
+#/sbin/modprobe ipt_limit
+#/sbin/modprobe ipt_MASQUERADE
+#/sbin/modprobe ipt_state 
+#
+# 2.2 Non-Required modules
+#-s $LAN_IP
+
+#/sbin/modprobe ipt_owner
+#/sbin/modprobe ipt_REJECT
+#/sbin/modprobe ip_conntrack_ftp
+#/sbin/modprobe ip_conntrack_irc
+#/sbin/modprobe ip_nat_ftp
+#/sbin/modprobe ip_nat_irc

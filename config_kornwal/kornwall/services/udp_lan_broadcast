@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$IPTABLES -A INPUT -p UDP -d $LAN_BROADCAST -s $LAN_IP_RANGE -j ACCEPT  

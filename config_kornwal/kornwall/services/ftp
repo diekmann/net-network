@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#FTP Verbindung zum Contro Port über TCP
+$IPTABLES -A tcp_packets_in -p TCP -d $LAN_IP --sport $CONTROL_PORT_FTP -m state --state $ESTABLISHED -j ACCEPT  
+
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport $CONTROL_PORT_FTP -m state --state $ESTABLISHED -j ACCEPT
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport $CONTROL_PORT_FTP --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j LOG --log-prefix "new FTP connection  "
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport $CONTROL_PORT_FTP --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT
+
+
+#Die Dateinübertragung
+
+$IPTABLES -A tcp_packets_in -p TCP -d $LAN_IP --sport $DATEINUEBERTRAGUNG_PORT_FTP --dport $DATEINUEBERTRAGUNG_PORT_FTP -m state --state $ESTABLISHED -j ACCEPT
+
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --sport $DATEINUEBERTRAGUNG_PORT_FTP --dport $DATEINUEBERTRAGUNG_PORT_FTP --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --sport $DATEINUEBERTRAGUNG_PORT_FTP --dport $DATEINUEBERTRAGUNG_PORT_FTP -m state --state $ESTABLISHED -j ACCEPT

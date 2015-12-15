@@ -1,0 +1,9 @@
+#!/bin/bash
+
+$IPTABLES -A tcp_packets_in -p TCP -d $LAN_IP --sport $PORT_HTTPS -m state --state $ESTABLISHED -j ACCEPT  
+
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport $PORT_HTTPS -m state --state $ESTABLISHED -j ACCEPT
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport $PORT_HTTPS --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j LOG --log-prefix "new HTTPS: "
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport $PORT_HTTPS --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT
+#$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport $PORT_HTTPS --tcp-flags SYN,RST,ACK ACK -j ACCEPT
+

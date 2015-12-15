@@ -1,0 +1,35 @@
+Chain INPUT (policy DROP 18598 packets, 6100K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 3867 4079K ACCEPT     all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+ 1695  626K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy DROP 13363 packets, 4383K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            131.159.0.2         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            131.159.0.0/16      
+  137 18184 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.1.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.2.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.3.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.4.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.5.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.6.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.7.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.8.0/24      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.9.0/24      
+ 1602  507K ACCEPT     all  --  *      *       0.0.0.0/0            192.168.10.0/24     
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.11.0/24     
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            192.168.12.0/24     
+  100 13499 ACCEPT     all  --  *      *       0.0.0.0/0            129.187.10.100      
+   78  4868 ACCEPT     all  --  *      *       0.0.0.0/0            212.211.132.250     
+ 2512  290K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+    1    60 ACCEPT     all  --  *      *       0.0.0.0/0            212.211.132.32      
+    1    60 ACCEPT     all  --  *      *       0.0.0.0/0            195.20.242.89       
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            212.211.132.250     
