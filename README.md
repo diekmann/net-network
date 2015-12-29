@@ -44,6 +44,9 @@ You should have received a copy of the license along with this work.  If not, se
 Third-party parts of this repository may be licensed seperately.
 For example, ITVal is GPLv2.
 
+The following is licensed under GPL 3:
+ * configs_tails_os
+
 For all other directories, no license is specified.
 
 
