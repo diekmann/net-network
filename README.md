@@ -11,7 +11,7 @@ Acknowledgements
 
 Many administrators and contributors wish to remain anonymous. 
 Thank you very much for your contribution!
-Special thanks to Pieter-Jan Maenhaut and Andreas Korsten.
+Special thanks to Pieter-Jan Maenhaut, Andreas Korsten, and danrl.
 
 
 
@@ -38,6 +38,7 @@ The following is licensed under a Creative Commons Attribution-NonCommercial-Sha
  * config_private_root
  * configs_psa
  * configs_ugent
+ * configs_ipv6_server
 
 You should have received a copy of the license along with this work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
 
