@@ -1,0 +1,94 @@
+[user@sys-firewall ~]$ sudo iptables -vL -n -t filter
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       udp  --  vif+   *       0.0.0.0/0            0.0.0.0/0            udp dpt:68
+55336   83M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+35540   23M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     all  --  vif0.0 *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DROP       all  --  vif+   vif+    0.0.0.0/0            0.0.0.0/0           
+  519 33555 ACCEPT     udp  --  *      *       10.137.2.12          10.137.1.1           udp dpt:53
+   16  1076 ACCEPT     udp  --  *      *       10.137.2.12          10.137.1.254         udp dpt:53
+    0     0 ACCEPT     tcp  --  *      *       10.137.2.12          10.137.1.1           tcp dpt:53
+    0     0 ACCEPT     tcp  --  *      *       10.137.2.12          10.137.1.254         tcp dpt:53
+    0     0 ACCEPT     icmp --  *      *       10.137.2.12          0.0.0.0/0           
+    0     0 DROP       tcp  --  *      *       10.137.2.12          10.137.255.254       tcp dpt:8082
+  264 14484 ACCEPT     all  --  *      *       10.137.2.12          0.0.0.0/0           
+  254 16404 ACCEPT     udp  --  *      *       10.137.2.9           10.137.1.1           udp dpt:53
+    2   130 ACCEPT     udp  --  *      *       10.137.2.9           10.137.1.254         udp dpt:53
+    0     0 ACCEPT     tcp  --  *      *       10.137.2.9           10.137.1.1           tcp dpt:53
+    0     0 ACCEPT     tcp  --  *      *       10.137.2.9           10.137.1.254         tcp dpt:53
+    0     0 ACCEPT     icmp --  *      *       10.137.2.9           0.0.0.0/0           
+    0     0 DROP       tcp  --  *      *       10.137.2.9           10.137.255.254       tcp dpt:8082
+  133  7620 ACCEPT     all  --  *      *       10.137.2.9           0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 32551 packets, 1761K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+[user@sys-firewall ~]$ sudo iptables -vL -n -t nat
+Chain PREROUTING (policy ACCEPT 362 packets, 20704 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  829 50900 PR-QBS     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  362 20704 PR-QBS-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 116 packets, 7670 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      vif+    0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+  945 58570 MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain PR-QBS (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  458 29593 DNAT       udp  --  *      *       0.0.0.0/0            10.137.2.1           udp dpt:53 to:10.137.1.1
+    0     0 DNAT       tcp  --  *      *       0.0.0.0/0            10.137.2.1           tcp dpt:53 to:10.137.1.1
+    9   603 DNAT       udp  --  *      *       0.0.0.0/0            10.137.2.254         udp dpt:53 to:10.137.1.254
+    0     0 DNAT       tcp  --  *      *       0.0.0.0/0            10.137.2.254         tcp dpt:53 to:10.137.1.254
+
+Chain PR-QBS-SERVICES (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+[user@sys-firewall ~]$ sudo iptables -vL -n -t mangle
+Chain PREROUTING (policy ACCEPT 12090 packets, 17M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain INPUT (policy ACCEPT 11387 packets, 17M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 703 packets, 88528 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 6600 packets, 357K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain POSTROUTING (policy ACCEPT 7303 packets, 446K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+[user@sys-firewall ~]$ sudo iptables -vL -n -t raw
+Chain PREROUTING (policy ACCEPT 92093 packets, 106M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       all  --  vif20.0 *      !10.137.2.9           0.0.0.0/0           
+    0     0 DROP       all  --  vif19.0 *      !10.137.2.12          0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 32551 packets, 1761K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+[user@sys-firewall ~]$ sudo iptables -vL -n -t security
+Chain INPUT (policy ACCEPT 11387 packets, 17M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 659 packets, 86158 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 6600 packets, 357K bytes)
+ pkts bytes target     prot opt in     out     source               destination   

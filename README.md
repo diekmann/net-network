@@ -39,6 +39,7 @@ The following is licensed under a Creative Commons Attribution-NonCommercial-Sha
  * configs_psa
  * configs_ugent
  * configs_ipv6_server
+ * blog_a-unikernel-firewall-for-qubesos
 
 You should have received a copy of the license along with this work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
 
