@@ -1,0 +1,206 @@
+#!/bin/sh 
+###########################################################################
+#
+# 1. Configuration options.
+#
+
+echo "======START======"
+
+
+INET_IFACE="eth0"
+
+LAN_IP="192.168.0.14"
+ROUTER="192.168.0.1"
+LAN_IP_RANGE="192.168.0.0/16"
+LAN_IFACE="eth1"
+
+LO_IFACE="lo"
+LO_IP="127.0.0.1"
+
+
+IPTABLES="/usr/sbin/iptables"
+
+USER="KoRny"
+
+BROWSER="firefox"
+
+#PID_BROWSER=`ps aux |grep $BROWSER |head -n 5 |cut -b 10-14`
+
+#SID_BROWSER=`ps -eo sid,args |grep $BROWSER |head -n 1 |cut -b 1-5`
+
+
+
+#echo "firefox pid: "
+#echo $PID_BROWSER
+#echo " "
+#echo "firefox sid:"
+#echo $SID_BROWSER
+
+##
+##Alte Config löschen
+##
+
+iptables -F INPUT
+iptables -P INPUT DROP
+iptables -F FORWARD
+iptables -P FORWARD DROP
+iptables -F OUTPUT
+iptables -P OUTPUT DROP
+
+iptables -F icmp_packets
+iptables -F udp_packets
+iptables -F bad_tcp_packets
+iptables -F allowed
+iptables -F tcp_packets
+
+iptables -X allowed
+iptables -X bad_tcp_packets
+iptables -X icmp_packets
+iptables -X tcp_packets
+iptables -X udp_packets
+
+
+
+
+###########################################################################
+#
+# 2. Module loading.
+#
+
+#
+# Needed to initially load modules
+#
+
+/sbin/depmod -a
+
+#
+# 2.1 Required modules
+#
+
+/sbin/modprobe ip_conntrack
+/sbin/modprobe ip_tables
+/sbin/modprobe iptable_filter
+/sbin/modprobe iptable_mangle
+/sbin/modprobe iptable_nat
+/sbin/modprobe ipt_LOG
+/sbin/modprobe ipt_limit
+/sbin/modprobe ipt_MASQUERADE
+
+#
+# 2.2 Non-Required modules
+#-s $LAN_IP
+
+/sbin/modprobe ipt_owner
+#/sbin/modprobe ipt_REJECT
+#/sbin/modprobe ip_conntrack_ftp
+#/sbin/modprobe ip_conntrack_irc
+#/sbin/modprobe ip_nat_ftp
+#/sbin/modprobe ip_nat_irc
+
+ /bin/echo "0" > /proc/sys/net/ipv4/ip_forward
+# Diese Option benötigt nur ein Router, ein Host
+# mit mehreren Netzwerk-Interfaces. Dies sollte
+# also bei Ihnen per Default ausgeschlatet sein.
+#
+
+#pings deaktivieren
+ /bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+#broadcats pings deaktivieren
+/bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+
+
+# Deaktivierung von "source routed packets"
+/bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route 
+
+#max connections 
+#/bin/echo "32760" > /proc/sys/net/ipv4/ip_conntrack_max
+
+
+
+# 3.2 Non-Required proc configuration
+
+#echo "1" > /proc/sys/net/ipv4/conf/all/rp_filter
+#echo "1" > /proc/sys/net/ipv4/conf/all/proxy_arp
+#echo "1" > /proc/sys/net/ipv4/ip_dynaddr
+
+
+
+$IPTABLES -P INPUT DROP
+$IPTABLES -P OUTPUT DROP
+$IPTABLES -P FORWARD DROP
+
+
+
+$IPTABLES -N bad_tcp_packets
+
+$IPTABLES -N allowed
+$IPTABLES -N tcp_packets
+$IPTABLES -N udp_packets
+$IPTABLES -N icmp_packets
+#log leeren
+#echo "" > /var/log/firewall
+
+
+
+$IPTABLES -A tcp_packets -p TCP -j ACCEPT
+
+
+$IPTABLES -A udp_packets -p UDP -j ACCEPT
+
+
+
+
+
+iptables -A INPUT -m state --state INVALID -j DROP
+iptables -A OUTPUT -m state --state INVALID -j DROP
+
+# Stealth Scans etc. DROPpen
+# Keine Flags gesetzt
+iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+
+# SYN und FIN gesetzt
+iptables -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+
+# SYN und RST gleichzeitig gesetzt
+iptables -A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+
+# FIN und RST gleichzeitig gesetzt
+iptables -A INPUT -p tcp --tcp-flags FIN,RST FIN,RST -j DROP
+
+# FIN ohne ACK
+iptables -A INPUT -p tcp --tcp-flags ACK,FIN FIN -j DROP
+
+# PSH ohne ACK
+iptables -A INPUT -p tcp --tcp-flags ACK,PSH PSH -j DROP
+
+# URG ohne ACK
+iptables -A INPUT -p tcp --tcp-flags ACK,URG URG -j DROP
+
+
+
+
+
+
+
+$IPTABLES -A OUTPUT -m owner --uid-owner root -j LOG --log-prefix "========= Root Inet Zugriff: " 
+$IPTABLES -A OUTPUT -m owner --uid-owner root -j DROP
+$IPTABLES -A OUTPUT -m owner ! --uid-owner $USER -j LOG --log-prefix "other user than $USER: " 
+$IPTABLES -A OUTPUT -m owner --cmd-owner firefox-sh -j LOG
+$IPTABLES -A OUTPUT -p TCP -s $LAN_IP --dport 80 -j tcp_packets
+$IPTABLES -A OUTPUT -p UDP -s $LAN_IP -d $ROUTER --dport 53 -j udp_packets
+
+$IPTABLES -A INPUT -p TCP -d $LAN_IP --sport 80 -j tcp_packets
+$IPTABLES -A INPUT -p UDP -s $ROUTER -d $LAN_IP --sport 53 -j udp_packets
+
+$IPTABLES -A OUTPUT -p TCP -s $LO_IP -d $LO_IP -j ACCEPT
+$IPTABLES -A INPUT -p TCP -s $LO_IP -d $LO_IP -j ACCEPT
+
+#$IPTABLES -A INPUT -p TCP -j tcp_packets  # -i $INET_IFACE
+#$IPTABLES -A OUTPUT -p TCP -j tcp_packets
+#$IPTABLES -A INPUT -p UDP -i $INET_IFACE -j udp_packets
+#$IPTABLES -A INPUT -p ICMP -i $INET_IFACE -j icmp_packets
+
+echo "=====ENDE====="
+
+

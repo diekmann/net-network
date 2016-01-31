@@ -1,0 +1,22 @@
+iptables -I INPUT -p udp -d 198.51.100.19 --dport 3478 -j ACCEPT
+iptables -I INPUT -p udp -d 198.51.100.20 --dport 3478 -j ACCEPT
+iptables -I INPUT -p udp -d 198.51.100.19 \
+        --dport 49152:65535 -j ACCEPT
+
+iptables -A INPUT -p tcp -d 198.51.100.19 --dport 5061 -j ACCEPT
+
+iptables -A INPUT -p tcp -d 198.51.100.19 --dport 5222 -j ACCEPT
+iptables -A INPUT -p tcp -d 198.51.100.19 --dport 5269 -j ACCEPT
+
+ip6tables -I INPUT -p udp -d 2001:DB8:1000:2000::19 \
+        --dport 3478 -j ACCEPT
+ip6tables -I INPUT -p udp -d 2001:DB8:1000:2000::19 \
+        --dport 49152:65535 -j ACCEPT
+
+ip6tables -A INPUT -p tcp -d 2001:DB8:1000:2000::19 \
+        --dport 5061 -j ACCEPT
+
+ip6tables -A INPUT -p tcp -d 2001:DB8:1000:2000::19 \
+        --dport 5222 -j ACCEPT
+ip6tables -A INPUT -p tcp -d 2001:DB8:1000:2000::19 \
+        --dport 5269 -j ACCEPT

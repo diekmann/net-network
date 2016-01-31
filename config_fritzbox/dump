@@ -1,0 +1,63 @@
+prios {
+       profiles {
+               name = "profile_http";
+               profile_id = "1";
+               rules = "TCP 80 0 0 0";
+               filter = "reject tcp any eq 80 any";
+       } {
+               name = "profile_ftp";
+               profile_id = "2";
+               rules = "TCP 20 21 0 0";
+               filter = "reject tcp any range 20 21 any";
+       } {
+               name = "profile_emule";
+               profile_id = "3";
+               rules = "TCP 0 0 4662 0", "UDP 0 0 4672 0";
+               filter = "reject tcp any any eq 4662",
+                        "reject udp any any eq 4672";
+       } {
+               name = "profile_torrent";
+               profile_id = "4";
+               rules = "TCP 0 0 6881 6999";
+               filter = "reject tcp any any range 6881 6999";
+       } {
+               name = "profile_rdp";
+               profile_id = "5";
+               rules = "TCP 3389 0 0 0";
+               filter = "reject tcp any eq 3389 any";
+       } {
+               name = "profile_ssh";
+               profile_id = "6";
+               rules = "TCP 0 0 22 0";
+               filter = "reject tcp any any eq 22";
+       } {
+               name = "profile_telnet";
+               profile_id = "7";
+               rules = "TCP 0 0 23 0";
+               filter = "reject tcp any any eq 23";
+       } {
+               name = "profile_not_surf";
+               profile_id = "8";
+               rules = "TCP 0 0 1 24", "TCP 0 0 26 79", "TCP 0 0 81 109",
+                       "TCP 0 0 111 142", "TCP 0 0 144 442",
+                       "TCP 0 0 444 464", "TCP 0 0 466 586",
+                       "TCP 0 0 588 992", "TCP 0 0 994 994",
+                       "TCP 0 0 996 8079", "TCP 0 0 8081 65535",
+                       "UDP 0 0 0 0";
+               filter = "reject tcp any any range 1 24",
+                        "reject tcp any any range 26 79",
+                        "reject tcp any any range 81 109",
+                        "reject tcp any any range 111 142",
+                        "reject tcp any any range 144 442",
+                        "reject tcp any any range 444 464",
+                        "reject tcp any any range 466 586",
+                        "reject tcp any any range 588 992",
+                        "reject tcp any any range 994 994",
+                        "reject tcp any any range 996 8079",
+                        "reject tcp any any range 8081 65535",
+                        "reject udp any any";
+       }
+}
+
+
+

@@ -1,0 +1,333 @@
+#!/bin/bash
+###########################################################################
+#
+# 1. Configuration options.
+#
+
+echo "======START======"
+
+
+INET_IFACE="eth0"
+
+LAN_IP="192.168.0.14"
+ROUTER="192.168.0.1"
+LAN_IP_RANGE="192.168.0.0/16"
+LAN_IFACE="eth1"
+
+PC2ALLOW="192.168.0.15"
+
+LO_IFACE="lo"
+LO_IP="127.0.0.1"
+
+
+IPTABLES="/usr/sbin/iptables"
+
+USER="KoRny"
+
+BROWSER="firefox"
+
+#PID_BROWSER=`ps aux |grep $BROWSER |head -n 5 |cut -b 10-14`
+
+#SID_BROWSER=`ps -eo sid,args |grep $BROWSER |head -n 1 |cut -b 1-5`
+
+
+
+#echo "firefox pid: "
+#echo $PID_BROWSER
+#echo " "
+#echo "firefox sid:"
+#echo $SID_BROWSER
+
+##
+##Alte Config löschen
+##
+
+$IPTABLES -F INPUT
+$IPTABLES -P INPUT DROP
+$IPTABLES -F FORWARD
+$IPTABLES -P FORWARD DROP
+$IPTABLES -F OUTPUT
+$IPTABLES -P OUTPUT DROP
+
+## alles löschen
+$IPTABLES -F
+$IPTABLES -X
+
+
+
+
+
+
+###########################################################################
+#
+# 2. Module loading.
+#
+
+#
+# Needed to initially load modules
+#
+
+/sbin/depmod -a
+
+#
+# 2.1 Required modules
+#
+
+/sbin/modprobe ip_conntrack
+/sbin/modprobe ip_tables
+/sbin/modprobe iptable_filter
+/sbin/modprobe iptable_mangle
+/sbin/modprobe iptable_nat
+/sbin/modprobe ipt_LOG
+/sbin/modprobe ipt_limit
+/sbin/modprobe ipt_MASQUERADE
+#/sbin/modprobe ipt_state 
+#
+# 2.2 Non-Required modules
+#-s $LAN_IP
+
+/sbin/modprobe ipt_owner
+#/sbin/modprobe ipt_REJECT
+#/sbin/modprobe ip_conntrack_ftp
+#/sbin/modprobe ip_conntrack_irc
+#/sbin/modprobe ip_nat_ftp
+#/sbin/modprobe ip_nat_irc
+
+ /bin/echo "0" > /proc/sys/net/ipv4/ip_forward
+# Diese Option benötigt nur ein Router, ein Host
+# mit mehreren Netzwerk-Interfaces. Dies sollte
+# also bei Ihnen per Default ausgeschlatet sein.
+#
+
+#pings deaktivieren
+ /bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+#broadcats pings deaktivieren
+/bin/echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+
+
+# Deaktivierung von "source routed packets"
+/bin/echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route 
+
+#max connections 
+#/bin/echo "32760" > /proc/sys/net/ipv4/ip_conntrack_max
+
+
+
+# 3.2 Non-Required proc configuration
+
+#echo "1" > /proc/sys/net/ipv4/conf/all/rp_filter
+#echo "1" > /proc/sys/net/ipv4/conf/all/proxy_arp
+#echo "1" > /proc/sys/net/ipv4/ip_dynaddr
+
+
+
+$IPTABLES -P INPUT DROP
+$IPTABLES -P OUTPUT DROP
+$IPTABLES -P FORWARD DROP
+
+
+
+$IPTABLES -N bad_tcp_packets
+
+$IPTABLES -N allowed
+$IPTABLES -N tcp_packets_out
+$IPTABLES -N tcp_packets_in
+$IPTABLES -N udp_packets_in
+$IPTABLES -N udp_packets_out
+$IPTABLES -N icmp_packets
+#log leeren
+echo "" > /var/log/firewall
+
+
+
+
+
+##
+##Ausgehende TCP Packete
+##
+#$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport 22 --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT  # SSH nach ausen
+#$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport ssh -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport https -m state --state NEW -j ACCEPT
+
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --dport 80 --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT  #http
+
+# AIM / ICQ
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --tcp-flags SYN,RST,ACK SYN --sport 1024: --dport 5190 -m state --state NEW -j ACCEPT 
+# IRC später
+#$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --tcp-flags SYN,RST,ACK SYN --sport 1024: -d irc.freenode.net -m state --state NEW --dport 6667 -j ACCEPT 
+# Jabber
+#$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP --tcp-flags SYN,RST,ACK SYN --sport 1024: -d jabber.org -m state --state NEW --dport 5222 -j ACCEPT  
+
+
+
+$IPTABLES -A tcp_packets_out -p TCP -s $LAN_IP -d $PC2ALLOW --sport 80 --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT  # Webserver
+$IPTABLES -A tcp_packets_out -j DROP
+
+
+
+
+
+#sonderfall für später:
+# Skype
+#$IPTABLES -A tcp_packets_out -s $LAN_IP -p UDP --sport 33333 -m state --state NEW -j ACCEPT 
+
+
+
+##
+##Eingehende TCP Packete
+##
+#$IPTABLES -A tcp_packets_in -p TCP -d $LAN_IP --dport 22 --tcp-flags SYN,RST,ACK SYN -m limit --limit 20/h -m state --state NEW -j ACCEPT #SSH von außen
+#$IPTABLES -A tcp_packets_in -p TCP -d $LAN_IP --sport ssh -m state --state ESTABLISHED,RELATED -j ACCEPT 
+
+#$IPTABLES -A tcp_packets_in -p TCP -d $LAN_IP --sport https -m state --state ESTABLISHED -j ACCEPT 
+
+#$IPTABLES -A tcp_packets_in -p TCP -d $LAN_IP --sport 80 --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT  #http
+
+$IPTABLES -A tcp_packets_in -p TCP -s $PC2ALLOW -d $LAN_IP --dport 80 --tcp-flags SYN,RST,ACK SYN -m state --state NEW -j ACCEPT  #Webserver
+$IPTABLES -A tcp_packets_in -j DROP
+
+
+
+
+
+
+
+##
+##Eingehende UDP Packete
+##
+$IPTABLES -A udp_packets_in -p UDP -m state --state ESTABLISHED -j ACCEPT
+#$IPTABLES -A udp_packets_in -p UDP -s $ROUTER -d $LAN_IP --sport 53 -m state --state NEW -j ACCEPT # Verbindung zum Router #ich verbinde mich, nicht er
+
+$IPTABLES -A udp_packets_in -p UDP -j DROP
+$IPTABLES -A udp_packets_in -j DROP
+
+##
+##Ausgehende TCP Packete
+##
+$IPTABLES -A udp_packets_out -p UDP -m state --state ESTABLISHED -j ACCEPT
+$IPTABLES -A udp_packets_out -p UDP -s $LAN_IP -d $ROUTER --dport 53 -m state --state NEW -j ACCEPT # Verbindung Router
+
+$IPTABLES -A udp_packets_out -p UDP -j DROP
+$IPTABLES -A udp_packets_out -j DROP
+
+
+
+
+
+
+##
+##Input chains gegen Portscanner
+##
+
+
+$IPTABLES -A INPUT -m state --state INVALID -j DROP
+$IPTABLES -A OUTPUT -m state --state INVALID -j DROP
+
+# Stealth Scans etc. DROPpen
+# Keine Flags gesetzt
+$IPTABLES -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+
+# SYN und FIN gesetzt
+$IPTABLES -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+
+# SYN und RST gleichzeitig gesetzt
+$IPTABLES -A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+
+# FIN und RST gleichzeitig gesetzt
+$IPTABLES -A INPUT -p tcp --tcp-flags FIN,RST FIN,RST -j DROP
+
+# FIN ohne ACK
+$IPTABLES -A INPUT -p tcp --tcp-flags ACK,FIN FIN -j DROP
+
+# PSH ohne ACK
+$IPTABLES -A INPUT -p tcp --tcp-flags ACK,PSH PSH -j DROP
+
+# URG ohne ACK
+$IPTABLES -A INPUT -p tcp --tcp-flags ACK,URG URG -j DROP
+
+
+
+##
+##Regeln für ICMP
+##
+$IPTABLES -A icmp_packets -j DROP
+######### ICMP
+# ping: 8 und 0, ausgehend
+$IPTABLES -A OUTPUT -p ICMP --icmp-type echo-request -j ACCEPT
+$IPTABLES -A INPUT  -p ICMP --icmp-type echo-reply -j ACCEPT
+# ping: 8 und 0, eingehend
+$IPTABLES -A INPUT  -p icmp --icmp-type echo-request -j ACCEPT
+$IPTABLES -A OUTPUT -p icmp --icmp-type echo-reply   -j ACCEPT
+# source quench (4)
+$IPTABLES -A OUTPUT -p ICMP --icmp-type source-quench -j ACCEPT
+$IPTABLES -A INPUT  -p ICMP --icmp-type source-quench -j ACCEPT
+# time exceeded (11)
+$IPTABLES -A OUTPUT -p ICMP --icmp-type time-exceeded -j ACCEPT
+$IPTABLES -A INPUT  -p ICMP --icmp-type time-exceeded -j ACCEPT
+# parameter problem (12)
+$IPTABLES -A OUTPUT -p ICMP --icmp-type parameter-problem -j ACCEPT
+$IPTABLES -A INPUT  -p ICMP --icmp-type parameter-problem -j ACCEPT
+# destination unreachable (3)
+$IPTABLES -A OUTPUT -p ICMP --icmp-type fragmentation-needed -j ACCEPT
+$IPTABLES -A OUTPUT -p ICMP --icmp-type port-unreachable -j ACCEPT
+$IPTABLES -A INPUT  -p ICMP --icmp-type fragmentation-needed -j ACCEPT
+$IPTABLES -A INPUT  -p ICMP --icmp-type destination-unreachable -j ACCEPT 
+
+
+
+
+##
+##Input Chains
+##
+$IPTABLES -A INPUT -p TCP -m state --state ESTABLISHED -j ACCEPT # bestehende TCP Verbindungen durchlassen
+
+$IPTABLES -A INPUT -p TCP -s $LO_IP -d $LO_IP -j ACCEPT #Ich verbinde mich zu mir selbst #Webserver bsp
+
+$IPTABLES -A INPUT -p TCP -d $LAN_IP -j tcp_packets_in #Regeln für TCP Packete
+$IPTABLES -A INPUT -p UDP -j udp_packets_in
+
+
+
+
+
+
+
+##
+##OUTPUT CHAINS
+##
+
+$IPTABLES -A OUTPUT -p TCP -m state --state ESTABLISHED -j ACCEPT #bestehende Verbindungen
+
+
+$IPTABLES -A OUTPUT -p TCP -s $LO_IP -d $LO_IP -j ACCEPT #Ich verbinde mich zu mir selbst #Webserver bsp
+
+# $IPTABLES -A OUTPUT -p TCP -m owner --uid-owner root -s $LAN_IP -d $PC2ALLOW --sport 80 -j LOG --log-prefix "Root Inet Zugriff erlaubt: "  ## brauch nicht nichtmehr loggen ##
+$IPTABLES -A OUTPUT -p TCP -m owner --uid-owner root -s $LAN_IP -d $PC2ALLOW --sport 80 -j tcp_packets_out #der einzige Fall, wenn Root ins Internet darf
+
+$IPTABLES -A OUTPUT -p ALL -m owner --uid-owner root -j LOG --log-prefix "========= Root Inet Zugriff: " 
+$IPTABLES -A OUTPUT -p ALL -m owner --uid-owner root -j DROP #Root darf nicht ins internet
+
+
+$IPTABLES -A OUTPUT -p TCP -m owner ! --uid-owner $USER -s $LAN_IP -d $PC2ALLOW --sport 80 -j tcp_packets_out # Webserver ist ein anderer User
+
+#$IPTABLES -A OUTPUT -p TCP  -m state --state ESTABLISHED -s $LAN_IP -j tcp_packets_out
+
+$IPTABLES -A OUTPUT -p TCP -m owner ! --uid-owner $USER -s $LAN_IP -d $LAN_IP -j DROP #was ist das, das müllt meine logs zu Verbindet sich zu sich selbst??
+
+$IPTABLES -A OUTPUT -p ALL -m owner ! --uid-owner $USER -j LOG --log-prefix "other user than $USER: "  # Verbindung geht nicht an den PC2Allow
+
+
+$IPTABLES -A OUTPUT -p TCP -s $LAN_IP -j tcp_packets_out #Restlcihen TCPs
+
+
+$IPTABLES -A OUTPUT -p UDP -j udp_packets_out
+
+## Wenn doch noch ein ICMP durchkommt
+$IPTABLES -A OUTPUT -p ICMP -j icmp_packets
+
+
+
+echo "=====ENDE====="
+
+

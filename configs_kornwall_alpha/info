@@ -1,0 +1,7 @@
+Scripts to set up a host-based firewall on a PC. Written by Cornelius Diekmann around the beginning of 2006.
+
+I found these scripts on one of my old backup drives. Later kornwall (see config_kornwall) emerged out of them.
+
+Oh, by the way, I have no idea what I thought when I set up those rules :D
+
+

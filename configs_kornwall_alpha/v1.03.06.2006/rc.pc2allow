@@ -1,0 +1,136 @@
+#!/bin/bash 
+#rc.pc2allow
+#created 4 SANBA
+#die kacke:
+#man muss sambe nochmal über yast starten mit der option beim systemstart laden, dann solte es gehn
+
+PC2ALLOW="192.168.0.15"
+LAN_IP="192.168.0.14"
+ROUTER="192.168.0.1"
+BROADCAST="192.168.0.255"
+LAN_RANGE="192.168.0.0/24"
+
+
+iptables -F
+iptables -X
+
+iptables -F INPUT
+iptables -P INPUT DROP
+iptables -F FORWARD
+iptables -P FORWARD DROP
+iptables -F OUTPUT
+iptables -P OUTPUT DROP
+
+/bin/echo "1" > /proc/sys/net/ipv4/ip_forward
+# Diese Option benötigt nur ein Router, ein Host
+# mit mehreren Netzwerk-Interfaces. Dies sollte
+# also bei Ihnen per Default ausgeschlatet sein.
+#
+
+#pings deaktivieren
+ /bin/echo "0" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+#broadcats pings deaktivieren
+/bin/echo "0" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+
+
+# Deaktivierung von "source routed packets"
+/bin/echo "1" > /proc/sys/net/ipv4/conf/all/accept_source_route 
+
+modprobe smbfs #test
+
+
+/bin/echo rc.pc2allow am `date`   > /var/log/firewall 
+
+
+
+
+
+iptables -A INPUT -p ALL -s 127.0.0.1 -d 127.0.0.1  -m state --state ESTABLISHED -j ACCEPT
+iptables -A INPUT -p ALL -s 127.0.0.1 -d 127.0.0.1  -m state --state NEW -j LOG --log-prefix "new local IN: "
+iptables -A INPUT -p ALL -s 127.0.0.1 -d 127.0.0.1  -m state --state NEW -j ACCEPT
+
+iptables -A INPUT -p ALL -s 127.0.0.1 -d 127.0.0.1 -j LOG --log-prefix "local IN: "
+iptables -A INPUT -p ALL -s 127.0.0.1 -d 127.0.0.1 -j ACCEPT
+
+iptables -A INPUT -p ALL  ! -s $LAN_RANGE -j LOG --log-prefix "==dropped INET: "
+iptables -A INPUT -p ALL  ! -s $LAN_RANGE -j DROP
+
+#iptables -A INPUT -p ALL -d $BROADCAST -s $PC2ALLOW -j LOG --log-prefix "BROAD IN: "
+#broadcasts vom pc2allow
+iptables -A INPUT -p ALL -d $BROADCAST -s $PC2ALLOW  -j ACCEPT
+
+iptables -A INPUT -p ALL -s $PC2ALLOW -j LOG --log-prefix "pc2allow IN: "
+iptables -A INPUT -p ALL -s $PC2ALLOW -j ACCEPT
+#iptables -A INPUT -p ALL -d $PC2ALLOW -j LOG --log-prefix "pc2allow -darfnichsein IN: "
+#iptables -A INPUT -p ALL -d $PC2ALLOW -j ACCEPT
+iptables -A INPUT -p UDP -m state --state ESTABLISHED -j LOG --log-prefix "accepted IN established: " #router
+iptables -A INPUT -p UDP -m state --state ESTABLISHED -j ACCEPT #router
+
+iptables -A INPUT -p ALL -d $BROADCAST -j DROP #keine Fremdrechner sehn mich, geht aber nicht ganz
+#iptables -A INPUT -p ALL -s $BROADCAST -j LOG --log-prefix "BROAD -s IN: "
+#iptables -A INPUT -p ALL -s $BROADCAST -j ACCEPT
+
+
+iptables -A INPUT -j LOG --log-prefix "dropped IN: "
+iptables -A INPUT -j DROP
+
+
+
+
+iptables -A FORWARD -p ALL -s $PC2ALLOW -j LOG --log-prefix "pc2allow -s FORWARD: "
+iptables -A FORWARD -p ALL -s $PC2ALLOW -j ACCEPT
+iptables -A FORWARD -p ALL -d $PC2ALLOW -j LOG --log-prefix "pc2allow -d FORWARD: "
+iptables -A FORWARD -p ALL -d $PC2ALLOW -j ACCEPT
+
+iptables -A FORWARD -p ALL -d $BROADCAST -j LOG --log-prefix "BROAD -d FORWARD: "
+iptables -A FORWARD -p ALL -d $BROADCAST -j ACCEPT
+iptables -A FORWARD -p ALL -s $BROADCAST -j LOG --log-prefix "BROAD -s FORWARD: "
+iptables -A FORWARD -p ALL -s $BROADCAST -j ACCEPT
+
+iptables -A FORWARD -j LOG --log-prefix "dropped FORWARD: "
+iptables -A FORWARD -j DROP
+
+
+
+
+
+iptables -A OUTPUT -p ALL -s 127.0.0.1 -d 127.0.0.1  -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p ALL -s 127.0.0.1 -d 127.0.0.1  -m state --state NEW -j LOG --log-prefix "new local OUT: "
+iptables -A OUTPUT -p ALL -s 127.0.0.1 -d 127.0.0.1  -m state --state NEW -j ACCEPT
+
+iptables -A OUTPUT -p ALL -s 127.0.0.1 -d 127.0.0.1 -j LOG --log-prefix "local OUT: "
+iptables -A OUTPUT -p ALL -s 127.0.0.1 -d 127.0.0.1 -j ACCEPT
+
+iptables -A OUTPUT -p ALL  ! -d $LAN_RANGE -j LOG --log-prefix "==dropped INET: "
+iptables -A OUTPUT -p ALL  ! -d $LAN_RANGE -j DROP
+
+
+iptables -A OUTPUT -p ALL -d $PC2ALLOW -j LOG --log-prefix "pc2allow OUTPUT: "
+iptables -A OUTPUT -p ALL -d $PC2ALLOW -j ACCEPT
+#iptables -A OUTPUT -p ALL -s $PC2ALLOW -j LOG --log-prefix "pc2allow -s OUTPUT: "
+#iptables -A OUTPUT -p ALL -s $PC2ALLOW -j ACCEPT
+
+iptables -A OUTPUT -p ALL -d $BROADCAST -j LOG --log-prefix "BROAD OUTPUT: "
+iptables -A OUTPUT -p ALL -d $BROADCAST -j ACCEPT
+#iptables -A OUTPUT -p ALL -s $BROADCAST -j LOG --log-prefix "BROAD OUTPUT: "
+#iptables -A OUTPUT -p ALL -s $BROADCAST -j ACCEPT
+
+iptables -A OUTPUT -p UDP -m state --state ESTABLISHED -j LOG --log-prefix "accepted OUT established: " #router
+iptables -A OUTPUT -p UDP -m state --state ESTABLISHED -j ACCEPT #router
+iptables -A OUTPUT -p UDP -s $LAN_IP -d $ROUTER --dport 53 -m state --state NEW -j LOG --log-prefix "OUT Verbindung router: " # Verbindung Router
+iptables -A OUTPUT -p UDP -s $LAN_IP -d $ROUTER --dport 53 -m state --state NEW -j ACCEPT # Verbindung Router
+
+
+#iptables -A OUTPUT -p udp --sport 137:138 -d 192.168.0.255 -j LOG --log-prefix "OUT broadcast: "
+#iptables -A OUTPUT -p udp --sport 137:138 -d 192.168.0.255 -j ACCEPT
+
+iptables -A OUTPUT -j LOG --log-prefix "dropped OUTPUT: "
+iptables -A OUTPUT -j DROP
+
+
+
+#iptables -L -v
+
+
+

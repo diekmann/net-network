@@ -1,0 +1,22 @@
+#!/bin/bash 
+
+iptables -F INPUT
+iptables -P INPUT DROP
+iptables -F FORWARD
+iptables -P FORWARD DROP
+iptables -F OUTPUT
+iptables -P OUTPUT DROP
+
+iptables -F icmp_packets
+iptables -F udp_packets
+iptables -F bad_tcp_packets
+iptables -F allowed
+iptables -F tcp_packets
+
+iptables -X allowed
+iptables -X bad_tcp_packets
+iptables -X icmp_packets
+iptables -X tcp_packets
+iptables -X udp_packets
+
+iptables -L -v

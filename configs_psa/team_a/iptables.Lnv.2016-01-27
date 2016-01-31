@@ -1,0 +1,113 @@
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 1159  521K ACCEPT     udp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+ 1059 88956 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    7   588 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+ 6223  373K ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+ 1331  286K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+   39  2180 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:61141
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+ 1784  132K ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            tcp dpt:3306
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:5432
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:5432
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:6659
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:6667
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:6659
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:6667
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:25 dpt:25 state ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:2049
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:2049
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:111
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:111
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:137
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:137
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:138
+   20  5090 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:138
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:139
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:139
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:389
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:389
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:123
+    0     0 ACCEPT     udp  --  *      *       192.168.11.0/24      0.0.0.0/0            udp dpt:8140
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.0/24      0.0.0.0/0            tcp dpt:8140
+   56  3360 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+  569 47796 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 5320  445K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+ 3814  319K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+11265 2203K ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+26799 7908K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+  356 21360 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+  340 20400 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:61141
+   57  3420 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+  790 53733 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:3306
+    6   360 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:5432
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:5432
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:6659
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:6667
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:6659
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:6667
+   74  4440 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:25
+   17  2076 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:2049
+    1    68 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:2049
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:111
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:111
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:137
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:137
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:138
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:138
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:139
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:139
+    9   540 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:389
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:389
+  175 13300 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:123
+    0     0 ACCEPT     udp  --  *      *       192.168.11.0/24      0.0.0.0/0            udp dpt:8140
+   63  3780 ACCEPT     tcp  --  *      *       192.168.11.0/24      0.0.0.0/0            tcp dpt:8140
+   58  5356 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    4  1312 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+   13  1092 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+ 1059 88956 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+ 6757 1255K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:61141
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443
+  376 29058 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    2   120 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp spt:53
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:53
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:3306
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:5432
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:5432
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:6659
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:6667
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:6659
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:6667
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:25 state NEW,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:2049
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:2049
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:111
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:111
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:137
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:137
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:138
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:138
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:139
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:139
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:389
+    0     0 ACCEPT     udp  --  *      *       192.168.0.0/16       0.0.0.0/0            udp dpt:389
+   23  1748 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:123
+    0     0 ACCEPT     udp  --  *      *       192.168.11.0/24      0.0.0.0/0            udp dpt:8140
+    4   240 ACCEPT     tcp  --  *      *       192.168.11.0/24      0.0.0.0/0            tcp dpt:8140
+   56  3360 ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+    7   420 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           

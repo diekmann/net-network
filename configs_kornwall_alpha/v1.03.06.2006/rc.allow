@@ -1,0 +1,43 @@
+#!/bin/bash 
+
+iptables -F
+iptables -X
+
+iptables -F INPUT
+iptables -P INPUT ACCEPT
+iptables -F FORWARD
+iptables -P FORWARD ACCEPT
+iptables -F OUTPUT
+iptables -P OUTPUT ACCEPT
+
+
+echo rc.allow am `date`     > /var/log/firewall
+
+
+iptables -A INPUT -j LOG --log-prefix "INPUT:       "
+iptables -A INPUT -j ACCEPT
+
+iptables -A FORWARD -j LOG --log-prefix "FORWARD:   "
+iptables -A FORWARD -j ACCEPT
+
+iptables -A OUTPUT -j LOG --log-prefix "OUTPUT:     "
+iptables -A OUTPUT -j ACCEPT
+
+iptables -L -v
+
+
+/bin/echo "1" > /proc/sys/net/ipv4/ip_forward
+# Diese Option benötigt nur ein Router, ein Host
+# mit mehreren Netzwerk-Interfaces. Dies sollte
+# also bei Ihnen per Default ausgeschlatet sein.
+#
+
+#pings deaktivieren
+ /bin/echo "0" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+#broadcats pings deaktivieren
+/bin/echo "0" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+
+
+# Deaktivierung von "source routed packets"
+/bin/echo "1" > /proc/sys/net/ipv4/conf/all/accept_source_route 

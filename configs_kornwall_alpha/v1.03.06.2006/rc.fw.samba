@@ -1,0 +1,92 @@
+#!/bin/bash
+
+echo "======START SAMBA FW======"
+
+
+#INET_IFACE="eth0"
+
+#LAN_IP="192.168.0.14"
+#ROUTER="192.168.0.1"
+#LAN_IP_RANGE="192.168.0.0/16"
+#LAN_IFACE="eth1" #hab ich garnich 0o
+#INTERFACE_INT="eth0"
+
+#LAN_BROADCAST="192.168.0.255"
+
+PC2ALLOW="192.168.0.15"
+
+#LO_IFACE="lo"
+#LO_IP="127.0.0.1"
+
+
+IPTABLES="/usr/sbin/iptables"
+
+#USER="KoRny"
+
+
+
+
+
+INTERFACE_INT="eth0"   
+INT_IP="192.168.0.10"
+DNS_SERVER="192.168.0.20"
+LOCAL_NET="192.168.0.0/24"
+BROADCAST="192.168.0.255"
+############# Portnummern
+PORTS_HIGH="1024:65535" 
+
+
+
+
+############ Zugriff vom internen LAN auf einen Samba Server
+
+# Mapping
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $INT_IP -p udp --sport $PORTS_HIGH --dport 135 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -s $INT_IP -d $LOCAL_NET -p udp --dport $PORTS_HIGH --sport 135 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# smb über tcp
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $INT_IP -p TCP --sport $PORTS_HIGH --dport 137:139 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -s $INT_IP -d $LOCAL_NET -p TCP --dport $PORTS_HIGH --sport 137:139 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# smb über udp
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $INT_IP -p udp --sport $PORTS_HIGH --dport 137:139 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -s $INT_IP -d $LOCAL_NET -p udp --dport $PORTS_HIGH --sport 137:139 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# 445 über udp
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $INT_IP -p udp --sport $PORTS_HIGH --dport 445 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -s $INT_IP -d $LOCAL_NET -p udp --dport $PORTS_HIGH --sport 445 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+
+# 445 über tcp
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $INT_IP -p tcp --sport $PORTS_HIGH --dport 445 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -s $INT_IP -d $LOCAL_NET -p tcp --dport $PORTS_HIGH --sport 445 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# 445 Rückantwort
+
+$IPTABLES -A OUTPUT -d $LOCAL_NET -s $INT_IP -p udp --sport $PORTS_HIGH --dport 445 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A INPUT -d $INT_IP -s $LOCAL_NET -p udp --dport $PORTS_HIGH --sport 445 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# 138 Regel: Transfer in beiden Richtungen über
+# den gleichen Port
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $INT_IP -p udp --sport 138 --dport 138 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -d $LOCAL_NET -s $INT_IP -p udp --sport 138 --dport 138 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $BROADCAST -p udp --sport 138 --dport 138 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -s $INT_IP -d $BROADCAST -p udp --sport 138 --dport 138 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# 137 Regel: Transfer in beiden Richtungen über
+# den gleichen Port
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $INT_IP -p udp --sport 137 --dport 138 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -d $LOCAL_NET -s $INT_IP -p udp --sport 137 --dport 138 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+$IPTABLES -A INPUT -s $LOCAL_NET -d $BROADCAST -p udp --sport 137 --dport 138 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -s $INT_IP -d $BROADCAST -p udp --sport 137 --dport 138 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+echo -e "Zugriff vom LAN auf den Samba-Server konfiguriert (Zugriff auf tcp Port 137-139 und udp Port 135,137-139,445 erlaubt" 

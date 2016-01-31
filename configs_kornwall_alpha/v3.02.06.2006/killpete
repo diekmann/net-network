@@ -1,0 +1,4 @@
+#!/bin/bash
+KOPETEPID=`ps aux | grep kopete | head -n 1 | cut -b 10-14`
+kill -9 $KOPETEPID
+echo `ps aux | grep kopete`

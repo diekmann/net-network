@@ -34,12 +34,15 @@ The following is licensed under a Creative Commons Attribution-NonCommercial-Sha
  * config_memphis_testbed
  * config_random_srv
  * config_eduroam_laptop
- * config_kornwal
+ * config_kornwall
+ * configs_kornwall_alpha
+ * config_home_router
  * config_private_root
  * configs_psa
  * configs_ugent
  * configs_ipv6_server
  * blog_a-unikernel-firewall-for-qubesos
+ * configs_medium-sized-company
 
 You should have received a copy of the license along with this work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
 
