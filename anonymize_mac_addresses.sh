@@ -14,6 +14,6 @@ done
 
 echo "The following MAC addresses are still in the dump:"
 
-find ./ -not -path "./uncensored/*" | xargs grep -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'
+find ./ -not -path "./uncensored/*" -not -path "./.git/*" -not -type d | xargs grep -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'
 
 echo "end"
