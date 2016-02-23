@@ -1,0 +1,185 @@
+===== IPs in CIDR notation where the prefixlen is not a multiple of 8
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+DROP       all  --  0.0.0.0/0            0.0.0.0/8
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0       
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Result (correct)
+
+Building rule tuples:
+Chain 2, Rule 2 --> 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 3-3 
+Done building rule tuples.
+Building rule tuples:
+Chain 2, Rule 1 --> 0-255 0-255 0-255 0-255 0-0 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 1-1 
+Done building rule tuples.
+QUERY CLASSESThere are 3 total host classes:
+Class1: 
+	0.[0-255].[0-255].[0-255]
+Class2: 
+	[1-255].[0-255].[0-255].[0-255]
+;
+
+
+
+
+=== Second try
+
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+DROP       all  --  0.0.0.0/0            0.0.0.0/7
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0       
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+
+
+Result (incorrect, probably parse error)
+
+Building rule tuples:
+Chain 2, Rule 2 --> 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 3-3 
+Done building rule tuples.
+Building rule tuples:
+Chain 2, Rule 1 --> 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 1-1 
+Done building rule tuples.
+QUERY CLASSESThere are 2 total host classes:
+Class1: 
+	[0-255].[0-255].[0-255].[0-255]
+;
+
+
+
+
+===== User defined chains
+=== First try (correct)
+Chain INPUT (policy ACCEPT)                                                     
+target     prot opt source               destination                            
+                                                                                
+Chain FORWARD (policy DROP)                                                     
+target     prot opt source               destination                            
+foo        all  --  10.0.0.0/8           0.0.0.0/0                              
+DROP       all  --  0.0.0.0/0            0.0.0.0/0                              
+                                                                                
+Chain OUTPUT (policy ACCEPT)                                                    
+target     prot opt source               destination                            
+                                                                                
+Chain foo (1 references)                                                        
+target     prot opt source               destination                            
+ACCEPT     all  --  10.8.0.0/16          0.0.0.0/0 
+
+
+Building rule tuples:
+Chain 2, Rule 2 --> 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 1-1 
+Done building rule tuples.
+Building rule tuples:
+Chain 2, Rule 1 --> 10-10 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 7-7 
+Done building rule tuples.
+Building rule tuples:
+Chain 4, Rule 1 --> 10-10 8-8 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 3-3 
+Done building rule tuples.
+QUERY CLASSESThere are 3 total host classes:
+Class1: 
+	[0-9].[0-255].[0-255].[0-255]
+	10.[0-7].[0-255].[0-255]
+	10.[9-255].[0-255].[0-255]
+	[11-255].[0-255].[0-255].[0-255]
+Class2: 
+	10.8.[0-255].[0-255]
+;
+
+=== Second Try (incorrect)
+
+two host classes: 10.8.0.0/16 exluding  10.8.8.0/24 is accepted
+everything else is dropped
+
+Chain INPUT (policy ACCEPT)                                                     
+target     prot opt source               destination                            
+                                                                                
+Chain FORWARD (policy DROP)                                                     
+target     prot opt source               destination                            
+foo        all  --  10.0.0.0/8           0.0.0.0/0                              
+DROP       all  --  0.0.0.0/0            0.0.0.0/0                              
+                                                                                
+Chain OUTPUT (policy ACCEPT)                                                    
+target     prot opt source               destination                            
+                                                                                
+Chain foo (1 references)                                                        
+target     prot opt source               destination                            
+RETURN     all  --  10.8.8.0/24          0.0.0.0/0                              
+ACCEPT     all  --  10.8.0.0/16          0.0.0.0/0
+
+
+Building rule tuples:
+Chain 2, Rule 2 --> 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 1-1 
+Done building rule tuples.
+Building rule tuples:
+Chain 2, Rule 1 --> 10-10 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 7-7 
+Done building rule tuples.
+Building rule tuples:
+Chain 4, Rule 2 --> 10-10 8-8 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 3-3 
+Done building rule tuples.
+Building rule tuples:
+Chain 4, Rule 1 --> 10-10 8-8 8-8 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 0-0 
+Done building rule tuples.
+QUERY CLASSESThere are 3 total host classes:
+Class1: 
+	[0-9].[0-255].[0-255].[0-255]
+	10.[0-7].[0-255].[0-255]
+	10.[9-255].[0-255].[0-255]
+	[11-255].[0-255].[0-255].[0-255]
+Class2: 
+	10.8.[0-255].[0-255]
+;
+
+
+
+===== Negated IPs
+Working fine. Negations which only exist logically (i.e. a ruleset
+with RETURNS which means "not the following rules") are handled incorrectly
+because RETURN is handled incorrectly
+
+
+Correct example:
+Chain INPUT (policy ACCEPT)                                                     
+target     prot opt source               destination                            
+                                                                                
+Chain FORWARD (policy DROP)                                                     
+target     prot opt source               destination                            
+foo        all  --  !10.0.0.0/8          0.0.0.0/0                              
+DROP       all  --  0.0.0.0/0            0.0.0.0/0                              
+                                                                                
+Chain OUTPUT (policy ACCEPT)                                                    
+target     prot opt source               destination                            
+                                                                                
+Chain foo (1 references)                                                        
+target     prot opt source               destination                            
+ACCEPT     all  --  42.8.0.0/16          0.0.0.0/0 
+
+
+Building rule tuples:
+Chain 2, Rule 2 --> 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 1-1 
+Done building rule tuples.
+Building rule tuples:
+Chain 2, Rule 1 --> 11-255 0-255 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 7-7 
+Done building rule tuples.
+Building rule tuples:
+Chain 4, Rule 1 --> 42-42 8-8 0-255 0-255 0-255 0-255 0-255 0-255 0-2 0-255 0-255 0-255 0-255 0-255 0-255 0-3 0-1 0-1 0-1 0-1 0-1 0-1 3-3 
+Done building rule tuples.
+QUERY CLASSESThere are 3 total host classes:
+Class1: 
+	[0-41].[0-255].[0-255].[0-255]
+	42.[0-7].[0-255].[0-255]
+	42.[9-255].[0-255].[0-255]
+	[43-255].[0-255].[0-255].[0-255]
+Class2: 
+	42.8.[0-255].[0-255]
+;
+
