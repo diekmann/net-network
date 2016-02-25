@@ -1,3 +1,7 @@
 iptables dump from the Tails operating system (The Amnesic Incognito Live System).
 
 tails-i386-1.4.1.iso
+
+
+ferm config of the git feature branch. Revision 32e89ef2d7ca2b564990b6758479c47c3713d1e9
+feature_various-firewall-hardening_ferm.conf
