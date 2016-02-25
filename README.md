@@ -67,7 +67,8 @@ Every dump is valuable! Please consider donating your dump. For science!
  * anonymous contributions to: my_github_name @ net (dot) in (dot) tum (dot) de
    * GPG: CC8E 23DA 4746 5AD1 DBEA  7B04 E458 7581 35F5 8030
    * We can take care of all the anonymization for you.
-   * You can find an IP address anonymizer [here](https://github.com/diekmann/yacryptopan). Please mail me if you need support :-)
+   * You can also anonymize the dumps on your system. No plaintext information will leave your machine!
+     You can find an IP address anonymizer [here](https://github.com/diekmann/yacryptopan). Please mail me if you need support :-)
  * By default, we will assume Creative Commons BY-NC-SA 3.0 and/or CC BY-SA 3.0 license.
 
 
