@@ -99,6 +99,7 @@ Chain PREROUTING (policy ACCEPT 34 packets, 1831 bytes)
 Chain OUTPUT (policy ACCEPT 35 packets, 1830 bytes)
  pkts bytes target     prot opt in     out     source               destination         
     6   320 CT         tcp  --  *      lo      0.0.0.0/0            0.0.0.0/0            tcp spt:1234 NOTRACK
+    
 Chain INPUT (policy ACCEPT 21 packets, 1073 bytes)
  pkts bytes target     prot opt in     out     source               destination         
     0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
@@ -167,6 +168,7 @@ Chain OUTPUT (policy ACCEPT 25 packets, 1368 bytes)
  pkts bytes target     prot opt in     out     source               destination         
     6   333 CT         tcp  --  *      lo      0.0.0.0/0            0.0.0.0/0            tcp spt:1234 NOTRACK
     7   387 CT         tcp  --  *      lo      0.0.0.0/0            0.0.0.0/0            tcp dpt:1234 NOTRACK
+    
 Chain INPUT (policy ACCEPT 12 packets, 750 bytes)
  pkts bytes target     prot opt in     out     source               destination         
     0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
@@ -271,6 +273,7 @@ Chain OUTPUT (policy ACCEPT 16 packets, 894 bytes)
  pkts bytes target     prot opt in     out     source               destination         
     8   459 CT         tcp  --  *      lo      0.0.0.0/0            0.0.0.0/0            tcp spt:1234 NOTRACK
     6   331 CT         tcp  --  *      lo      0.0.0.0/0            0.0.0.0/0            tcp dpt:1234 NOTRACK
+    
 Chain INPUT (policy ACCEPT 2 packets, 104 bytes)
  pkts bytes target     prot opt in     out     source               destination         
     0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
@@ -294,5 +297,9 @@ The DROP rules do not match for valid traffic, all is fine :)
 The DROP rule for source port 1234 (if ACK flag not set) matches. 
 
 YAY!
+
+
+NOTE: the setup is a bit complicated because packets get essentially routed over the loopback interface twice.
+If you want to use NOTRACK for external traffic, you can ommit about half of the rules.
 
 

@@ -1,0 +1,83 @@
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    9   608 fail2ban-ssh  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 22
+20735 4962K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate ESTABLISHED
+  111 11937 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED
+    0     0 ACCEPT     tcp  --  *      *       131.159.0.2          192.168.11.0/24      tcp spt:8080
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp spt:443
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp spt:80
+  160 13343 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+ 1494  125K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+  524 31120 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 flags:0x17/0x02 ctstate NEW
+52086   21M ACCEPT     udp  --  eth1   *       0.0.0.0/0            0.0.0.0/0            udp spts:67:68 dpts:67:68
+60399 4382K ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+ 2434  229K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+2095K  444M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate ESTABLISHED
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.0/24      131.159.0.2          tcp dpt:8080
+    0     0 ACCEPT     tcp  --  *      *       131.159.0.2          192.168.11.0/24      tcp spt:8080
+ 5036  302K ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.0/16       tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.0/16       tcp dpt:443
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp spt:80
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp spt:443
+10489  881K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+ 5539  332K ACCEPT     tcp  --  *      *       192.168.11.0/24      0.0.0.0/0            tcp dpt:22 flags:0x17/0x02 ctstate NEW
+ 5605 1873K ACCEPT     udp  --  eth1   *       192.168.11.0/24      192.168.11.0/24      udp spts:67:68 dpts:67:68
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.0/24      192.168.11.3         tcp dpt:3306
+ 2533  152K ACCEPT     tcp  --  *      *       192.168.1.0/24       192.168.11.3         tcp dpt:3306
+   23  1380 ACCEPT     tcp  --  *      *       192.168.11.5         192.168.10.0/24      tcp dpt:5432
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.8         192.168.10.0/24      tcp dpt:5432
+   57  3420 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:25
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:993
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:110
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:995
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:143
+   36  2160 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.0/16       tcp dpt:2049
+   27  1836 ACCEPT     udp  --  *      *       0.0.0.0/0            192.168.0.0/16       udp dpt:2049
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:139
+  639 38340 ACCEPT     tcp  --  *      *       192.168.0.0/16       192.168.11.9         tcp dpt:389
+ 2976  226K ACCEPT     udp  --  *      *       192.168.11.0/24      0.0.0.0/0            udp dpt:123
+ 1634 98040 ACCEPT     tcp  --  *      *       192.168.11.0/24      192.168.11.8         tcp dpt:8140
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.0/24      192.168.11.8         tcp dpt:8142
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.0/24      192.168.11.8         tcp dpt:61613
+    1    60 ACCEPT     tcp  --  *      *       192.168.11.0/24      0.0.0.0/0            tcp dpt:6667
+ 1006 60360 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.11.5         tcp dpt:61141 flags:0x17/0x02 ctstate NEW
+  164 10660 ACCEPT     all  --  *      *       192.168.11.0/24      131.159.0.0/16      
+    0     0 ACCEPT     all  --  *      *       192.168.11.0/24      129.187.10.100      
+  323 14700 ACCEPT     all  --  *      *       192.168.11.0/24      212.211.132.250     
+ 2343  143K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+79889   14M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate ESTABLISHED
+    3  1628 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.0/24      131.159.0.2          tcp dpt:8080
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.0/16       tcp dpt:443
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.0/16       tcp dpt:80
+  160 13343 ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+    0     0 ACCEPT     tcp  --  *      *       192.168.11.0/24      0.0.0.0/0            tcp dpt:22 flags:0x17/0x02 ctstate NEW
+ 5092  402K ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+   22  1320 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.11.3         tcp dpt:3306
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            192.168.0.0/16       udp dpt:2049
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.0.0/16       tcp dpt:2049
+    0     0 ACCEPT     tcp  --  *      *       192.168.0.0/16       0.0.0.0/0            tcp dpt:139
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.11.9         tcp dpt:389
+  360 27360 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:123
+  105  6300 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.11.8         tcp dpt:8140
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            192.168.11.5         tcp dpt:61141 flags:0x17/0x02 ctstate NEW
+    3   180 ACCEPT     all  --  *      *       0.0.0.0/0            131.159.0.0/16      
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            129.187.10.100      
+17125 5617K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain fail2ban-ssh (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    9   608 RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
