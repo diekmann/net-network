@@ -54,6 +54,7 @@ The following is licensed under GPL 3:
 
 The following is licensed under GPL 2:
  * examples_ferm
+ * hassell-public_Stanford
 
 For all other directories, no license is specified.
 
