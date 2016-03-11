@@ -261,7 +261,7 @@ COMMIT
 
 We can connect to port 1234 normally.
 As above, conntrack -L confirms that we don't set up any state.
-When we try to connect to port destination 80 using soure port 1234, we get DROPed.
+When we try to connect to destination port 80 using soure port 1234, we get DROPed.
 
 # iptables -t raw -L -n -v && iptables -L -n -v
 Chain PREROUTING (policy ACCEPT 12 packets, 654 bytes)
@@ -293,7 +293,7 @@ Chain OUTPUT (policy ACCEPT 2 packets, 104 bytes)
     4   240 DROP       tcp  --  *      lo      0.0.0.0/0            0.0.0.0/0            tcp spt:1234
     0     0 DROP       all  --  *      lo      0.0.0.0/0            0.0.0.0/0  
 
-The DROP rules do not match for valid traffic, all is fine :)
+The DROP rules do not match on valid traffic, all is fine :)
 The DROP rule for source port 1234 (if ACK flag not set) matches. 
 
 YAY!

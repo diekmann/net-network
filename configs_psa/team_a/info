@@ -1,5 +1,6 @@
 eth0 gateway to internet
 eth1 internal networks
-2016er firewall: main firewall/router interconnecting several VMs
+dumps 2016-01-27 firewall: main firewall/router interconnecting several VMs
+dumps 2016-03-02 firewall: updated and improved
 
 
