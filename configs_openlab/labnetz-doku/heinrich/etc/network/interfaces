@@ -1,0 +1,26 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug eth0
+
+auto eth0.14
+iface eth0.14 inet static
+        address 192.168.0.12/24
+        dns-nameservers 8.8.8.8
+        vlan-raw-device eth0
+        up ip route add 144.76.143.122 via 192.168.0.1 dev eth0.14
+
+auto eth0.9
+iface eth0.9 inet static
+        address 10.11.77.5/24
+        vlan-raw-device eth0
+        up ip route add 10.11.7.0/24 via 10.11.77.16 dev eth0.9
+
+allow-hotplug eth1
+iface eth1 inet static
+        address 172.16.0.1/24
