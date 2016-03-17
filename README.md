@@ -11,7 +11,7 @@ Acknowledgements
 
 Many administrators and contributors wish to remain anonymous. 
 Thank you very much for your contribution!
-Special thanks to Pieter-Jan Maenhaut, Andreas Korsten, and danrl.
+Special thanks to Pieter-Jan Maenhaut, Andreas Korsten, Markus Schräder ([cryptomagic GmbH](https://www.cryptomagic.eu/)), and danrl.
 
 
 
@@ -55,6 +55,9 @@ The following is licensed under GPL 3:
 The following is licensed under GPL 2:
  * examples_ferm
  * hassell-public_Stanford
+
+The following is licensed under any any any license:
+ * configs_openlab/stettenstr
 
 For all other directories, no license is specified.
 

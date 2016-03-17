@@ -1,0 +1,6 @@
+0:	from all lookup local 
+32763:	from all fwmark 0x3 lookup FREIFUNK 
+32764:	from all fwmark 0x2 lookup KABEL 
+32765:	from all fwmark 0x1 lookup DSL 
+32766:	from all lookup main 
+32767:	from all lookup default 

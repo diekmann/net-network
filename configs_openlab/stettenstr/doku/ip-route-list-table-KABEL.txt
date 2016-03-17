@@ -1,0 +1,18 @@
+default via 192.168.178.1 dev eth5  metric 2 
+default via 192.168.179.1 dev eth4  metric 3 
+5.9.2.138 via 192.168.178.1 dev eth5 
+5.9.2.138 via 192.168.179.1 dev eth4  metric 1 
+79.229.168.124 via 192.168.178.1 dev eth5 
+79.229.168.124 via 192.168.179.1 dev eth4  metric 1 
+80.147.172.201 via 192.168.178.1 dev eth5 
+80.147.172.201 via 192.168.179.1 dev eth4  metric 1 
+80.153.166.24 via 192.168.178.1 dev eth5 
+80.153.166.24 via 192.168.179.1 dev eth4  metric 1 
+144.76.143.122 via 192.168.178.1 dev eth5 
+144.76.143.122 via 192.168.179.1 dev eth4  metric 1 
+178.63.20.132 via 192.168.178.1 dev eth5 
+178.63.20.132 via 192.168.179.1 dev eth4  metric 1 
+178.63.20.186 via 192.168.178.1 dev eth5 
+178.63.20.186 via 192.168.179.1 dev eth4  metric 1 
+185.32.124.171 via 192.168.178.1 dev eth5 
+185.32.124.171 via 192.168.179.1 dev eth4  metric 1 

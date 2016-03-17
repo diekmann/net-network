@@ -1,0 +1,32 @@
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default 
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    inet 192.0.0.38/24 brd 192.0.0.255 scope global eth0
+       valid_lft forever preferred_lft forever
+6: eth4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    inet 192.168.179.2/24 brd 192.168.179.255 scope global eth4
+       valid_lft forever preferred_lft forever
+7: eth5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    inet 192.168.178.2/24 brd 192.168.178.255 scope global eth5
+       valid_lft forever preferred_lft forever
+    inet 192.168.100.2/24 brd 192.168.100.255 scope global eth5:0
+       valid_lft forever preferred_lft forever
+8: eth6: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    inet 10.11.69.3/25 brd 10.11.69.127 scope global eth6
+       valid_lft forever preferred_lft forever
+9: br0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    inet 192.168.0.38/24 brd 192.168.0.255 scope global br0
+       valid_lft forever preferred_lft forever
+10: br1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    inet 10.11.64.1/26 brd 10.11.64.63 scope global br1
+       valid_lft forever preferred_lft forever
+11: br2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    inet 10.11.66.1/24 brd 10.11.66.255 scope global br2
+       valid_lft forever preferred_lft forever
+12: tap0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc pfifo_fast state UNKNOWN group default qlen 500
+    inet 10.11.64.69 peer 10.11.64.70/30 brd 10.11.64.71 scope global tap0
+       valid_lft forever preferred_lft forever
+102: tap20: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN group default qlen 100
+    inet 10.11.79.130/25 brd 10.11.79.255 scope global tap20
+       valid_lft forever preferred_lft forever

@@ -1,0 +1,2 @@
+default via 10.11.64.70 dev tap0 
+default via 10.11.64.8 dev br1  metric 1 

@@ -1,0 +1,53 @@
+default via 10.11.79.129 dev tap20 
+default via 192.168.178.1 dev eth5  metric 2 
+default via 192.168.179.1 dev eth4  metric 3 
+5.9.2.138 via 192.168.178.1 dev eth5 
+5.9.2.138 via 192.168.179.1 dev eth4  metric 1 
+10.11.64.0/26 dev br1  proto kernel  scope link  src 10.11.64.1 
+10.11.64.11 via 10.11.64.11 dev br1  metric 2 onlink 
+10.11.64.17 via 10.11.64.17 dev br1  metric 2 onlink 
+10.11.64.18 via 10.11.64.18 dev br1  metric 2 onlink 
+10.11.64.68/30 dev tap0  proto kernel  scope link  src 10.11.64.69 
+10.11.64.70 via 10.11.64.70 dev tap0  metric 2 onlink 
+10.11.64.72/30 via 10.11.66.3 dev br2  metric 2 onlink 
+10.11.64.192/26 via 10.11.79.129 dev tap20  metric 2 onlink 
+10.11.66.0/24 dev br2  proto kernel  scope link  src 10.11.66.1 
+10.11.66.3 via 10.11.66.3 dev br2  metric 2 onlink 
+10.11.67.66 via 10.11.66.3 dev br2  metric 2 onlink 
+10.11.67.67 via 10.11.64.17 dev br1  metric 2 onlink 
+10.11.69.0/25 dev eth6  proto kernel  scope link  src 10.11.69.3 
+10.11.69.192/26 via 10.11.66.3 dev br2  metric 2 onlink 
+10.11.69.193 via 10.11.66.3 dev br2  metric 2 onlink 
+10.11.69.194 via 10.11.66.3 dev br2  metric 2 onlink 
+10.11.70.0/24 via 10.11.64.18 dev br1  metric 2 onlink 
+10.11.71.192/26 via 10.11.64.18 dev br1  metric 2 onlink 
+10.11.79.0/24 via 10.11.79.129 dev tap20  metric 2 onlink 
+10.11.79.128/25 dev tap20  proto kernel  scope link  src 10.11.79.130 
+10.11.79.129 via 10.11.79.129 dev tap20  metric 2 onlink 
+10.11.80.0/26 via 10.11.64.17 dev br1  metric 2 onlink 
+10.11.80.64/26 via 10.11.64.11 dev br1  metric 2 onlink 
+10.11.81.0/29 via 10.11.64.17 dev br1  metric 2 onlink 
+10.11.81.1 via 10.11.64.17 dev br1  metric 2 onlink 
+10.11.81.2 via 10.11.64.11 dev br1  metric 2 onlink 
+10.11.81.3 via 10.11.64.11 dev br1  metric 2 onlink 
+79.229.168.124 via 192.168.178.1 dev eth5 
+79.229.168.124 via 192.168.179.1 dev eth4  metric 1 
+80.147.172.201 via 192.168.178.1 dev eth5 
+80.147.172.201 via 192.168.179.1 dev eth4  metric 1 
+80.153.166.24 via 192.168.178.1 dev eth5 
+80.153.166.24 via 192.168.179.1 dev eth4  metric 1 
+144.76.143.122 via 192.168.178.1 dev eth5 
+144.76.143.122 via 192.168.179.1 dev eth4  metric 1 
+172.16.0.0/24 via 10.11.66.3 dev br2  metric 2 onlink 
+172.16.16.0/24 via 10.11.66.3 dev br2  metric 2 onlink 
+178.63.20.132 via 192.168.178.1 dev eth5 
+178.63.20.132 via 192.168.179.1 dev eth4  metric 1 
+178.63.20.186 via 192.168.178.1 dev eth5 
+178.63.20.186 via 192.168.179.1 dev eth4  metric 1 
+185.32.124.171 via 192.168.178.1 dev eth5 
+185.32.124.171 via 192.168.179.1 dev eth4  metric 1 
+192.0.0.0/24 dev eth0  proto kernel  scope link  src 192.0.0.38 
+192.168.0.0/24 dev br0  proto kernel  scope link  src 192.168.0.38 
+192.168.100.0/24 dev eth5  proto kernel  scope link  src 192.168.100.2 
+192.168.178.0/24 dev eth5  proto kernel  scope link  src 192.168.178.2 
+192.168.179.0/24 dev eth4  proto kernel  scope link  src 192.168.179.2 
