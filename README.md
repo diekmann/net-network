@@ -65,8 +65,20 @@ For all other directories, no license is specified.
 Contributing
 ===========
 
-Every dump is valuable! Please consider donating your dump. For science!
+Every dump is valuable! Please consider donating your dump. _Even if it is small_. For science!
 
+What to dump:
+ * Firewall rulesets
+   * **Any firewall system.**
+   * If possibly, including packet counters.
+   * Currently, we mainly have `iptables-save` and `iptables -L -n -v`
+ * Routing tables
+   * `route -n`, `ip route`
+ * Interface config
+   * `ifconfig` `ip addr show`
+ * _Any other config of middleboxes_
+
+How to donate:
  * we accept pull requests
  * anonymous contributions to: my_github_name @ net (dot) in (dot) tum (dot) de
    * GPG: CC8E 23DA 4746 5AD1 DBEA  7B04 E458 7581 35F5 8030
