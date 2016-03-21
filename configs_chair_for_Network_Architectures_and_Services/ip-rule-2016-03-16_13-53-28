@@ -1,0 +1,9 @@
+0:	from all lookup local 
+32760:	from 185.86.232.0/22 lookup 500 
+32761:	from 188.95.236.0/22 lookup 500 
+32762:	from 192.48.107.0/24 lookup 500 
+32763:	from 188.95.234.0/23 lookup 500 
+32764:	from 188.95.233.0/24 lookup 500 
+32765:	from 188.95.232.192/27 lookup 500 
+32766:	from all lookup main 
+32767:	from all lookup default 

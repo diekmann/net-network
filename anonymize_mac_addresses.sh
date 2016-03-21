@@ -4,7 +4,7 @@ function censorMAC {
 	echo "Censoring MAC addresses of file $1"
 	filename=$(basename "$1")
 	echo "saving to $filename"
-	sed -r "s/([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/XX:XX:XX:XX:XX:XX/g" $1 > ./$filename
+	sed -r "s/\s([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/ XX:XX:XX:XX:XX:XX/g" $1 > ./$filename
 }
 
 

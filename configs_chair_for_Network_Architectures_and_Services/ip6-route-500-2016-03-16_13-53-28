@@ -1,0 +1,21 @@
+2001:4ca0:2001:a::/64 dev eth1.221  metric 1024 
+2001:4ca0:2001:10::/64 dev eth1.96  metric 1024 
+2001:4ca0:2001:11::/64 dev eth1.109  metric 1024 
+2001:4ca0:2001:12::/64 dev eth1.1017  metric 1024 
+2001:4ca0:2001:13::/64 dev eth1.171  metric 1024 
+2001:4ca0:2001:14::/64 dev eth1.1010  metric 1024 
+2001:4ca0:2001:15::/64 dev eth1.1014  metric 1024 
+2001:4ca0:2001:17::/64 dev eth1.1011  metric 1024 
+2001:4ca0:2001:18::/64 dev eth1.1016  metric 1024 
+2001:4ca0:2001:19::/64 dev eth1.173  metric 1024 
+2001:4ca0:2001:20::/64 dev eth1.1012  metric 1024 
+2001:4ca0:2001:21::/64 dev eth1.152  metric 1024 
+2001:4ca0:2001:40::/64 dev eth1.108  metric 1024 
+2001:4ca0:2001:42::/64 dev eth1.1015  metric 1024 
+2001:4ca0:2001:8000::/56 via 2001:4ca0:2001:13:be5f:f4ff:fe4a:4917 dev eth1.171  metric 1024 
+unreachable 2001:4ca0:2001::/48 dev lo  metric 1024  error -101
+2a00:4700:0:3::/64 dev eth1.1019  metric 1024 
+2a00:4700:0:4::/64 dev eth1.1020  metric 1024 
+2a00:4700:0:7::/64 dev eth1.1023  metric 1024 
+2a00:4700:0:9::/64 dev eth1.1025  metric 1024 
+default via 2a00:4700:0:8::1 dev eth1.1024  metric 1024 
