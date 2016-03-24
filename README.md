@@ -59,6 +59,9 @@ The following is licensed under GPL 2:
 The following is licensed under any any any license:
  * configs_openlab/stettenstr
 
+The following is public domain (free to do whatever you want to do)
+ * majek_dump_vpn
+
 For all other directories, no license is specified.
 
 
