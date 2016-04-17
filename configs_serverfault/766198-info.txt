@@ -1,0 +1,68 @@
+http://serverfault.com/questions/766198/what-does-p-input-accept-mean-with-regards-to-iptables/770971#770971
+
+
+What does -P INPUT ACCEPT mean with regards to iptables?
+
+
+I'm fairly new to iptables, and am trying to figure out if I've configured my ruleset appropriately.  With regards to the **-P INPUT ACCEPT** part of my question, I am trying to determine if this is valid in the context of the rules I want to apply.  Please see below for further details.
+
+I have used **iptables-restore** with a file containing the following rules.  Essentially, I am attempting to allow loopback traffic, established/related connections, SSH, and HTTP.  All other traffic should be rejected.
+
+    *filter
+    :fail2ban-ssh - [0:0]
+    
+    # Input chain rules
+    -A INPUT -i lo -j ACCEPT
+    -A INPUT ! -i lo -s 127.0.0.0/8 -j REJECT
+    -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    -A INPUT -p tcp -m tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+    -A INPUT -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+    -A INPUT -p tcp -m multiport --dports 22 -j fail2ban-ssh
+    # Reject all other inbound traffic
+    -A INPUT -j REJECT   
+    
+    # Output chain rules
+    -A OUTPUT -o lo -j ACCEPT
+    -A OUTPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+    -A OUTPUT -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+    
+    # Forward chain rules
+    -A FORWARD -j REJECT                                    
+    
+    # fail2ban-ssh chain rules
+    -A fail2ban-ssh -s 146.0.77.33/32 -j REJECT --reject-with icmp-port-unreachable
+    -A fail2ban-ssh -s 62.75.236.76/32 -j REJECT --reject-with icmp-port-unreachable
+    -A fail2ban-ssh -j RETURN
+    
+    COMMIT
+
+If I run **iptables -S**, I receive the following output:
+
+    -P INPUT ACCEPT
+    -P FORWARD ACCEPT
+    -P OUTPUT ACCEPT
+    -N fail2ban-ssh
+    -A INPUT -i lo -j ACCEPT
+    -A INPUT -s 127.0.0.0/8 ! -i lo -j REJECT --reject-with icmp-port-unreachable
+    -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+    -A INPUT -p tcp -m tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+    -A INPUT -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+    -A INPUT -p tcp -m multiport --dports 22 -j fail2ban-ssh
+    -A INPUT -j REJECT --reject-with icmp-port-unreachable
+    -A FORWARD -j REJECT --reject-with icmp-port-unreachable
+    -A OUTPUT -o lo -j ACCEPT
+    -A OUTPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+    -A OUTPUT -p tcp -m tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+    -A fail2ban-ssh -s 146.0.77.33/32 -j REJECT --reject-with icmp-port-unreachable
+    -A fail2ban-ssh -s 62.75.236.76/32 -j REJECT --reject-with icmp-port-unreachable
+    -A fail2ban-ssh -j RETURN
+
+I've done a bit of reading on iptables, and my understanding is that the first few lines (e.g., "**-P INPUT ACCEPT**") essentially mean that the default action if none of the other rules apply is to accept the traffic (in this case, for input, forward and output).
+
+If this is the case, should I explicitly put the following lines in my rules file and restore iptables again?
+
+    -P INPUT DROP
+    -P FORWARD DROP
+    -P OUTPUT DROP
+
+Thank you very much in advance to anyone who reads this full question!  It's a bit long, but I thought it would be necessary to include all of the above details to adequately explain my scenario.

@@ -56,6 +56,9 @@ The following is licensed under GPL 2:
  * examples_ferm
  * hassell-public_Stanford
 
+The following is licensed under Creative Commons Attribution-ShareAlike 3.0 Unported
+ * configs_serverfault
+
 The following is licensed under any any any license:
  * configs_openlab/stettenstr
 

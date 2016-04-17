@@ -1,0 +1,15 @@
+http://serverfault.com/questions/769294/openvpn-block-smtp-access-server-completely
+
+OpenVPN block SMTP Access Server completely
+
+I've tried almost all iptables rules to block smtp on openvpn server but still clients clients can access remote smtp servers on port 25.
+
+I'm using openvpn access server. It's creating two interfaces as0t0 and as0t1.
+
+All users assigned ips from 172.16.0.0/12.
+
+Please help me what rules can be written to resolve this issue.
+
+Iptables rules set by openvpn access server:
+
+

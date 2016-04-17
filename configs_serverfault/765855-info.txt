@@ -1,0 +1,198 @@
+http://serverfault.com/questions/765855/network-configuration-fault
+
+Network configuration fault
+
+
+I'm moving my router from Rpi with Rasbian to another pc device with ubuntu server 14. 
+I have:
+- local network 10.0.0.0/16, with my router gateway 10.0.0.1
+- lte usb device 192.168.8.1 in network 192.168.8.0/24 
+- lte usb device 192.168.10.1 in network  192.168.10.0/24
+
+I have moved all network settings with modified iptables rules, firstly I only want to forward traffic from my local network via eth2 (192.168.10.1).
+With following settings I doesn't work.
+
+First I noticed what adding 'ip route add default 192.168.10.1' enable internet connections in my local network, but when i changed default gateway to  192.168.8.1 or change '-A PREROUTING -m state --state NEW -j MARK --set-xmark 0x2/0xffffffff' to '-A PREROUTING -m state --state NEW -j MARK --set-xmark 0x1/0xffffffff' it doesn't work but on my previous configuration on RPI this changes don't break internet network. 
+
+Secondly without 'ip route add default 192.168.10.1' when i'm trying to connect to some server i have in kern.log:
+
+    Mar 24 14:16:27 ubuntu kernel: [ 1299.607243] '[POSTROUTING]'IN= OUT=eth2         SRC=10.0.0.129 DST=94.23.42.140 LEN=52 TOS=0x00 PREC=0x00 TTL=127 ID=5925 DF PR                                                        OTO=TCP SPT=59745 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 MARK=0x2
+    Mar 24 14:16:27 ubuntu kernel: [ 1299.698118] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10                                                         LEN=52 TOS=0x00 PREC=0x00 TTL=54 ID=0 DF PROTO=TCP SPT=80 DPT=59745 WINDOW=29200 RES=0x00 ACK SYN URGP=0
+    Mar 24 14:16:28 ubuntu kernel: [ 1300.695494] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10                                                         LEN=52 TOS=0x00 PREC=0x00 TTL=54 ID=0 DF PROTO=TCP SPT=80 DPT=59745 WINDOW=29200 RES=0x00 ACK SYN URGP=0
+    Mar 24 14:16:30 ubuntu kernel: [ 1302.698119] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10                                                         LEN=52 TOS=0x00 PREC=0x00 TTL=54 ID=0 DF PROTO=TCP SPT=80 DPT=59745 WINDOW=29200 RES=0x00 ACK SYN URGP=0
+    Mar 24 14:16:34 ubuntu kernel: [ 1306.698124] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10                                                         LEN=52 TOS=0x00 PREC=0x00 TTL=54 ID=0 DF PROTO=TCP SPT=80 DPT=59745 WINDOW=29200  RES=0x00 ACK SYN URGP=0
+
+and with  'ip route add default 192.168.10.1' i have:
+
+    Mar 24 14:19:27 ubuntu kernel: [ 1479.922360] '[PREROUTING]'IN=eth0 OUT= MAC=00:1e:4f:4b:79:eb:e8:39:35:3a:c9:83:08:00 SRC=10.0.0.129 DST=94.23.42.140 LEN=52 TOS=0x00 PREC=0x00 TTL=128 ID=8796 DF PROTO=TCP SPT=59749 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0
+    Mar 24 14:19:27 ubuntu kernel: [ 1479.922385] '[FORWARD]'IN=eth0 OUT=eth2 MAC=00:1e:4f:4b:79:eb:e8:39:35:3a:c9:83:08:00 SRC=10.0.0.129 DST=94.23.42.140 LEN=52 TOS=0x00 PREC=0x00 TTL=127 ID=8796 DF PROTO=TCP SPT=59749 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 MARK=0x2
+    Mar 24 14:19:27 ubuntu kernel: [ 1479.922392] '[POSTROUTING]'IN= OUT=eth2 SRC=10.0.0.129 DST=94.23.42.140 LEN=52 TOS=0x00 PREC=0x00 TTL=127 ID=8796 DF PROTO=TCP SPT=59749 DPT=80 WINDOW=8192 RES=0x00 SYN URGP=0 MARK=0x2
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.006939] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10 LEN=52 TOS=0x00 PREC=0x00 TTL=54 ID=0 DF PROTO=TCP SPT=80 DPT=59749 WINDOW=29200 RES=0x00 ACK SYN URGP=0
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.006956] '[FORWARD]'IN=eth2 OUT=eth0 MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=10.0.0.129 LEN=52 TOS=0x00 PREC=0x00 TTL=53 ID=0 DF PROTO=TCP SPT=80 DPT=59749 WINDOW=29200 RES=0x00 ACK SYN URGP=0 MARK=0x2
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.007197] '[PREROUTING]'IN=eth0 OUT= MAC=00:1e:4f:4b:79:eb:e8:39:35:3a:c9:83:08:00 SRC=10.0.0.129 DST=94.23.42.140 LEN=40 TOS=0x00 PREC=0x00 TTL=128 ID=8797 DF PROTO=TCP SPT=59749 DPT=80 WINDOW=16450 RES=0x00 ACK URGP=0
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.007211] '[FORWARD]'IN=eth0 OUT=eth2 MAC=00:1e:4f:4b:79:eb:e8:39:35:3a:c9:83:08:00 SRC=10.0.0.129 DST=94.23.42.140 LEN=40 TOS=0x00 PREC=0x00 TTL=127 ID=8797 DF PROTO=TCP SPT=59749 DPT=80 WINDOW=16450 RES=0x00 ACK URGP=0 MARK=0x2
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.009327] '[PREROUTING]'IN=eth0 OUT= MAC=00:1e:4f:4b:79:eb:e8:39:35:3a:c9:83:08:00 SRC=10.0.0.129 DST=94.23.42.140 LEN=120 TOS=0x00 PREC=0x00 TTL=128 ID=8798 DF PROTO=TCP SPT=59749 DPT=80 WINDOW=16450 RES=0x00 ACK PSH URGP=0
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.009341] '[FORWARD]'IN=eth0 OUT=eth2 MAC=00:1e:4f:4b:79:eb:e8:39:35:3a:c9:83:08:00 SRC=10.0.0.129 DST=94.23.42.140 LEN=120 TOS=0x00 PREC=0x00 TTL=127 ID=8798 DF PROTO=TCP SPT=59749 DPT=80 WINDOW=16450 RES=0x00 ACK PSH URGP=0 MARK=0x2
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.062812] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10 LEN=40 TOS=0x00 PREC=0x00 TTL=54 ID=39937 DF PROTO=TCP SPT=80 DPT=59749 WINDOW=229 RES=0x00 ACK URGP=0
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.062826] '[FORWARD]'IN=eth2 OUT=eth0 MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=10.0.0.129 LEN=40 TOS=0x00 PREC=0x00 TTL=53 ID=39937 DF PROTO=TCP SPT=80 DPT=59749 WINDOW=229 RES=0x00 ACK URGP=0 MARK=0x2
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.063815] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10 LEN=40 TOS=0x00 PREC=0x00 TTL=54 ID=39938 DF PROTO=TCP SPT=80 DPT=59749 WINDOW=229 RES=0x00 ACK URGP=0
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.063834] '[FORWARD]'IN=eth2 OUT=eth0 MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=10.0.0.129 LEN=40 TOS=0x00 PREC=0x00 TTL=53 ID=39938 DF PROTO=TCP SPT=80 DPT=59749 WINDOW=229 RES=0x00 ACK URGP=0 MARK=0x2
+    Mar 24 14:19:27 ubuntu kernel: [ 1480.063850] '[PREROUTING]'IN=eth2 OUT= MAC=0c:5b:8f:27:9a:64:00:0d:87:8e:4b:ac:08:00 SRC=94.23.42.140 DST=192.168.10.10 LEN=1440 TOS=0x00 PREC=0x00 TTL=54 ID=39939 DF PROTO=TCP SPT=80 DPT=59749 WINDOW=229 RES=0x00 ACK URGP=0
+
+Does anybody can tell me is that iptables problem or something connected with ubuntu 14 os, or I have forgotten some configurations?
+
+Thanks in advance!
+
+**My settings**
+
+**ifconfig**
+
+    eth0  Link encap:Ethernet  HWaddr 00:1e:4f:4b:79:eb
+          inet addr:10.0.0.100  Bcast:10.0.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::21e:4fff:fe4b:79eb/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:3477 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:5180 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:277674 (277.6 KB)  TX bytes:3262888 (3.2 MB)
+          Interrupt:21 Memory:fe9e0000-fea00000
+
+    eth1  Link encap:Ethernet  HWaddr 0c:5b:8f:27:9a:64
+          inet addr:192.168.8.10  Bcast:192.168.8.255  Mask:255.255.255.0
+          inet6 addr: fe80::e5b:8fff:fe27:9a64/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:38 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:11 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:15975 (15.9 KB)  TX bytes:1018 (1.0 KB)
+
+    eth2  Link encap:Ethernet  HWaddr 0c:5b:8f:27:9a:64
+          inet addr:192.168.10.10  Bcast:192.168.10.255  Mask:255.255.255.0
+          inet6 addr: fe80::e5b:8fff:fe27:9a64/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:12 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:3616 (3.6 KB)  TX bytes:660 (660.0 B)
+
+    lo    Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:68 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:68 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:5068 (5.0 KB)  TX bytes:5068 (5.0 KB)
+
+
+**iproute**
+
+    10.0.0.0/16 dev eth0  proto kernel  scope link  src 10.0.0.100
+    192.168.8.0/24 dev eth1  proto kernel  scope link  src 192.168.8.10
+    192.168.10.0/24 dev eth2  proto kernel  scope link  src 192.168.10.10
+
+
+**ip route show table upeth1**
+
+    default via 192.168.8.1 dev eth1
+    10.0.0.0/16 dev eth0  proto kernel  scope link  src 10.0.0.100
+    192.168.8.0/24 dev eth1  proto kernel  scope link  src 192.168.8.10
+    192.168.10.0/24 dev eth2  proto kernel  scope link  src 192.168.10.10
+
+**ip route show table upeth2**
+
+    default via 192.168.10.1 dev eth1
+    10.0.0.0/16 dev eth0  proto kernel  scope link  src 10.0.0.100
+    192.168.8.0/24 dev eth1  proto kernel  scope link  src 192.168.8.10
+    192.168.10.0/24 dev eth2  proto kernel  scope link  src 192.168.10.10
+
+**rt_tables**
+
+    #
+    # reserved values
+    #
+    255     local
+    254     main
+    253     default
+    0       unspec
+    #
+    # local
+    #
+    #1      inr.ruhep
+    
+    201     upeth1
+    202     upeth2
+
+**iptables-save**
+
+    # Generated by iptables-save v1.4.21 on Thu Mar 24 14:03:06 2016
+    *filter
+    :INPUT DROP [0:0]
+    :FORWARD DROP [0:0]
+    :OUTPUT ACCEPT [76:12773]
+    -A INPUT -j LOG --log-prefix "\'[INPUT]\'"
+    -A INPUT -i lo -j ACCEPT
+    -A INPUT -i eth0 -j ACCEPT
+    -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+    -A FORWARD -j LOG --log-prefix "\'[FORWARD]\'"
+    -A FORWARD -i eth2 -o eth0 -p udp -j ACCEPT
+    -A FORWARD -i eth1 -o eth0 -p udp -j ACCEPT
+    -A FORWARD -i eth2 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+    -A FORWARD -i eth1 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+    -A FORWARD -i eth0 -o eth2 -m mark --mark 0x2 -j ACCEPT
+    -A FORWARD -i eth0 -o eth1 -m mark --mark 0x1 -j ACCEPT
+    COMMIT
+    # Completed on Thu Mar 24 14:03:06 2016
+    # Generated by iptables-save v1.4.21 on Thu Mar 24 14:03:06 2016
+    *nat
+    :PREROUTING ACCEPT [28:6364]
+    :INPUT ACCEPT [3:201]
+    :OUTPUT ACCEPT [1:136]
+    :POSTROUTING ACCEPT [0:0]
+    -A POSTROUTING -j LOG --log-prefix "\'[POSTROUTING]\'"
+    -A POSTROUTING -o eth2 -j MASQUERADE
+    -A POSTROUTING -o eth1 -j MASQUERADE
+    -A POSTROUTING -o eth0 -j MASQUERADE
+    COMMIT
+    # Completed on Thu Mar 24 14:03:06 2016
+    # Generated by iptables-save v1.4.21 on Thu Mar 24 14:03:06 2016
+    *mangle
+    :PREROUTING ACCEPT [136:17065]
+    :INPUT ACCEPT [82:7193]
+    :FORWARD ACCEPT [24:1606]
+    :OUTPUT ACCEPT [77:13117]
+    :POSTROUTING ACCEPT [101:14723]
+    -A PREROUTING -j LOG --log-prefix "\'[PREROUTING]\'"
+    -A PREROUTING -p icmp -j MARK --set-xmark 0x2/0xffffffff
+    -A PREROUTING -m state --state NEW -j MARK --set-xmark 0x2/0xffffffff
+    -A PREROUTING -d 192.168.8.1/32 -m state --state NEW -j MARK --set-xmark 0x1/0xffffffff
+    -A PREROUTING -d 192.168.10.1/32 -m state --state NEW -j MARK --set-xmark 0x2/0xffffffff
+    -A PREROUTING -p udp -j MARK --set-xmark 0x2/0xffffffff
+    -A PREROUTING -m mark ! --mark 0x0 -j CONNMARK --save-mark --nfmask 0xffffffff --ctmask 0xffffffff
+    -A PREROUTING -m connmark --mark 0x1 -j CONNMARK --restore-mark --nfmask 0xffffffff --ctmask 0xffffffff
+    -A PREROUTING -m connmark --mark 0x2 -j CONNMARK --restore-mark --nfmask 0xffffffff --ctmask 0xffffffff
+    COMMIT
+    # Completed on Thu Mar 24 14:03:06 2016
+    # Generated by iptables-save v1.4.21 on Thu Mar 24 14:03:06 2016
+    *raw
+    :PREROUTING ACCEPT [137:17105]
+    :OUTPUT ACCEPT [77:13117]
+    -A OUTPUT -p icmp -j TRACE
+    -A OUTPUT -p tcp -j TRACE
+    COMMIT
+    # Completed on Thu Mar 24 14:03:06 2016
+
+**ip rule**
+
+    0:      from all lookup local
+    32762:  from all fwmark 0x2 lookup upeth2
+    32763:  from all fwmark 0x1 lookup upeth1
+    32764:  from all fwmark 0x2 lookup upeth2
+    32765:  from all fwmark 0x1 lookup upeth1
+    32766:  from all lookup main
+    32767:  from all lookup default
+
+**cat /proc/sys/net/ipv4/ip_forward**
+
+    1
+
