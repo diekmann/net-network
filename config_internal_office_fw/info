@@ -1,0 +1,18 @@
+For privacy reasons, public IP addresses have been anonymized with cryptopan.
+Private IP ranges have been preserved.
+
+Description by administator:
+
+Internal firewall of an office network. There exists an upstream firewall (not shown).
+[some cursing about IPsec in iptables omitted]
+
+VLANs:
+
+br0v100 -> standard network (things for everything without a home)
+
+br0v700 -> standard network for things without a home but without a public address (might be NATed)
+br0v701 -> ?
+br0v702 -> stuff but more complicated and related to virtualization (cloud?)
+
+br0v502 -> Probably things such as PXE boot
+
