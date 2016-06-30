@@ -1,0 +1,8 @@
+0:	from all lookup local 
+16383:	from 2a00:4700:0:6::/64 lookup 500 
+16383:	from 2a00:4700:0:2::/64 lookup 500 
+16383:	from 2a00:4700:0:3::/64 lookup 500 
+16383:	from 2a00:4700:0:4::/64 lookup 500 
+16383:	from 2a00:4700:0:7::/64 lookup 500 
+16383:	from 2a00:4700:0:9::/64 lookup 500 
+32766:	from all lookup main 

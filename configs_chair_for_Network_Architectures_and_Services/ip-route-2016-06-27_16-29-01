@@ -1,0 +1,27 @@
+default via 131.159.252.149 dev eth1.110 
+default via 131.159.14.196 dev eth1.1011  metric 512 
+131.159.14.0/25 dev eth1.96  proto kernel  scope link  src 131.159.14.3 
+blackhole 131.159.14.0/23 
+131.159.14.128/26 dev eth1.108  proto kernel  scope link  src 131.159.14.129 
+131.159.14.192/27 dev eth1.1011  proto kernel  scope link  src 131.159.14.194 
+131.159.14.224/28 dev eth1.1012  proto kernel  scope link  src 131.159.14.238 
+131.159.14.240/28 dev eth1.1017  proto kernel  scope link  src 131.159.14.242 
+131.159.15.0/26 dev eth1.171  proto kernel  scope link  src 131.159.15.2 
+131.159.15.64/26 dev eth1.1016  proto kernel  scope link  src 131.159.15.66 
+131.159.15.128/26 dev eth1.116  proto kernel  scope link  src 131.159.15.131 
+131.159.15.192/27 dev eth1.1014  proto kernel  scope link  src 131.159.15.217 
+131.159.15.224/28 dev eth1.1010  proto kernel  scope link  src 131.159.15.227 
+131.159.15.240/28 dev eth1.152  proto kernel  scope link  src 131.159.15.252 
+131.159.20.0/24 dev eth1.109  proto kernel  scope link  src 131.159.20.11 
+131.159.21.0/24 dev eth1.173  proto kernel  scope link  src 131.159.21.252 
+131.159.21.1 via 131.159.14.212 dev eth1.1011 
+131.159.252.148/30 dev eth1.110  proto kernel  scope link  src 131.159.252.150 
+185.86.232.0/22 dev eth1.1025  proto kernel  scope link  src 185.86.232.2 
+188.95.232.56/29 dev eth1.1024  proto kernel  scope link  src 188.95.232.61 
+188.95.232.192/27 via 188.95.233.4 dev eth1.97 
+188.95.233.0/24 dev eth1.97  proto kernel  scope link  src 188.95.233.2 
+188.95.234.0/23 dev eth1.1019  proto kernel  scope link  src 188.95.234.2 
+188.95.236.0/22 dev eth1.1023  proto kernel  scope link  src 188.95.236.2 
+192.48.107.0/24 dev eth1.1020  proto kernel  scope link  src 192.48.107.2 
+192.168.212.0/24 dev eth1.1111  proto kernel  scope link  src 192.168.212.4 
+192.168.213.0/24 dev eth0  proto kernel  scope link  src 192.168.213.4 
