@@ -1,0 +1,2 @@
+default via 192.168.178.1 dev eth0  src 192.168.178.37 
+192.168.178.0/24 dev eth0  proto kernel  scope link  src 192.168.178.37
