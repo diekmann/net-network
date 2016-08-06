@@ -1,0 +1,18 @@
+http://serverfault.com/questions/793631/iptables-multiport-and-negation/795234
+
+I want to log, with iptables, everything wich can seems to be a flood, except on the web and IRC ports.
+So I did:
+
+    iptables -A INPUT -p tcp -m multiport ! --dports 80,443,6667,6697 -m hashlimit --hashlimit-above 10/sec --hashlimit-burst 20 --hashlimit-mode srcip --hashlimit-name aflood --hashlimit-srcmask 8 -j LOG --log-prefix "[IP FLOOD ALL]"
+    iptables -A INPUT -p udp -m multiport ! --dports 80,443,6667,6697 -m hashlimit --hashlimit-above 10/sec --hashlimit-burst 20 --hashlimit-mode srcip --hashlimit-name aflood --hashlimit-srcmask 8 -j LOG --log-prefix "[IP FLOOD ALL]"
+    iptables -A INPUT -p icmp -m hashlimit --hashlimit-above 10/sec --hashlimit-burst 20 --hashlimit-mode srcip --hashlimit-name aflood --hashlimit-srcmask 8 -j LOG --log-prefix "[IP FLOOD ALL]"
+
+But when I look in the logs, I get (MAC and IP obfuscated):
+
+    Aug  3 16:49:00 server kernel: [IP FLOOD ALL]IN=eth0 OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:00:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=107 TOS=0x00 PREC=0x00 TTL=61 ID=6765 DF PROTO=TCP SPT=6667 DPT=40605 WINDOW=10818 RES=0x00 ACK PSH URGP=0
+    Aug  3 16:49:00 server kernel: [IP FLOOD ALL]IN=eth0 OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:00:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=104 TOS=0x00 PREC=0x00 TTL=61 ID=54214 DF PROTO=TCP SPT=6667 DPT=49484 WINDOW=10815 RES=0x00 ACK PSH URGP=0
+    Aug  3 16:50:00 server kernel: [IP FLOOD ALL]IN=eth0 OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:00:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=40 TOS=0x00 PREC=0x00 TTL=60 ID=9024 DF PROTO=TCP SPT=80 DPT=36729 WINDOW=123 RES=0x00 ACK FIN URGP=0
+
+You can see the SPT having values I normaly protect (6667 and 80).
+
+Anyone has an idea about this trouble ?

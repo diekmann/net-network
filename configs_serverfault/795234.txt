@@ -1,0 +1,9 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
+-A INPUT -p tcp -m multiport ! --dports 80,443,6667,6697 -m hashlimit --hashlimit-above 10/sec --hashlimit-burst 20 --hashlimit-mode srcip --hashlimit-name aflood --hashlimit-srcmask 8 -j ACCEPT
+-A INPUT -p udp -m multiport ! --dports 80,443,6667,6697 -m hashlimit --hashlimit-above 10/sec --hashlimit-burst 20 --hashlimit-mode srcip --hashlimit-name aflood --hashlimit-srcmask 8 -j ACCEPT
+-A INPUT -p icmp -m hashlimit --hashlimit-above 10/sec --hashlimit-burst 20 --hashlimit-mode srcip --hashlimit-name aflood --hashlimit-srcmask 8 -j ACCEPT
+COMMIT
+
