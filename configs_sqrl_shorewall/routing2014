@@ -1,0 +1,13 @@
+default via 8.7.6.5 dev lup  proto dhcp  src 8.7.6.4  metric 1024 
+10.13.37.0/24 via 255.255.255.0 dev vpriv 
+10.13.42.168/29 dev wg  proto kernel  scope link  src 10.13.41.1 
+10.13.42.128/29 dev lmd  proto kernel  scope link  src 10.13.42.129 
+10.13.42.136/29 dev ldit  proto kernel  scope link  src 10.13.42.137 linkdown 
+10.13.42.144/28 dev loben  proto kernel  scope link  src 10.13.42.145 
+10.13.42.160/29 dev wt  proto kernel  scope link  src 10.13.42.161 
+10.13.43.0/28 dev vshit  proto kernel  scope link  src 10.13.43.1 
+10.13.43.16/28 dev vocb  proto kernel  scope link  src 10.13.43.17 
+10.13.44.0/24 via 255.255.255.0 dev vpriv 
+8.7.6.0/24 dev lup  proto kernel  scope link  src 8.7.6.4 
+8.7.6.5 dev lup  proto dhcp  scope link  src 8.7.6.4  metric 1024 
+255.255.255.0 dev vpriv  proto kernel  scope link  src 10.13.37.200 
