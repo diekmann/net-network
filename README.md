@@ -61,6 +61,7 @@ The following is licensed under Creative Commons Attribution-ShareAlike 3.0 Unpo
 
 The following is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
  * config_internal_office_fw
+ * configs_corny_docker
 
 The following is licensed under any any any license:
  * configs_openlab/stettenstr
