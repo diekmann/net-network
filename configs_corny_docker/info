@@ -1,0 +1,9 @@
+Cornelius Diekmann playing around with docker.
+
+We model and enforce the scenario described in
+Cornelius Diekmann, Andreas Korsten, Georg Carle, “Demonstrating topoS: Theorem-Prover-Based Synthesis of Secure Network Configurations,” in 2nd International Workshop on Management of SDN and NFV Systems, manSDN/NFV, Barcelona, Spain, Nov. 2015.
+https://www.net.in.tum.de/fileadmin/bibtex/publications/papers/diekmann2015mansdnnfv.pdf
+
+
+
+dfwfw contains our port to https://github.com/irsl/dfwfw

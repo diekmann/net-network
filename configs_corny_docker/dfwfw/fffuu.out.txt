@@ -1,0 +1,273 @@
+Parsed IpAssmt
+IpAssmt [(docker0,Pos [172.17.0.1/16]),(br-0a5ad9e85c71,Pos [10.0.0.0/8])]
+Parsed routing table
+10.0.2.0/24 dev enp0s3 metric 100
+172.17.0.0/16 dev docker0 metric 0
+10.0.0.0/8 dev br-0a5ad9e85c71 metric 0
+0.0.0.0/0 via 10.0.2.2 dev enp0s3 metric 100
+
+== Parser output ==
+*filter
+:DFWFW_FORWARD - [0:0]
+:DFWFW_INPUT - [0:0]
+:DOCKER - [0:0]
+:DOCKER-ISOLATION - [0:0]
+:FORWARD DROP [0:0]
+:HOST_INCOMING - [0:0]
+:HOST_OUTBOUND - [0:0]
+:INPUT DROP [24:1488]
+:OUTPUT DROP [1:76]
+-A DFWFW_FORWARD `ParsedMatch -m state --state INVALID' `ParsedAction -j DROP'
+-A DFWFW_FORWARD `ParsedMatch -m state --state ESTABLISHED,RELATED' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.1/32' `ParsedMatch -d 10.0.0.1/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.1/32' `ParsedMatch -d 10.0.0.2/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.1/32' `ParsedMatch -d 10.0.0.4/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.3/32' `ParsedMatch -d 10.0.0.3/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.3/32' `ParsedMatch -d 10.0.0.2/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.3/32' `ParsedMatch -d 10.0.0.4/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.2/32' `ParsedMatch -d 10.0.0.2/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.4/32' `ParsedMatch -d 10.0.0.1/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.4/32' `ParsedMatch -d 10.0.0.3/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.4/32' `ParsedMatch -d 10.0.0.2/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedMatch -s 10.0.0.4/32' `ParsedMatch -d 10.0.0.4/32' `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A DFWFW_FORWARD `ParsedAction -j DROP'
+-A DFWFW_INPUT `ParsedMatch -i br-0a5ad9e85c71' `ParsedAction -j DROP'
+-A DFWFW_INPUT `ParsedMatch -i docker0' `ParsedAction -j DROP'
+-A DOCKER-ISOLATION `ParsedMatch -i docker0' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j DROP'
+-A DOCKER-ISOLATION `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o docker0' `ParsedAction -j DROP'
+-A DOCKER-ISOLATION `ParsedAction -j RETURN'
+-A FORWARD `ParsedAction -j DOCKER-ISOLATION (call)'
+-A FORWARD `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j DOCKER (call)'
+-A FORWARD `ParsedMatch -o br-0a5ad9e85c71' `ParsedMatch -m state --state ESTABLISHED,RELATED' `ParsedAction -j ACCEPT'
+-A FORWARD `ParsedMatch -i br-0a5ad9e85c71' `ParsedNegatedMatch -o br-0a5ad9e85c71' `ParsedAction -j ACCEPT'
+-A FORWARD `ParsedAction -j DFWFW_FORWARD (call)'
+-A FORWARD `ParsedMatch -o docker0' `ParsedAction -j DOCKER (call)'
+-A FORWARD `ParsedMatch -o docker0' `ParsedMatch -m state --state ESTABLISHED,RELATED' `ParsedAction -j ACCEPT'
+-A FORWARD `ParsedMatch -i docker0' `ParsedNegatedMatch -o docker0' `ParsedAction -j ACCEPT'
+-A FORWARD `ParsedMatch -i docker0' `ParsedMatch -o docker0' `ParsedAction -j ACCEPT'
+-A FORWARD `ParsedMatch -i br-0a5ad9e85c71' `ParsedMatch -o br-0a5ad9e85c71' `ParsedAction -j DROP'
+-A HOST_INCOMING `ParsedMatch -p tcp' `ParsedMatch -m protocolid:0 --dpts [22]' `ParsedAction -j ACCEPT'
+-A HOST_INCOMING `ParsedMatch -p icmp' `ParsedAction -j ACCEPT'
+-A HOST_OUTBOUND `ParsedMatch -p udp' `ParsedMatch -m protocolid:0 --dpts [53]' `ParsedAction -j ACCEPT'
+-A HOST_OUTBOUND `ParsedMatch -p tcp' `ParsedMatch -m protocolid:0 --dpts [80]' `ParsedAction -j ACCEPT'
+-A HOST_OUTBOUND `ParsedMatch -p tcp' `ParsedMatch -m protocolid:0 --dpts [443]' `ParsedAction -j ACCEPT'
+-A HOST_OUTBOUND `ParsedMatch -p icmp' `ParsedAction -j ACCEPT'
+-A INPUT `ParsedMatch -m state --state INVALID' `ParsedAction -j DROP'
+-A INPUT `ParsedMatch -m state --state ESTABLISHED,RELATED' `ParsedAction -j ACCEPT'
+-A INPUT `ParsedAction -j DFWFW_INPUT (call)'
+-A INPUT `ParsedMatch -m state --state NEW' `ParsedAction -j HOST_INCOMING (call)'
+-A OUTPUT `ParsedMatch -m state --state INVALID' `ParsedAction -j DROP'
+-A OUTPUT `ParsedMatch -m state --state ESTABLISHED,RELATED' `ParsedAction -j ACCEPT'
+-A OUTPUT `ParsedMatch -m state --state NEW' `ParsedAction -j HOST_OUTBOUND (call)'
+COMMIT
+== Difference between used IP assignment and routing table ==
+Interface       | a - b         | b - a        
+----------------+---------------+--------------
+docker0         |               |              
+br-0a5ad9e85c71 |   10.0.2.0/24 |              
+enp0s3          |               |     0.0.0.0/5
+                |               |     8.0.0.0/7
+                |               |   10.0.2.0/24
+                |               |    11.0.0.0/8
+                |               |    12.0.0.0/6
+                |               |    16.0.0.0/4
+                |               |    32.0.0.0/3
+                |               |    64.0.0.0/2
+                |               |   128.0.0.0/3
+                |               |   160.0.0.0/5
+                |               |   168.0.0.0/6
+                |               |  172.0.0.0/12
+                |               | 172.16.0.0/16
+                |               | 172.18.0.0/15
+                |               | 172.20.0.0/14
+                |               | 172.24.0.0/13
+                |               | 172.32.0.0/11
+                |               | 172.64.0.0/10
+                |               | 172.128.0.0/9
+                |               |   173.0.0.0/8
+                |               |   174.0.0.0/7
+                |               |   176.0.0.0/4
+                |               |   192.0.0.0/2
+== Checking which tables are supported for analysis. Usually, only `filter'. ==
+Parsed 9 chains in table filter, a total of 42 rules
+== Transformed to Isabelle type (only filter table) ==
+[("DFWFW_FORWARD",[(-m state --state INVALID, -j DROP),(-m state --state ESTABLISHED,RELATED, -j ACCEPT),(-s 10.0.0.1/32 -d 10.0.0.1/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.1/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.1/32 -d 10.0.0.4/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.3/32 -d 10.0.0.3/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.3/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.3/32 -d 10.0.0.4/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.2/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.4/32 -d 10.0.0.1/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.4/32 -d 10.0.0.3/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.4/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(-s 10.0.0.4/32 -d 10.0.0.4/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT),(, -j DROP)]),("DFWFW_INPUT",[(-i br-0a5ad9e85c71, -j DROP),(-i docker0, -j DROP)]),("DOCKER",[]),("DOCKER-ISOLATION",[(-i docker0 -o br-0a5ad9e85c71, -j DROP),(-i br-0a5ad9e85c71 -o docker0, -j DROP),(, -j RETURN)]),("FORWARD",[(, -j DOCKER-ISOLATION (call)),(-o br-0a5ad9e85c71, -j DOCKER (call)),(-o br-0a5ad9e85c71 -m state --state ESTABLISHED,RELATED, -j ACCEPT),(-i br-0a5ad9e85c71 ! -o br-0a5ad9e85c71, -j ACCEPT),(, -j DFWFW_FORWARD (call)),(-o docker0, -j DOCKER (call)),(-o docker0 -m state --state ESTABLISHED,RELATED, -j ACCEPT),(-i docker0 ! -o docker0, -j ACCEPT),(-i docker0 -o docker0, -j ACCEPT),(-i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j DROP)]),("HOST_INCOMING",[(-p tcp -m tcp --dpts [22], -j ACCEPT),(-p icmp, -j ACCEPT)]),("HOST_OUTBOUND",[(-p udp -m udp --dpts [53], -j ACCEPT),(-p tcp -m tcp --dpts [80], -j ACCEPT),(-p tcp -m tcp --dpts [443], -j ACCEPT),(-p icmp, -j ACCEPT)]),("INPUT",[(-m state --state INVALID, -j DROP),(-m state --state ESTABLISHED,RELATED, -j ACCEPT),(, -j DFWFW_INPUT (call)),(-m state --state NEW, -j HOST_INCOMING (call))]),("OUTPUT",[(-m state --state INVALID, -j DROP),(-m state --state ESTABLISHED,RELATED, -j ACCEPT),(-m state --state NEW, -j HOST_OUTBOUND (call))])]
+Default Policies: fromList [("FORWARD",-j DROP),("INPUT",-j DROP),("OUTPUT",-j DROP)]
+== unfolded FORWARD chain ==
+(-i docker0 -o br-0a5ad9e85c71, -j DROP)
+(-i br-0a5ad9e85c71 -o docker0, -j DROP)
+(-o br-0a5ad9e85c71 -m state --state ESTABLISHED,RELATED, -j ACCEPT)
+(-i br-0a5ad9e85c71 ! -o br-0a5ad9e85c71, -j ACCEPT)
+(-m state --state INVALID, -j DROP)
+(-m state --state ESTABLISHED,RELATED, -j ACCEPT)
+(-s 10.0.0.1/32 -d 10.0.0.1/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.1/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.1/32 -d 10.0.0.4/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.3/32 -d 10.0.0.3/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.3/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.3/32 -d 10.0.0.4/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.2/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.4/32 -d 10.0.0.1/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.4/32 -d 10.0.0.3/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.4/32 -d 10.0.0.2/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(-s 10.0.0.4/32 -d 10.0.0.4/32 -i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j ACCEPT)
+(, -j DROP)
+(-o docker0 -m state --state ESTABLISHED,RELATED, -j ACCEPT)
+(-i docker0 ! -o docker0, -j ACCEPT)
+(-i docker0 -o docker0, -j ACCEPT)
+(-i br-0a5ad9e85c71 -o br-0a5ad9e85c71, -j DROP)
+(, -j DROP)
+== unfolded FORWARD chain (upper closure) ==
+(-o br-0a5ad9e85c71 -i docker0, -j DROP)
+(-o docker0 -i br-0a5ad9e85c71, -j DROP)
+(-o br-0a5ad9e85c71 -m state --state ESTABLISHED,RELATED, -j ACCEPT)
+(! -o br-0a5ad9e85c71 -i br-0a5ad9e85c71, -j ACCEPT)
+(-m state --state INVALID, -j DROP)
+(-m state --state ESTABLISHED,RELATED, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.1/32 -s 10.0.0.1/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.2/32 -s 10.0.0.1/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.4/32 -s 10.0.0.1/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.3/32 -s 10.0.0.3/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.2/32 -s 10.0.0.3/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.4/32 -s 10.0.0.3/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.2/32 -s 10.0.0.2/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.1/32 -s 10.0.0.4/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.3/32 -s 10.0.0.4/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.2/32 -s 10.0.0.4/32, -j ACCEPT)
+(-o br-0a5ad9e85c71 -i br-0a5ad9e85c71 -d 10.0.0.4/32 -s 10.0.0.4/32, -j ACCEPT)
+(, -j DROP)
+== to simple firewall ==
+DROP     all  --  0.0.0.0/0            0.0.0.0/0 in: docker0 out: br-0a5ad9e85c71  
+DROP     all  --  0.0.0.0/0            0.0.0.0/0 in: br-0a5ad9e85c71 out: docker0  
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0 in: br-0a5ad9e85c71   
+ACCEPT     all  --  10.0.0.1/32            10.0.0.1/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.1/32            10.0.0.2/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.1/32            10.0.0.4/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.3/32            10.0.0.3/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.3/32            10.0.0.2/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.3/32            10.0.0.4/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.2/32            10.0.0.2/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.4/32            10.0.0.1/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.4/32            10.0.0.3/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.4/32            10.0.0.2/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+ACCEPT     all  --  10.0.0.4/32            10.0.0.4/32 in: br-0a5ad9e85c71 out: br-0a5ad9e85c71  
+DROP     all  --  0.0.0.0/0            0.0.0.0/0    
+== to even-simpler firewall ==
+DROP     all  --  172.17.0.0/16            10.0.0.0/23    
+DROP     all  --  172.17.0.0/16            10.0.3.0/24    
+DROP     all  --  172.17.0.0/16            10.0.4.0/22    
+DROP     all  --  172.17.0.0/16            10.0.8.0/21    
+DROP     all  --  172.17.0.0/16            10.0.16.0/20    
+DROP     all  --  172.17.0.0/16            10.0.32.0/19    
+DROP     all  --  172.17.0.0/16            10.0.64.0/18    
+DROP     all  --  172.17.0.0/16            10.0.128.0/17    
+DROP     all  --  172.17.0.0/16            10.1.0.0/16    
+DROP     all  --  172.17.0.0/16            10.2.0.0/15    
+DROP     all  --  172.17.0.0/16            10.4.0.0/14    
+DROP     all  --  172.17.0.0/16            10.8.0.0/13    
+DROP     all  --  172.17.0.0/16            10.16.0.0/12    
+DROP     all  --  172.17.0.0/16            10.32.0.0/11    
+DROP     all  --  172.17.0.0/16            10.64.0.0/10    
+DROP     all  --  172.17.0.0/16            10.128.0.0/9    
+DROP     all  --  10.0.0.0/8            172.17.0.0/16    
+ACCEPT     all  --  10.0.0.0/8            0.0.0.0/5    
+ACCEPT     all  --  10.0.0.0/8            8.0.0.0/7    
+ACCEPT     all  --  10.0.0.0/8            10.0.2.0/24    
+ACCEPT     all  --  10.0.0.0/8            11.0.0.0/8    
+ACCEPT     all  --  10.0.0.0/8            12.0.0.0/6    
+ACCEPT     all  --  10.0.0.0/8            16.0.0.0/4    
+ACCEPT     all  --  10.0.0.0/8            32.0.0.0/3    
+ACCEPT     all  --  10.0.0.0/8            64.0.0.0/2    
+ACCEPT     all  --  10.0.0.0/8            128.0.0.0/1    
+ACCEPT     all  --  10.0.0.1/32            10.0.0.1/32    
+ACCEPT     all  --  10.0.0.1/32            10.0.0.2/32    
+ACCEPT     all  --  10.0.0.1/32            10.0.0.4/32    
+ACCEPT     all  --  10.0.0.3/32            10.0.0.3/32    
+ACCEPT     all  --  10.0.0.3/32            10.0.0.2/32    
+ACCEPT     all  --  10.0.0.3/32            10.0.0.4/32    
+ACCEPT     all  --  10.0.0.2/32            10.0.0.2/32    
+ACCEPT     all  --  10.0.0.4/32            10.0.0.1/32    
+ACCEPT     all  --  10.0.0.4/32            10.0.0.3/32    
+ACCEPT     all  --  10.0.0.4/32            10.0.0.2/32    
+ACCEPT     all  --  10.0.0.4/32            10.0.0.4/32    
+DROP     all  --  0.0.0.0/0            0.0.0.0/0    
+== checking spoofing protection ==
+distinct: passed
+ipassmt_sanity_nowildcards: passed
+ipassmt_sanity_defined (interfaces defined in the ruleset are also in ipassmt): passed
+ipassmt_sanity_disjoint (no zone-spanning interfaces): passed
+ipassmt_sanity_disjoint excluding UNIV interfaces: passed
+ipassmt_sanity_complete: the following is not covered: {0.0.0.0 .. 9.255.255.255} u {11.0.0.0 .. 172.16.255.255} u {172.18.0.0 .. 255.255.255.255}
+ipassmt_sanity_complete excluding UNIV interfaces: the following is not covered: {0.0.0.0 .. 9.255.255.255} u {11.0.0.0 .. 172.16.255.255} u {172.18.0.0 .. 255.255.255.255}
+Spoofing certification results:
+("docker0","True (certified)")
+("br-0a5ad9e85c71","Probably not (False)")
+== calculating service matrices ==
+=========== TCP port 10000->22 =========
+a |-> {172.17.0.0 .. 172.17.255.255}
+b |-> {0.0.0.0 .. 9.255.255.255} u {11.0.0.0 .. 172.16.255.255} u {172.18.0.0 .. 255.255.255.255}
+c |-> 10.0.0.0 u {10.0.0.5 .. 10.0.1.255} u {10.0.3.0 .. 10.255.255.255}
+d |-> {10.0.2.0 .. 10.0.2.255}
+e |-> 10.0.0.4
+f |-> 10.0.0.3
+g |-> 10.0.0.2
+h |-> 10.0.0.1
+
+(c,b)
+(c,d)
+(d,b)
+(d,d)
+(e,b)
+(e,d)
+(e,e)
+(e,f)
+(e,g)
+(e,h)
+(f,b)
+(f,d)
+(f,e)
+(f,f)
+(f,g)
+(g,b)
+(g,d)
+(g,g)
+(h,b)
+(h,d)
+(h,e)
+(h,g)
+(h,h)
+
+=========== TCP port 10000->80 =========
+a |-> {172.17.0.0 .. 172.17.255.255}
+b |-> {0.0.0.0 .. 9.255.255.255} u {11.0.0.0 .. 172.16.255.255} u {172.18.0.0 .. 255.255.255.255}
+c |-> 10.0.0.0 u {10.0.0.5 .. 10.0.1.255} u {10.0.3.0 .. 10.255.255.255}
+d |-> {10.0.2.0 .. 10.0.2.255}
+e |-> 10.0.0.4
+f |-> 10.0.0.3
+g |-> 10.0.0.2
+h |-> 10.0.0.1
+
+(c,b)
+(c,d)
+(d,b)
+(d,d)
+(e,b)
+(e,d)
+(e,e)
+(e,f)
+(e,g)
+(e,h)
+(f,b)
+(f,d)
+(f,e)
+(f,f)
+(f,g)
+(g,b)
+(g,d)
+(g,g)
+(h,b)
+(h,d)
+(h,e)
+(h,g)
+(h,h)
+

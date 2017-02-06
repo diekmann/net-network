@@ -1,0 +1,4 @@
+default via 10.0.2.2 dev enp0s3  proto static  metric 100 
+10.0.0.0/8 dev br-0a5ad9e85c71  proto kernel  scope link  src 10.42.0.100 
+10.0.2.0/24 dev enp0s3  proto kernel  scope link  src 10.0.2.15  metric 100 
+172.17.0.0/16 dev docker0  proto kernel  scope link  src 172.17.0.1 
