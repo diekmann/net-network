@@ -329,6 +329,32 @@ f |-> 10.0.0.0 u {10.0.0.5 .. 10.255.255.255}
 (e,e)
 
 
+isabelle gives the same results. Here is what is also allowed to be ESTABLISHED
+"([(''0.0.0.0'', ''{0.0.0.0 .. 9.255.255.255} u 10.0.0.1 u {11.0.0.0 .. 255.255.255.255}''),
+   (''10.0.0.4'', ''10.0.0.4''),
+   (''10.0.0.3'', ''10.0.0.3''),
+   (''10.0.0.2'', ''10.0.0.2''),
+   (''10.0.0.0'', ''10.0.0.0 u {10.0.0.5 .. 10.255.255.255}'')],
+   
+  [(''0.0.0.0'', ''0.0.0.0''),
+   (''0.0.0.0'', ''10.0.0.4''),
+   (''0.0.0.0'', ''10.0.0.3''),
+   (''0.0.0.0'', ''10.0.0.2''),
+   (''0.0.0.0'', ''10.0.0.0''),
+   (''10.0.0.4'', ''0.0.0.0''),
+   (''10.0.0.4'', ''10.0.0.4''),
+   (''10.0.0.4'', ''10.0.0.3''),
+   (''10.0.0.4'', ''10.0.0.2''),
+   (''10.0.0.4'', ''10.0.0.0''),
+   (''10.0.0.3'', ''10.0.0.4''),
+   (''10.0.0.3'', ''10.0.0.3''),
+   (''10.0.0.3'', ''10.0.0.2''),
+   (''10.0.0.2'', ''10.0.0.2'')])"
+  :: "(char list × char list) list × (char list × char list) list"
+
+Yes, this is correct! interestingly, 10.0.0.1 is grouped to the Internet. Well, once established, it basically has the same access rights.
+The only additional flow is is that 10.0.0.1 (WebFRNT) has an arrow to the Internet.
+Interestingly, WebFRNT is grouped togther with the Internet in one node. Considering established connections, The Internet has indeed the same access rights as WebFrnt!!
 
 
 
